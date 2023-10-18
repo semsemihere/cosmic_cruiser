@@ -13,8 +13,8 @@ on:
   workflow_dispatch:
 
 env:
-  DEMO_HOME: /home/runner/work/cosmic_cruiser/cosmic_cruiser/
-  PYTHONPATH: /home/runner/work/cosmic_cruiser/cosmic_cruiser/
+  DEMO_HOME: ${{ github.workspace }}/cosmic_cruiser/
+  PYTHONPATH: ${{ github.workspace }}/cosmic_cruiser/
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -47,7 +47,7 @@ jobs:
         run: make dev_env
 
       - name: Run Python tests.
-        run: make tests
+        run: make all_tests
         
           # - name: Deploy to PythonAnywhere
           # run: ./deploy.sh
