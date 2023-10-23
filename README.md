@@ -6,7 +6,8 @@ Build a software portion of the autonomous rover for [FAR 51025 competition][htt
 Christy Lin, George Gonzalez, Nishma Shakya, Semi Hong
 
 # Timeline
-<img width="865" alt="Timeline" src="https://github.com/semsemihere/cosmic_cruiser/assets/71098021/fe8d4a7d-78ba-4fe9-b3ad-4a92f9576cb9">
+<img width="1201" alt="Screenshot 2023-10-22 at 9 55 19 PM" src="https://github.com/semsemihere/cosmic_cruiser/assets/71098021/f4d3fc54-1337-4802-90af-d71bcdf77317">
+
 
 # Project Endpoints
 - Home
