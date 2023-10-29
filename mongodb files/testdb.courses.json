@@ -1,0 +1,48 @@
+[{
+  "_id": {
+    "$oid": "653ee94da3c6fea5262ff52d"
+  },
+  "title": "Introduction to Python Programming",
+  "description": "Learn the fundamentals of Python programming.",
+  "tags": [
+    "programming",
+    "Python",
+    "beginner"
+  ],
+  "lessons": [
+    {
+      "title": "Getting Started with Python",
+      "duration": "60 minutes",
+      "video_url": "https://example.com/python-intro"
+    },
+    {
+      "title": "Variables and Data Types",
+      "duration": "45 minutes",
+      "video_url": "https://example.com/python-variables"
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "653ee998a3c6fea5262ff52f"
+  },
+  "title": "Programming Fundamentals with Java",
+  "description": "A comprehensive introduction to Java programming.",
+  "tags": [
+    "Java",
+    "programming",
+    "beginner"
+  ],
+  "lessons": [
+    {
+      "title": "Introduction to Java",
+      "duration": "60 minutes",
+      "video_url": "https://example.com/java-intro"
+    },
+    {
+      "title": "Variables and Data Types",
+      "duration": "45 minutes",
+      "video_url": "https://example.com/java-variables"
+    }
+  ]
+}]
