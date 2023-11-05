@@ -1,5 +1,5 @@
 # Wikipedia API 
-# Simply grabs wikipedia's python article & prints the first line
+# Simply grabs wikipedia's python article & prints the first lined
 
 import wikipediaapi
 wiki_wiki = wikipediaapi.Wikipedia(
