@@ -1,6 +1,4 @@
-import users as usrs
-
-# usrs = get_users()
+import data.users as usrs
 
 
 def test_get_users():

@@ -1,6 +1,6 @@
 import pytest
 
-import categories as categ
+import data.categories as categ
 
 
 def test_get_categories():

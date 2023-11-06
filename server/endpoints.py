@@ -7,7 +7,7 @@ from flask import Flask
 from flask_restx import Resource, Api
 
 import data.games as gms
-import data.tests.users as users
+import data.users as users
 
 app = Flask(__name__)
 api = Api(app)
