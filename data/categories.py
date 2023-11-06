@@ -1,7 +1,7 @@
 """
 categories.py: the interface to our categories data.
 """
-# import random
+import random
 
 ID_LEN = 24
 BIG_NUM = 100000000000000000000
@@ -25,3 +25,9 @@ categories = {
 
 def get_categories() -> dict:
     return categories
+
+
+def _get_test_name():
+    name = 'test'
+    rand_part = random.randint(0, BIG_NUM)
+    return name + str(rand_part)
