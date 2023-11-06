@@ -24,3 +24,12 @@ def test_get_categories():
 #         assert isinstance(game, str)
 #         assert isinstance(games[game], dict)
 #     assert gms.TEST_GAME_NAME in games
+
+
+def test_get_test_name():
+    name = categ._get_test_name()
+    assert isinstance(name, str)
+    assert len(name) > 0
+
+def test_get_test_category():
+    assert isinstance(categ.get_test_category(), dict)
