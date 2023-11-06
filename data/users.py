@@ -4,6 +4,7 @@ This module interfaces to our user data.
 
 LEVEL = 'level'
 MIN_USER_NAME_LEN = 2
+users = {}
 
 
 def get_users():
@@ -24,3 +25,11 @@ def get_users():
         },
     }
     return users
+
+
+def create_users(username):
+    if (not (username in users)):
+        users.update({username: 0})
+    else:
+        return -1
+    return {username: 0}
