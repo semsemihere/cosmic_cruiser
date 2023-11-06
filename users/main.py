@@ -1,5 +1,4 @@
 """
-
 creates & reads database
 """
 
@@ -29,22 +28,29 @@ def get_db():
 # Use LocalProxy to read the global db instance with just `db`
 db = LocalProxy(get_db)
 
-
+# Create user instance
 def add_user(name, email, password, role):
     """
-    Inserts a comment into the comments collection, with the following fields:
-
+    Inserts a user into user db, with following fields:
     - "name"
     - "email"
     - "password"
     - "role"
-
-    Name and email must be retrieved from the "user" object.
     """
 
-    comment_doc = { 
+    users_doc = { 
         'name' : name, 
         'email' : email,
         'password' : password,
         'role' : role}
-    return db.comments.insert_one(comment_doc)
+    return db.users.insert_one(users_doc)
+
+
+# Read users
+def get_all_users():
+    """
+    Returns list of users' names in the database.
+    """
+    return list(db.users.aggregate([
+        {"$unwind": "$users"}
+    ]))[0]["names"]
