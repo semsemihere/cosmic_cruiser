@@ -12,7 +12,3 @@ def test_get_users():
         assert isinstance(user, dict)
         assert usrs.LEVEL in user
         assert isinstance(user[usrs.LEVEL], int)
-
-# def test_create_users():
-#     user = usrs.create_user("test")
-#     assert not(user!=-1)
