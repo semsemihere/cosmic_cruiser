@@ -3,14 +3,10 @@ This is the file containing all of the endpoints for our flask app.
 The endpoint called `endpoints` will return all available endpoints.
 """
 
-from http import HTTPStatus
+from flask import Flask
+from flask_restx import Resource, Api
 
-from flask import Flask, request
-from flask_restx import Resource, Api, fields
-
-import werkzeug.exceptions as wz
-
-import data.categories as categ
+import data.games as gms
 import data.users as users
 
 app = Flask(__name__)
@@ -19,13 +15,12 @@ api = Api(app)
 DEFAULT = 'Default'
 MENU = 'menu'
 MAIN_MENU_EP = '/MainMenu'
-MAIN_MENU_NM = "Welcome to Jack of All Trades!"
+MAIN_MENU_NM = "Welcome to Text Game!"
 HELLO_EP = '/hello'
 HELLO_RESP = 'hello'
-CATEGORIES_EP = '/categories'
-CATEGORY_MENU_EP = '/category_menu'
-CATEGORY_MENU_NM = 'Category Menu'
-CATEGORY_ID = 'Category ID'
+GAMES_EP = '/games'
+GAME_MENU_EP = '/game_menu'
+GAME_MENU_NM = 'Game Menu'
 # USERS = 'users'
 USERS_EP = '/users'
 USER_MENU_EP = '/user_menu'
@@ -71,7 +66,7 @@ class MainMenu(Resource):
     """
     def get(self):
         """
-        Gets the main category menu.
+        Gets the main game menu.
         """
         return {TITLE: MAIN_MENU_NM,
                 DEFAULT: 2,
@@ -79,7 +74,7 @@ class MainMenu(Resource):
                     '1': {'url': '/', 'method': 'get',
                           'text': 'List Available Characters'},
                     '2': {'url': '/',
-                          'method': 'get', 'text': 'List Active Categories'},
+                          'method': 'get', 'text': 'List Active Games'},
                     '3': {'url': f'{USERS_EP}',
                           'method': 'get', 'text': 'List Users'},
                     '4': {'url': '/',
@@ -124,26 +119,26 @@ class Users(Resource):
         """
         return {
             TYPE: DATA,
-            TITLE: 'Current Categories',
+            TITLE: 'Current Games',
             DATA: users.get_users(),
             MENU: USER_MENU_EP,
             RETURN: MAIN_MENU_EP,
         }
 
 
-@api.route(f'{CATEGORIES_EP}')
-class Categories(Resource):
+@api.route(f'{GAMES_EP}')
+class Games(Resource):
     """
-    This class supports fetching a list of all categories.
+    This class supports fetching a list of all games.
     """
     def get(self):
         """
-        This method returns all categories.
+        This method returns all games.
         """
         return {
             TYPE: DATA,
-            TITLE: 'Current Categories',
-            DATA: categ.get_categories(),
-            MENU: CATEGORY_MENU_EP,
+            TITLE: 'Current Games',
+            DATA: gms.get_games(),
+            MENU: GAME_MENU_EP,
             RETURN: MAIN_MENU_EP,
         }
