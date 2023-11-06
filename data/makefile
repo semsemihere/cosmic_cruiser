@@ -1,2 +1,2 @@
-PKG = data
+PKG = server
 include ../common.mk
