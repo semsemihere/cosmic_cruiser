@@ -14,7 +14,19 @@ def test_get_users():
         assert isinstance(user[usrs.LEVEL], int)
 
 def test_create_user():
-    user = usrs.create_user("test")
-    assert user=={"test": 0}
+    username = "test"
+    user = usrs.create_user(username)
+    users = usrs.get_users()
+    assert (username in users)
     user2 = usrs.create_user("test")
+    assert user2==-1
+
+
+def test_delete_user():
+    username = "test"
+    users = usrs.get_users()
+    assert (username in users)
+    user = usrs.delete_user(username)
+    assert (not(username in users))
+    user2 = usrs.delete_user(username)
     assert user2==-1

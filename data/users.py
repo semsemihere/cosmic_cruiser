@@ -33,3 +33,11 @@ def create_user(username):
     else:
         users.update({username: 0})
         return {username: 0}
+
+
+def delete_user(username):
+    if (not (username in users)):
+        return -1
+    else:
+        users.pop(username)
+        return username
