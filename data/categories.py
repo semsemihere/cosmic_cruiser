@@ -4,7 +4,7 @@ categories.py: the interface to our categories data.
 import random
 
 ID_LEN = 24
-BIG_NUM = 100000000000000000000
+BIG_NUM = 100_000_000_000_000_000_000
 
 MOCK_ID = '0' * ID_LEN
 
@@ -40,3 +40,20 @@ def get_test_category():
     test_category[NAME] = _get_test_name()
     test_category[NUM_SECTIONS] = 0
     return test_category
+
+
+def generate_category_id() -> str:
+    # generates a 24 digit id with leading 0's
+    _id = str(random.randint(0, BIG_NUM)).rjust(ID_LEN, "0")
+    return _id
+
+
+def create_category(category_name: str, num_sections: int) -> str:
+    if category_name in categories:
+        raise ValueError(f'Duplicate category name: {category_name=}')
+    if not category_name:
+        raise ValueError("Category name cannot be blank!")
+
+    categories[category_name] = {NUM_SECTIONS: num_sections}
+    category_id = generate_category_id()
+    return category_id
