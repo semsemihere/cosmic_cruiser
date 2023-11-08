@@ -65,3 +65,7 @@ def delete_category(category_name: str):
         del categories[category_name]
     else:
         raise ValueError(f'Delete failure: {category_name} not in database.')
+
+
+def exists(category_name: str) -> bool:
+    return category_name in get_categories()

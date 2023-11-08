@@ -3,6 +3,15 @@ import pytest
 import data.categories as categ
 
 
+@pytest.fixture(scope='function')
+def temp_category():
+    category_name = categ._get_test_name()
+    ret = categ.create_category(category_name, 0)
+    yield category_name
+    if categ.exists(category_name):
+        categ.delete_category(category_name)
+
+
 def test_get_categories():
     categories = categ.get_categories()
 
@@ -33,3 +42,8 @@ def test_get_test_name():
 
 def test_get_test_category():
     assert isinstance(categ.get_test_category(), dict)
+
+def test_delete_category(temp_category):
+    category_name = temp_category
+    categ.delete_category(category_name)
+    assert not categ.exists(category_name)
