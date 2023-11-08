@@ -1,6 +1,5 @@
 # Project Information
-Cosmic Cruiser
-Build a software portion of the autonomous rover for [FAR 51025 competition][https://friendsofamateurrocketry.org/wp-content/uploads/2022/12/2023-FAR-51025-competition.pdf]
+Jack of All Trades: An educational platform to learn essential life skills for a successful and well-rounded future, targeted towards college students and young adults.
 
 # Team Members
 Christy Lin, George Gonzalez, Nishma Shakya, Semi Hong
