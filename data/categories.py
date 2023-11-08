@@ -57,10 +57,3 @@ def create_category(category_name: str, num_sections: int) -> str:
     categories[category_name] = {NUM_SECTIONS: num_sections}
     category_id = generate_category_id()
     return category_id
-
-def delete_category(category_name: str):
-    # check if the category to delete is in the database, delete if it is, raise error if not
-    if category_name in categories:
-        del categories[category_name]
-    else:
-        raise ValueError(f'Delete failure: {category_name} not in database.')
