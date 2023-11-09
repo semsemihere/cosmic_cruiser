@@ -24,9 +24,9 @@ def test_create_user_ideal():
     user2 = usrs.create_user("test")
     assert user2==-1
 
-@patch('data.users.create_user', side_effect=ValueError(), autospec=True)
+
 # Test to make sure the exception is handled 
-def test_create_user_fail(mockArg):
+def test_create_user_fail():
     with pytest.raises(ValueError):
         usrs.create_user("")
         
@@ -41,7 +41,7 @@ def test_delete_user():
     user2 = usrs.delete_user(username)
     assert user2==-1
 
-
+@patch('data.users.create_user', return_value="null", autospec=True)
 @pytest.mark.skip('bad test just to show how to skip')
 def test_to_skip():
-    assert (False)
+    assert (usrs.create_user("test")=="test")
