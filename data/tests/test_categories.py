@@ -12,7 +12,7 @@ def temp_category():
         categ.delete_category(category_name)
 
 
-def test_get_categories():
+def test_get_categories(temp_category):
     categories = categ.get_categories()
 
     assert isinstance(categories, dict)     # checks if categories is a dictionary
@@ -23,28 +23,24 @@ def test_get_categories():
         assert isinstance(category, str)
         assert isinstance(categories[category], dict)
 
-    assert categ.TEST_CATEGORY_NAME in categories
+    assert categ.exists(temp_category)
 
-# def test_get_games():
-#     games = gms.get_games()
-#     assert isinstance(games, dict)
-#     assert len(games) > 0
-#     for game in games:
-#         assert isinstance(game, str)
-#         assert isinstance(games[game], dict)
-#     assert gms.TEST_GAME_NAME in games
-def test_generate_category_id():
-    _id = categ.generate_category_id()
-    assert isinstance(_id, str)
-    assert len(_id) == categ.ID_LEN
 
 def test_get_test_name():
     name = categ._get_test_name()
     assert isinstance(name, str)
     assert len(name) > 0
 
+
 def test_get_test_category():
     assert isinstance(categ.get_test_category(), dict)
+
+
+def test_generate_category_id():
+    _id = categ.generate_category_id()
+    assert isinstance(_id, str)
+    assert len(_id) == categ.ID_LEN
+
 
 ADD_NAME = "New Category"
 
