@@ -40,6 +40,11 @@ def test_get_test_name():
     assert isinstance(name, str)
     assert len(name) > 0
 
+def test_generate_category_id():
+    _id = categ.generate_category_id()
+    assert isinstance(_id, str)
+    assert len(_id) == categ.ID_LEN
+
 def test_get_test_category():
     assert isinstance(categ.get_test_category(), dict)
 
