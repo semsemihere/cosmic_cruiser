@@ -1,3 +1,4 @@
+import pytest
 import data.users as usrs
 
 
@@ -13,13 +14,21 @@ def test_get_users():
         assert usrs.LEVEL in user
         assert isinstance(user[usrs.LEVEL], int)
 
-def test_create_user():
+# Test to make sure that the user is created 
+# (User exists in users)
+def test_create_user_ideal():
     username = "test"
     user = usrs.create_user(username)
     users = usrs.get_users()
     assert (username in users)
     user2 = usrs.create_user("test")
     assert user2==-1
+
+# Test to make sure the exception is handled 
+def test_create_user_fail():
+    with pytest.raises(ValueError):
+        usrs.create_user("")
+        
 
 
 def test_delete_user():

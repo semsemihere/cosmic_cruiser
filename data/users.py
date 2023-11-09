@@ -28,7 +28,9 @@ def get_users():
 
 
 def create_user(username):
-    if (username in users):
+    if not username:
+        raise ValueError()
+    elif (username in users):
         return -1
     else:
         users.update({username: 0})
