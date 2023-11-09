@@ -1,5 +1,9 @@
 
 import server.endpoints as ep
+# from unittest.mock import patch
+import data.categories as categ
+import pytest
+
 
 TEST_CLIENT = ep.app.test_client()
 
@@ -19,3 +23,8 @@ def test_list_users():
     assert ep.TITLE in resp_json
     assert ep.TYPE in resp_json
     assert ep.DATA in resp_json
+
+
+@pytest.mark.skip('bad test, just showing how skip works')
+def test_to_skip_categ():
+    assert(categ.add_category("test")=="test")
