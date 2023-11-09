@@ -40,3 +40,8 @@ def test_delete_user():
     assert (not(username in users))
     user2 = usrs.delete_user(username)
     assert user2==-1
+
+
+@pytest.mark.skip('bad test just to show how to skip')
+def test_to_skip():
+    assert (False)
