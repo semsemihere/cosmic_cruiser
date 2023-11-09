@@ -12,17 +12,20 @@ NAME = 'name'
 
 NUM_SECTIONS = "numSections"
 TEST_CATEGORY_NAME = "Nutrition/Cooking"
-categories = {
-    'Emergency Services/Resources': {
-        NUM_SECTIONS: 3,
-    },
-    'Financial Literacy': {
-        NUM_SECTIONS: 4,
-    },
-    TEST_CATEGORY_NAME: {
-        NUM_SECTIONS: 5,
-    },
-}
+
+categories = {}
+
+# categories = {
+#     'Emergency Services/Resources': {
+#         NUM_SECTIONS: 3,
+#     },
+#     'Financial Literacy': {
+#         NUM_SECTIONS: 4,
+#     },
+#     TEST_CATEGORY_NAME: {
+#         NUM_SECTIONS: 5,
+#     },
+# }
 
 
 def get_categories() -> dict:
