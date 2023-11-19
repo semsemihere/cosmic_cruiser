@@ -2,6 +2,10 @@
 categories.py: the interface to our categories data.
 """
 import random
+import data.db_connect as dbc
+
+CATEGORIES_COLLECT = 'categories'
+
 
 ID_LEN = 24
 BIG_NUM = 100_000_000_000_000_000_000
@@ -30,6 +34,13 @@ categories = {}
 
 def get_categories() -> dict:
     return categories
+    dbc.connect_db()
+    return dbc.fetch_all_as_dict(NAME, CATEGORIES_COLLECT)
+
+
+def exists(name: str) -> bool:
+    dbc.connect_db()
+    return dbc.fetch_one(CATEGORIES_COLLECT, {NAME: name})
 
 
 def _get_test_name():
@@ -51,24 +62,39 @@ def generate_category_id() -> str:
     return _id
 
 
-def add_category(category_name: str, num_sections: int) -> str:
-    if category_name in categories:
+def add_category(category_name: str, num_sections: int) -> bool:
+    if exists(category_name):
         raise ValueError(f'Duplicate category name: {category_name=}')
     if not category_name:
         raise ValueError("Category name cannot be blank!")
 
-    categories[category_name] = {NUM_SECTIONS: num_sections}
-    category_id = generate_category_id()
-    return category_id
+    # categories[category_name] = {NUM_SECTIONS: num_sections}
+    # category_id = generate_category_id()
+    # return category_id
+    cetegory = {}
+    cetegory[NAME] = category_name
+    cetegory[NUM_SECTIONS] = num_sections
+    dbc.connect_db()
+    _id = dbc.insert_one(CATEGORIES_COLLECT, cetegory)
+    return _id is not None
 
 
 def delete_category(category_name: str):
     # check if the category to delete is in the database
-    if category_name in categories:
-        del categories[category_name]
+    if exists(category_name):
+        # del categories[category_name]
+        dbc.del_one(CATEGORIES_COLLECT, {NAME: category_name})
     else:
         raise ValueError(f'Delete failure: {category_name} not in database.')
 
 
-def exists(category_name: str) -> bool:
-    return category_name in get_categories()
+# def exists(category_name: str) -> bool:
+#     return category_name in get_categories()
+
+
+def main():
+    print(get_categories())
+
+
+if __name__ == '__main__':
+    main()

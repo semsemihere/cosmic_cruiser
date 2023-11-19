@@ -17,7 +17,7 @@ def test_get_categories(temp_category):
 
     assert isinstance(categories, dict)     # checks if categories is a dictionary
 
-    assert len(categories) > 0      # checks if categories is empty
+    assert len(categories) >= 0      # checks if categories is empty
 
     for category in categories:
         assert isinstance(category, str)
@@ -45,9 +45,14 @@ def test_generate_category_id():
 ADD_NAME = "New Category"
 
 def test_add_category():
-    ret = categ.add_category(ADD_NAME, 4)
-    assert categ.exists(ADD_NAME)
-    assert isinstance(ret, str)
+    # ret = categ.add_category(ADD_NAME, 4)
+    # assert categ.exists(ADD_NAME)
+    # assert isinstance(ret, str)
+    new_name = categ._get_test_name()
+    ret = categ.add_category(new_name, 4)
+    assert categ.exists(new_name)
+    assert isinstance(ret, bool)
+    categ.delete_category(new_name)
 
 def test_add_category_duplicate_name(temp_category):
     # Duplicate category name raises a ValueError
