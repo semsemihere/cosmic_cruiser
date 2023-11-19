@@ -83,7 +83,7 @@ def delete_category(category_name: str):
     # check if the category to delete is in the database
     if exists(category_name):
         # del categories[category_name]
-        dbc.del_one(CATEGORIES_COLLECT, {NAME: category_name})
+        return dbc.del_one(CATEGORIES_COLLECT, {NAME: category_name})
     else:
         raise ValueError(f'Delete failure: {category_name} not in database.')
 
