@@ -68,5 +68,5 @@ def test_category_bad_add(mock_add):
     """
     Testing we do the right thing with a value error from add_category.
     """
-    resp = TEST_CLIENT.post(ep.CATEGORIES_EP, json=gm.get_test_category())
+    resp = TEST_CLIENT.post(ep.CATEGORIES_EP, json=categ.get_test_category())
     assert resp.status_code == NOT_ACCEPTABLE
