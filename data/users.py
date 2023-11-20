@@ -2,7 +2,7 @@
 This module interfaces to our user data.
 """
 # import bcrypt
-
+import hashlib
 LEVEL = 'level'
 MIN_USER_NAME_LEN = 2
 
@@ -10,9 +10,9 @@ MIN_USER_NAME_LEN = 2
 """
 Each users have ...
     - hashed id (primary key)
-        - for now, used number
     - email
     - username
+    - password (hashed and never stored as plain text)
     - first name
     - last name
     - phone
@@ -23,66 +23,30 @@ Each users have ...
 """
 
 users = {
-        'ch123': {
-            'email': 'cas123@nyu.edu',
-            'username': 'ch123',
-            'first_name': 'Smith',
-            'last_name': 'Callahan',
-            'phone': 1231231234,
-            'role': 'user'
-        },
-
-        'cf123': {
-            'email': 'afd123@gmail.com',
-            'username': 'cf123',
-            'first_name': 'Jane',
-            'last_name': 'Doe',
-            'phone': 9879879876,
-            'role': 'user'
-        },
-
-        'an982': {
-            'email': 'ani987@gmail.com',
-            'username': 'an982',
-            'first_name': 'John',
-            'last_name': 'Doe',
-            'phone': 2472472478,
-            'role': 'user'
-        }
     }
 
 
-def create_user(username, email, first_name, last_name, phone):
-
-    # id = id_generator()
-
+def create_user(username, password, email, first_name, last_name, phone):
     if not username:
         raise ValueError()
-    elif (username in users):
+    id = (hashlib.sha3_512(username.encode('UTF-8'),
+                           usedforsecurity=True)).hexdigest()
+    print(id)
+    if (id in users):
+        print(True)
         return -1
     else:
-        users[username] = {
+        users[id] = {
             'email': email,
             'username': username,
+            'hashedPass': hashlib.sha3_512(password.encode('UTF-8'),
+                                           usedforsecurity=True),
             'first_name': first_name,
             'last_name': last_name,
             'phone': phone,
             'role': 'user'
         }
-        return username
-
-# Password Hashing
-# def password_encode(password):
-#     encoded_pwd = password.encode('utf-8')
-#     salt = bcrypt.gensalt()
-#     hashed_password = bcrypt.hashpw(encoded_pwd, salt)
-
-#     return hashed_password
-
-
-# Generates User ID
-# def id_generator():
-#     return random.randint(10000, 99999)
+        return id
 
 
 def get_all_users():
@@ -98,21 +62,21 @@ def get_all_users():
 
 
 # Get specific user information
-def get_user(username):
-    if not (username in users):
+def get_user(userId):
+    if not (userId in users):
         return -1
     else:
-        return users[username]
+        return users[userId][:3] + users[userId][4:]
 
 
 # Update User information
-def update_user(username, field, update):
+def update_user(userId, field, update):
     """
-    parameter: username
-        use the username to grab the user information
+    parameter: userId
+        use the userId to grab the user information
     return: True is successful, else -1
     """
-    user_info = get_user(username)
+    user_info = get_user(userId)
 
     if user_info == -1:
         return user_info
@@ -123,9 +87,9 @@ def update_user(username, field, update):
 
 
 # Remove the user from the db
-def delete_user(username):
-    if (not (username in users)):
+def delete_user(userId):
+    if (not (userId in users)):
         return -1
     else:
-        del users[username]
+        del users[userId]
         return True
