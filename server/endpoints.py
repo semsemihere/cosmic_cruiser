@@ -16,7 +16,6 @@ import data.users as users
 app = Flask(__name__)
 api = Api(app)
 
-DELETE = 'delete'
 DEFAULT = 'Default'
 MENU = 'menu'
 MAIN_MENU_EP = '/MainMenu'
@@ -24,7 +23,6 @@ MAIN_MENU_NM = "Welcome to Jack-of-All-Trades!"
 HELLO_EP = '/hello'
 HELLO_RESP = 'hello'
 CATEGORIES_EP = '/categories'
-DEL_CATEGORIES_EP = f'{CATEGORIES_EP}/{DELETE}'
 CATEGORIES_MENU_EP = '/category_menu'
 CATEGORIES_MENU_NM = 'Category Menu'
 CATEGORY_ID = 'Category ID'
@@ -131,23 +129,6 @@ class Users(Resource):
             MENU: USER_MENU_EP,
             RETURN: MAIN_MENU_EP,
         }
-
-@api.route(f'{DEL_CATEGORIES_EP}/<name>')
-class DelCategory(Resource):
-    """
-    Deletes a category by name.
-    """
-    @api.response(HTTPStatus.OK, 'Success')
-    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
-    def delete(self, name):
-        """
-        Deletes a category by name.
-        """
-        try:
-            categ.delete_category(name)
-            return {name: 'Deleted'}
-        except ValueError as e:
-            raise wz.NotFound(f'{str(e)}')
 
 
 category_fields = api.model('NewCategory', {
