@@ -66,7 +66,7 @@ def get_user(userId):
     if not (userId in users):
         return -1
     else:
-        return users[userId][:3] + users[userId][4:]
+        return users[userId]
 
 
 # Update User information

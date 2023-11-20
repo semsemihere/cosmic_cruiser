@@ -8,7 +8,8 @@ from unittest.mock import patch
 def create_test_user():
     userId = usrs.create_user("test", "test_password","test@gmail.com", "Test", "Test", 1111111111)
     yield userId
-    usrs.delete_user(userId)
+    if(userId in usrs.get_all_users()):
+        usrs.delete_user(userId)
 
 def test_get_all_users(create_test_user):
     # users = usrs.get_all_users()
@@ -39,13 +40,36 @@ def test_create_user_fail():
     with pytest.raises(ValueError):
         usrs.create_user("", "","" , "", "", 0)
         
-
+def test_get_user(create_test_user):
+    userId = create_test_user
+    users = usrs.get_all_users()
+    assert(usrs.get_user(userId)==(users[userId]))
 
 def test_delete_user(create_test_user):
     userId = create_test_user
     usrs.delete_user(userId)
     users = usrs.get_all_users()
     assert (not(userId in users))
+
+def test_bad_get_user_request():
+    username=""
+    assert(usrs.get_user((hashlib.sha3_512(username.encode('UTF-8'),
+                           usedforsecurity=True)).hexdigest())==-1)
+
+
+def test_update_user(create_test_user):
+    userId = create_test_user
+    field = 'username'
+    newValue = "test2"
+    usrs.update_user(userId,field,newValue)
+    assert(usrs.get_user(userId)[field]==newValue)
+
+def test_bad_update_user(create_test_user):
+    username = ""
+    userId = hashlib.sha3_512(username.encode('UTF-8'),usedforsecurity=True).hexdigest()
+    field = 'username'
+    newValue = "test2"
+    assert(usrs.update_user(userId,field,newValue)==-1)
 
 
 def test_user_exists_delete_user():
