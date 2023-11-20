@@ -70,3 +70,12 @@ def test_category_bad_add(mock_add):
     """
     resp = TEST_CLIENT.post(ep.CATEGORIES_EP, json=categ.get_test_category())
     assert resp.status_code == NOT_ACCEPTABLE
+
+
+@patch('data.categories.add_category', return_value=None)
+def test_category_add_db_failure(mock_add):
+    """
+    Testing we do the right thing with a null ID return from add_category.
+    """
+    resp = TEST_CLIENT.post(ep.CATEGORIES_EP, json=categ.get_test_category())
+    assert resp.status_code == SERVICE_UNAVAILABLE
