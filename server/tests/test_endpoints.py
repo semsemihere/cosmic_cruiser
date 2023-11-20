@@ -42,7 +42,7 @@ def test_to_skip_categ():
 @patch('data.categories.delete_category', autospec=True)
 def test_category_delete(mock_del):
     """
-    Testing we do the right thing with a call to del_game that succeeds.
+    Testing we do the right thing with a call to del_category that succeeds.
     """
     resp = TEST_CLIENT.delete(f'{ep.DEL_CATEGORY_EP}/AnyName')
     assert resp.status_code == OK
@@ -51,7 +51,7 @@ def test_category_delete(mock_del):
 @patch('data.categories.delete_category', side_effect=ValueError(), autospec=True)
 def test_category_bad_delete(mock_del):
     """
-    Testing we do the right thing with a value error from del_game.
+    Testing we do the right thing with a value error from del_category.
     """
     resp = TEST_CLIENT.delete(f'{ep.DEL_CATEGORY_EP}/AnyName')
     assert resp.status_code == NOT_FOUND
@@ -61,3 +61,12 @@ def test_category_bad_delete(mock_del):
 def test_category_add(mock_add):
     resp = TEST_CLIENT.post(ep.CATEGORIES_EP, json=categ.get_test_category())
     assert resp.status_code == OK
+
+
+@patch('data.categories.add_category', side_effect=ValueError(), autospec=True)
+def test_category_bad_add(mock_add):
+    """
+    Testing we do the right thing with a value error from add_category.
+    """
+    resp = TEST_CLIENT.post(ep.CATEGORIES_EP, json=gm.get_test_category())
+    assert resp.status_code == NOT_ACCEPTABLE
