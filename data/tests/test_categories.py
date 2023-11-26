@@ -69,3 +69,8 @@ def test_delete_category(temp_category):
     category_name = temp_category
     categ.delete_category(category_name)
     assert not categ.exists(category_name)
+
+def test_delete_category_not_there():
+    category_name = categ._get_test_name()
+    with pytest.raises(ValueError):
+        categ.delete_category(category_name)
