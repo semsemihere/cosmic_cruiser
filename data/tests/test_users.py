@@ -34,17 +34,16 @@ def test_create_user_ideal(create_test_user):
 #     user2 = usrs.create_user("test")
 #     assert user2==-1
 
+
 # Test to make sure the exception is handled 
 def test_create_user_fail():
     with pytest.raises(ValueError):
         usrs.create_user("", "","" , "", "", 0)
         
-        
 def test_get_user(create_test_user):
     userId = create_test_user
     users = usrs.get_all_users()
     assert(usrs.get_user(userId)==(users[userId]))
-
 
 def test_delete_user(create_test_user):
     userId = create_test_user
@@ -52,12 +51,11 @@ def test_delete_user(create_test_user):
     users = usrs.get_all_users()
     assert (not(userId in users))
 
-
 def test_bad_get_user_request():
     username=""
     assert(usrs.get_user((hashlib.sha3_512(username.encode('UTF-8'),
                            usedforsecurity=True)).hexdigest())==-1)
-    
+
 
 def test_update_user(create_test_user):
     userId = create_test_user

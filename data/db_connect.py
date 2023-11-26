@@ -6,7 +6,6 @@ import pymongo as pm
 LOCAL = "0"
 CLOUD = "1"
 
-USER_DB = 'usersDB'
 CATEGORY_DB = 'categoriesDB'
 
 client = None
@@ -27,7 +26,6 @@ def connect_db():
         print("Setting client because it is None.")
         if os.environ.get("CLOUD_MONGO", LOCAL) == CLOUD:
             password = os.environ.get("GAME_MONGO_PW")
-            # password = os.environ.get("MONGODB_PASSWORD")
             if not password:
                 raise ValueError('You must set your password '
                                  + 'to use Mongo in the cloud.')
@@ -35,9 +33,6 @@ def connect_db():
             client = pm.MongoClient(f'mongodb+srv://gcallah:{password}'
                                     + '@cluster0.eqxbbqd.mongodb.net/'
                                     + '?retryWrites=true&w=majority')
-            # client = pm.MongoClient(f'mongodb+srv://semihong:{password}'
-            #                         + '@cosmiccrusier.3cyi8m1.mongodb.net/'
-            #                         + '?retryWrites=true&w=majority')
             # PA recommends these settings:
             # + 'connectTimeoutMS=30000&'
             # + 'socketTimeoutMS=None
