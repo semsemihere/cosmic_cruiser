@@ -13,10 +13,8 @@ BIG_NUM = 100_000_000_000_000_000_000
 MOCK_ID = '0' * ID_LEN
 
 NAME = 'name'
-CATEGORY_ID = 'categoryID'
-NUM_SECTIONS = "numSections"
-CATEGORY_CONTENT = 'categoryContent'
 
+NUM_SECTIONS = "numSections"
 TEST_CATEGORY_NAME = "Nutrition/Cooking"
 
 categories = {}
@@ -54,9 +52,7 @@ def _get_test_name():
 def get_test_category():
     test_category = {}
     test_category[NAME] = _get_test_name()
-    test_category[CATEGORY_ID] = generate_category_id()
     test_category[NUM_SECTIONS] = 0
-    test_category[CATEGORY_CONTENT] = 'content'
     return test_category
 
 
@@ -66,8 +62,7 @@ def generate_category_id() -> str:
     return _id
 
 
-def add_category(category_name: str, category_id: str, num_sections:
-    int, category_content: str) -> bool:
+def add_category(category_name: str, num_sections: int) -> bool:
     if exists(category_name):
         raise ValueError(f'Duplicate category name: {category_name=}')
     if not category_name:
@@ -76,14 +71,11 @@ def add_category(category_name: str, category_id: str, num_sections:
     # categories[category_name] = {NUM_SECTIONS: num_sections}
     # category_id = generate_category_id()
     # return category_id
-    category = {}
-    category[NAME] = category_name
-    category[CATEGORY_ID] = category_id
-    category[NUM_SECTIONS] = num_sections
-    category[CATEGORY_CONTENT] = category_content
-
+    cetegory = {}
+    cetegory[NAME] = category_name
+    cetegory[NUM_SECTIONS] = num_sections
     dbc.connect_db()
-    _id = dbc.insert_one(CATEGORIES_COLLECT, category)
+    _id = dbc.insert_one(CATEGORIES_COLLECT, cetegory)
     return _id is not None
 
 

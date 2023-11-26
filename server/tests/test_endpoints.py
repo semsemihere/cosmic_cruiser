@@ -57,15 +57,13 @@ def test_category_bad_delete(mock_del):
     assert resp.status_code == NOT_FOUND
 
 
-# @patch('data.categories.add_category', return_value=categ.MOCK_ID, autospec=True)
-@pytest.mark.skip('temp skip test')
+@patch('data.categories.add_category', return_value=categ.MOCK_ID, autospec=True)
 def test_category_add(mock_add):
     resp = TEST_CLIENT.post(ep.CATEGORIES_EP, json=categ.get_test_category())
     assert resp.status_code == OK
 
 
-# @patch('data.categories.add_category', side_effect=ValueError(), autospec=True)
-@pytest.mark.skip('temp skip test')
+@patch('data.categories.add_category', side_effect=ValueError(), autospec=True)
 def test_category_bad_add(mock_add):
     """
     Testing we do the right thing with a value error from add_category.
