@@ -153,9 +153,7 @@ class DelCategory(Resource):
 
 category_fields = api.model('NewCategory', {
     categ.NAME: fields.String,
-    categ.CATEGORY_ID: fields.String,
     categ.NUM_SECTIONS: fields.Integer,
-    categ.CATEGORY_CONTENT: fields.String,
 })
 
 
@@ -185,11 +183,9 @@ class Categories(Resource):
         Add a category.
         """
         name = request.json[categ.NAME]
-        category_id = request.json[categ.CATEGORY_ID]
         num_sections = request.json[categ.NUM_SECTIONS]
-        category_content = request.json[categ.CATEGORY_CONTENT]
         try:
-            new_id = categ.add_category(name, category_id, num_sections, category_content)
+            new_id = categ.add_category(name, num_sections)
             if new_id is None:
                 raise wz.ServiceUnavailable('We have a technical problem.')
             return {CATEGORY_ID: new_id}
