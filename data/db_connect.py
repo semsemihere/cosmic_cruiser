@@ -44,18 +44,15 @@ def connect_db():
             client = pm.MongoClient()
 
 
+# function to insert single doc into collection
 def insert_one(collection, doc, db=CATEGORY_DB):
-    """
-    Insert a single doc into collection.
-    """
+
     print(f'{db=}')
     return client[db][collection].insert_one(doc)
 
 
+# function to return first doc found with filer
 def fetch_one(collection, filt, db=CATEGORY_DB):
-    """
-    Find with a filter and return on the first doc found.
-    """
     for doc in client[db][collection].find(filt):
         if MONGO_ID in doc:
             # Convert mongo ID to a string so it works as JSON
@@ -63,13 +60,22 @@ def fetch_one(collection, filt, db=CATEGORY_DB):
         return doc
 
 
+# function to delete first doc found with filter
 def del_one(collection, filt, db=CATEGORY_DB):
-    """
-    Find with a filter and return on the first doc found.
-    """
     client[db][collection].delete_one(filt)
 
 
+# function to delete all docs in collection
+def delete_all(collection, db=CATEGORY_DB):
+    return client[db][collection].delete_many({})
+
+
+# function to count number of documents in collection
+def count_documents(collection, db=CATEGORY_DB):
+    return client[db][collection].count_documents({})
+
+
+# function to fetch all docs in collection
 def fetch_all(collection, db=CATEGORY_DB):
     ret = []
     for doc in client[db][collection].find():
