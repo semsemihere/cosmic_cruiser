@@ -66,8 +66,7 @@ def generate_category_id() -> str:
     return _id
 
 
-def add_category(category_name: str, category_id: str, num_sections:
-    int, category_content: str) -> bool:
+def add_category(category_name: str, category_id: str, num_sections: int, category_content: str) -> bool:
     if exists(category_name):
         raise ValueError(f'Duplicate category name: {category_name=}')
     if not category_name:
