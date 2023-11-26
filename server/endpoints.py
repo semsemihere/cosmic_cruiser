@@ -99,6 +99,7 @@ class UserMenu(Resource):
         """
         Gets the user menu.
         """
+        """
         return {
                    TITLE: USER_MENU_NM,
                    DEFAULT: '0',
@@ -113,6 +114,8 @@ class UserMenu(Resource):
                        },
                    },
                }
+        """
+        return users.get_users()
 
 
 @api.route(f'{USERS_EP}')
