@@ -2,6 +2,7 @@
 This module interfaces to our user data.
 """
 # import bcrypt
+import data.db_connect as dbc
 import hashlib
 LEVEL = 'level'
 MIN_USER_NAME_LEN = 2
@@ -24,6 +25,16 @@ Each users have ...
 
 users = {
     }
+
+USERNAME = "username"
+PASSWORD = "password"
+USERS_COLLECT = "users"
+
+
+# get all users; added to test mongodb
+def get_users():
+    dbc.connect_db()
+    return dbc.fetch_all_as_dict(USERNAME, USERS_COLLECT)
 
 
 def create_user(username, password, email, first_name, last_name, phone):
