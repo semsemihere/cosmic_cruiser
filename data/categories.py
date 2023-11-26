@@ -54,7 +54,9 @@ def _get_test_name():
 def get_test_category():
     test_category = {}
     test_category[NAME] = _get_test_name()
+    test_category[CATEGORY_ID] = generate_category_id()
     test_category[NUM_SECTIONS] = 0
+    test_category[CATEGORY_CONTENT] = 'content'
     return test_category
 
 
