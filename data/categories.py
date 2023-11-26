@@ -13,8 +13,10 @@ BIG_NUM = 100_000_000_000_000_000_000
 MOCK_ID = '0' * ID_LEN
 
 NAME = 'name'
-
+CATEGORY_ID = 'categoryID'
 NUM_SECTIONS = "numSections"
+DESCRIPTION = 'description'
+CONTENT = 'content'
 TEST_CATEGORY_NAME = "Nutrition/Cooking"
 
 categories = {}
@@ -62,20 +64,25 @@ def generate_category_id() -> str:
     return _id
 
 
-def add_category(category_name: str, num_sections: int) -> bool:
-    if exists(category_name):
-        raise ValueError(f'Duplicate category name: {category_name=}')
-    if not category_name:
-        raise ValueError("Category name cannot be blank!")
+def add_category(category_name: str, category_id: str, num_sections: int, description: str, content: str) -> bool:
+    if exists(category_id):
+        raise ValueError(f'Duplicate category ID: {category_id=}')
+    if not category_id:
+        raise ValueError("Category id cannot be blank!")
 
     # categories[category_name] = {NUM_SECTIONS: num_sections}
     # category_id = generate_category_id()
     # return category_id
-    cetegory = {}
-    cetegory[NAME] = category_name
-    cetegory[NUM_SECTIONS] = num_sections
+
+    category = {}
+    category[NAME] = category_name
+    category[CATEGORY_ID] = category_id
+    category[NUM_SECTIONS] = num_sections
+    category[DESCRIPTION] = description
+    category[CONTENT] = content
+
     dbc.connect_db()
-    _id = dbc.insert_one(CATEGORIES_COLLECT, cetegory)
+    _id = dbc.insert_one(CATEGORIES_COLLECT, category)
     return _id is not None
 
 
