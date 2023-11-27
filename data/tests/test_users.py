@@ -76,7 +76,7 @@ def test_user_exists_delete_user():
     userId = create_test_user
     usrs.delete_user(userId)
     user2 = usrs.delete_user(userId)
-    assert user2==-1
+    assert user2==False
 
 
 @patch('data.users.create_user', return_value="null", autospec=True)
@@ -89,3 +89,7 @@ def test_dup_user(create_test_user):
     user=usrs.create_user("test", "test_password","test@gmail.com", "Test", "Test", 1111111111)
     assert(user==-1)
         
+        
+def test_login_user(create_test_user):
+    userId = create_test_user
+    assert(usrs.login_user(userId,"test_password")==True)

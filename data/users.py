@@ -89,7 +89,18 @@ def update_user(userId, field, update):
 # Remove the user from the db
 def delete_user(userId):
     if (not (userId in users)):
-        return -1
+        return False
     else:
         del users[userId]
         return True
+
+
+def login_user(userId, passwordAttempt):
+    if (not (userId in users)):
+        return False
+    if (hashlib.sha3_512(passwordAttempt.encode('UTF-8'),
+        usedforsecurity=True)
+        .hexdigest() == users
+            [userId]['hashedPass'].hexdigest()):
+        return True
+    return False
