@@ -6,6 +6,7 @@ import pymongo as pm
 LOCAL = "0"
 CLOUD = "1"
 
+USER_DB = 'usersDB'
 CATEGORY_DB = 'categoriesDB'
 
 client = None
@@ -25,13 +26,17 @@ def connect_db():
     if client is None:  # not connected yet!
         print("Setting client because it is None.")
         if os.environ.get("CLOUD_MONGO", LOCAL) == CLOUD:
-            password = os.environ.get("GAME_MONGO_PW")
+            # password = os.environ.get("GAME_MONGO_PW")
+            password = os.environ.get("MONGODB_PASSWORD")
             if not password:
                 raise ValueError('You must set your password '
                                  + 'to use Mongo in the cloud.')
             print("Connecting to Mongo in the cloud.")
-            client = pm.MongoClient(f'mongodb+srv://gcallah:{password}'
-                                    + '@cluster0.eqxbbqd.mongodb.net/'
+            # client = pm.MongoClient(f'mongodb+srv://gcallah:{password}'
+            #                         + '@cluster0.eqxbbqd.mongodb.net/'
+            #                         + '?retryWrites=true&w=majority')
+            client = pm.MongoClient(f'mongodb+srv://semihong:{password}'
+                                    + '@cosmiccrusier.3cyi8m1.mongodb.net/'
                                     + '?retryWrites=true&w=majority')
             # PA recommends these settings:
             # + 'connectTimeoutMS=30000&'
@@ -45,14 +50,14 @@ def connect_db():
 
 
 # function to insert single doc into collection
-def insert_one(collection, doc, db=CATEGORY_DB):
+def insert_one(collection, doc, db=USER_DB):
 
     print(f'{db=}')
     return client[db][collection].insert_one(doc)
 
 
 # function to return first doc found with filer
-def fetch_one(collection, filt, db=CATEGORY_DB):
+def fetch_one(collection, filt, db=USER_DB):
     for doc in client[db][collection].find(filt):
         if MONGO_ID in doc:
             # Convert mongo ID to a string so it works as JSON
@@ -61,31 +66,78 @@ def fetch_one(collection, filt, db=CATEGORY_DB):
 
 
 # function to delete first doc found with filter
-def del_one(collection, filt, db=CATEGORY_DB):
+def del_one(collection, filt, db=USER_DB):
     client[db][collection].delete_one(filt)
 
 
 # function to delete all docs in collection
-def delete_all(collection, db=CATEGORY_DB):
+def delete_all(collection, db=USER_DB):
     return client[db][collection].delete_many({})
 
 
 # function to count number of documents in collection
-def count_documents(collection, db=CATEGORY_DB):
+def count_documents(collection, db=USER_DB):
     return client[db][collection].count_documents({})
 
 
 # function to fetch all docs in collection
-def fetch_all(collection, db=CATEGORY_DB):
+def fetch_all(collection, db=USER_DB):
     ret = []
     for doc in client[db][collection].find():
         ret.append(doc)
     return ret
 
 
-def fetch_all_as_dict(key, collection, db=CATEGORY_DB):
+def fetch_all_as_dict(key, collection, db=USER_DB):
     ret = {}
     for doc in client[db][collection].find():
         del doc[MONGO_ID]
         ret[doc[key]] = doc
     return ret
+
+
+# # function to insert single doc into collection
+# def insert_one(collection, doc, db=CATEGORY_DB):
+
+#     print(f'{db=}')
+#     return client[db][collection].insert_one(doc)
+
+
+# # function to return first doc found with filer
+# def fetch_one(collection, filt, db=CATEGORY_DB):
+#     for doc in client[db][collection].find(filt):
+#         if MONGO_ID in doc:
+#             # Convert mongo ID to a string so it works as JSON
+#             doc[MONGO_ID] = str(doc[MONGO_ID])
+#         return doc
+
+
+# # function to delete first doc found with filter
+# def del_one(collection, filt, db=CATEGORY_DB):
+#     client[db][collection].delete_one(filt)
+
+
+# # function to delete all docs in collection
+# def delete_all(collection, db=CATEGORY_DB):
+#     return client[db][collection].delete_many({})
+
+
+# # function to count number of documents in collection
+# def count_documents(collection, db=CATEGORY_DB):
+#     return client[db][collection].count_documents({})
+
+
+# # function to fetch all docs in collection
+# def fetch_all(collection, db=CATEGORY_DB):
+#     ret = []
+#     for doc in client[db][collection].find():
+#         ret.append(doc)
+#     return ret
+
+
+# def fetch_all_as_dict(key, collection, db=CATEGORY_DB):
+#     ret = {}
+#     for doc in client[db][collection].find():
+#         del doc[MONGO_ID]
+#         ret[doc[key]] = doc
+#     return ret

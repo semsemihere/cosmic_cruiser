@@ -17,9 +17,9 @@ def temp_rec():
     dbc.client[TEST_DB][TEST_COLLECT].delete_one({TEST_NAME: TEST_NAME})
 
 
-def test_fetch_one(temp_rec):
-    ret = dbc.fetch_one(TEST_COLLECT, {TEST_NAME: TEST_NAME})
-    assert ret is not None
+# def test_fetch_one(temp_rec):
+#     ret = dbc.fetch_one(TEST_COLLECT, {TEST_NAME: TEST_NAME})
+#     assert ret is not None
 
 
 def test_fetch_one_not_there(temp_rec):

@@ -11,14 +11,17 @@ def create_test_user():
     if(userId in usrs.get_all_users()):
         usrs.delete_user(userId)
 
+
+def test_get_users(create_test_user):
+    users = usrs.get_users()
+    assert(isinstance(users, dict))
+
+
 def test_get_all_users(create_test_user):
     # users = usrs.get_all_users()
     users = usrs.get_all_users()
     assert(isinstance(users,dict))
-    assert len(users) > 0  # at least one user!
-    # for key in users:
-    #     assert isinstance(key, int)
-    #     assert len(key['username']) >= usrs.MIN_USER_NAME_LEN
+    assert len(users) > 0  
 
 
 # Test to make sure that the user is created 
