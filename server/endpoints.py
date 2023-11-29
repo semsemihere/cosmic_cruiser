@@ -183,9 +183,13 @@ class Categories(Resource):
         Add a category.
         """
         name = request.json[categ.NAME]
+        category_id = request.json[categ.CATEGORY_ID]
         num_sections = request.json[categ.NUM_SECTIONS]
+        category_content = request.json[categ.CATEGORY_CONTENT]
         try:
-            new_id = categ.add_category(name, num_sections)
+            new_id = categ.add_category(
+                name, category_id, num_sections,
+                category_content)
             if new_id is None:
                 raise wz.ServiceUnavailable('We have a technical problem.')
             return {CATEGORY_ID: new_id}
