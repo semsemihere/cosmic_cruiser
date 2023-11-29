@@ -33,7 +33,7 @@ categories = {}
 
 
 def get_categories() -> dict:
-    return categories
+    # return categories
     dbc.connect_db()
     return dbc.fetch_all_as_dict(NAME, CATEGORIES_COLLECT)
 
