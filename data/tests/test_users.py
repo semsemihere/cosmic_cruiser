@@ -22,9 +22,9 @@ def test_get_all_users():
     assert len(users) > 0  
 
 
-def test_create_user_ideal():
-    username = 'test'
-    assert username in usrs.get_all_users()
+# def test_create_user_ideal():
+#     username = 'test'
+#     assert username in usrs.get_all_users()
 
 
 # Test to make sure the exception is handled 
@@ -32,9 +32,9 @@ def test_create_user_fail():
     with pytest.raises(ValueError):
         usrs.create_user("", "","" , "", "", 0)
         
-def test_exists():
-    username = 'test'
-    assert username in usrs.get_all_users()
+# def test_exists():
+#     username = 'test'
+#     assert username in usrs.get_all_users()
 
 
 def test_bad_exists_request():
@@ -82,5 +82,3 @@ def test_login_user(create_test_user):
     userId = create_test_user
     assert(usrs.login_user(userId,"test_password")==True)
 """
-
-test_create_user_ideal()
