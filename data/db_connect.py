@@ -6,7 +6,6 @@ import pymongo as pm
 LOCAL = "0"
 CLOUD = "1"
 
-USER_DB = 'usersDB'
 MONGO_DB = 'ccDB'
 
 client = None
@@ -48,7 +47,6 @@ def connect_db():
 
 # function to insert single doc into collection
 def insert_one(collection, doc, db=MONGO_DB):
-
     print(f'{db=}')
     return client[db][collection].insert_one(doc)
 

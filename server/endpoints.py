@@ -28,7 +28,7 @@ DEL_CATEGORY_EP = f'{CATEGORIES_EP}/{DELETE}'
 CATEGORIES_MENU_EP = '/category_menu'
 CATEGORIES_MENU_NM = 'Category Menu'
 CATEGORY_ID = 'Category ID'
-# USERS = 'users'
+USERS = 'users'
 USERS_EP = '/users'
 USER_MENU_EP = '/user_menu'
 USER_MENU_NM = 'User Menu'
@@ -115,6 +115,17 @@ class UserMenu(Resource):
                }
 
 
+user_information = api.model('NewUser', {
+    users.EMAIL: fields.String,
+    users.USERNAME: fields.String,
+    users.PASSWORD: fields.String,
+    users.FIRSTNAME: fields.String,
+    users.LASTNAME: fields.String,
+    users.PHONE: fields.Integer,
+
+})
+
+
 @api.route(f'{USERS_EP}')
 class Users(Resource):
     """
@@ -126,11 +137,35 @@ class Users(Resource):
         """
         return {
             TYPE: DATA,
-            TITLE: 'Current Categories',
-            DATA: users.get_users(),
+            TITLE: 'ALL USERS',
+            DATA: users.get_all_users(),
             MENU: USER_MENU_EP,
             RETURN: MAIN_MENU_EP,
         }
+
+    @api.expect(user_information)
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    def post(self):
+        """
+        This method posts new user.
+        """
+        email = request.json[users.EMAIL]
+        username = request.json[users.USERNAME]
+        password = request.json[users.PASSWORD]
+        first_name = request.json[users.FIRSTNAME]
+        last_name = request.json[users.LASTNAME]
+        phone = request.json[users.PHONE]
+
+        try:
+            new_user = users.create_user(email, username,
+                                         password, first_name,
+                                         last_name, phone)
+
+            return {USERS: new_user}
+
+        except ValueError as e:
+            raise wz.NotAcceptable(f'{str(e)}')
 
 
 @api.route(f'{DEL_CATEGORY_EP}/<name>')
