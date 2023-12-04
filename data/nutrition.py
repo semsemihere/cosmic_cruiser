@@ -15,21 +15,21 @@ MOCK_ID = '0' * ID_LEN
 NAME = 'name'
 SECTION_ID = 'sectionID'
 # NUM_SECTIONS = "numSections"
-CONTENT = 'nutritionContent'
+ARTICLE = 'nutritionContent'
 
 # TEST_CATEGORY_NAME = "Nutrition/Cooking"
 
 # nutrition = {
 #     'health': {
-#         CONTENT: "api",
+#         ARTICLE: "api",
 #     },
 #     'cooking': {
-#         CONTENT: "api",
+#         ARTICLE: "api",
 #     },
 # }
 
 
-def get_nutrition() -> dict:
+def get_sections() -> dict:
     # return nutrition, by name
     dbc.connect_db()
     return dbc.fetch_all_as_dict(NAME, NUTRITION_COLLECT)
@@ -50,7 +50,7 @@ def get_test_section():
     test_section = {}
     test_section[NAME] = _get_test_name()
     test_section[SECTION_ID] = generate_section_id()
-    test_section[CONTENT] = 'content'
+    test_section[ARTICLE] = 'article'
     return test_section
 
 
@@ -61,7 +61,7 @@ def generate_section_id() -> str:
 
 
 def add_section(section_name: str, section_id: str,
-                section_content: str) -> bool:
+                section_article: str) -> bool:
     if exists(section_name):
         raise ValueError(f'Duplicate section name: {section_name=}')
     if not section_name:
@@ -73,7 +73,7 @@ def add_section(section_name: str, section_id: str,
     section = {}
     section[NAME] = section_name
     section[SECTION_ID] = section_id
-    section[CONTENT] = section_content
+    section[ARTICLE] = section_article
     dbc.connect_db()
     _id = dbc.insert_one(NUTRITION_COLLECT, section)
     return _id is not None
@@ -90,11 +90,11 @@ def delete_section(section_name: str):
 
 
 # def exists(section_name: str) -> bool:
-#     return section_name in get_nutrition()
+#     return section_name in get_sections()
 
 
 def main():
-    print(get_nutrition())
+    print(get_sections())
 
 
 if __name__ == '__main__':

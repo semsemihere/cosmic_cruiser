@@ -12,6 +12,7 @@ import werkzeug.exceptions as wz
 
 import data.categories as categ
 import data.users as users
+import data.nutrition as nutrition
 
 app = Flask(__name__)
 api = Api(app)
@@ -28,6 +29,11 @@ DEL_CATEGORY_EP = f'{CATEGORIES_EP}/{DELETE}'
 CATEGORIES_MENU_EP = '/category_menu'
 CATEGORIES_MENU_NM = 'Category Menu'
 CATEGORY_ID = 'Category ID'
+
+NUTRITION = 'nutrition'
+NUTRITION_EP = '/categories/nutrition'
+NUTRITION_MENU_EP = '/nutrition_menu'
+
 USERS = 'users'
 USERS_EP = '/users'
 USER_MENU_EP = '/user_menu'
@@ -226,5 +232,43 @@ class Categories(Resource):
             if new_id is None:
                 raise wz.ServiceUnavailable('We have a technical problem.')
             return {CATEGORY_ID: new_id}
+        except ValueError as e:
+            raise wz.NotAcceptable(f'{str(e)}')
+
+
+@api.route(f'{NUTRITION_EP}')
+class Nutrition(Resource):
+    """
+    This class supports fetching a list of all nutrition sections.
+    """
+    def get(self):
+        """
+        This method returns all nutrition.
+        """
+        return {
+            TYPE: DATA,
+            TITLE: 'ALL NUTRITION',
+            DATA: nutrition.get_all_sections(),
+            MENU: NUTRITION_MENU_EP,
+            RETURN: MAIN_MENU_EP,
+        }
+
+    @api.expect(user_information)
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    def post(self):
+        """
+        This method posts new nutrition.
+        """
+
+        name = request.json[nutrition.NAME]
+        section_id = request.json[nutrition.SECTION_ID]
+        article = request.json[nutrition.ARTICLE]
+
+        try:
+            new_section = nutrition.add_section(name, section_id, article)
+
+            return {NUTRITION: new_section}
+
         except ValueError as e:
             raise wz.NotAcceptable(f'{str(e)}')
