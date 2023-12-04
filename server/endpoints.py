@@ -256,7 +256,7 @@ class Nutrition(Resource):
         return {
             TYPE: DATA,
             TITLE: 'ALL NUTRITION',
-            DATA: nutrition.get_all_sections(),
+            DATA: nutrition.get_sections(),
             MENU: NUTRITION_MENU_EP,
             RETURN: MAIN_MENU_EP,
         }
