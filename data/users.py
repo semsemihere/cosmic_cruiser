@@ -82,7 +82,10 @@ def create_user(email, username, password, first_name, last_name, phone):
 
 def delete_user(username):
     dbc.connect_db()
-    id = dbc.del_one(USERS_COLLECT, {'username': username})
+    if exists(username):
+        id = dbc.del_one(USERS_COLLECT, {'username': username})
+    else:
+        raise ValueError(f'Delete failure: {username} not in database.')
     return id is not None
 
 
@@ -90,8 +93,6 @@ def delete_user(username):
 # def delete_user(username):
 #     if exists(username):
 #         return dbc.del_one(USERS_COLLECT, {USERNAME : username})
-#     else:
-#         raise ValueError(f'Delete failure: {username} not in database.')
 
 
 # # Update User information

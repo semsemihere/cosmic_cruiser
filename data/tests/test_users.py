@@ -27,9 +27,13 @@ def test_get_all_users():
 
 
 def test_create_user_ideal(create_test_user):
-    
     print(usrs.get_all_users())
     assert USERNAME in usrs.get_all_users()
+
+
+def test_create_dup_user(create_test_user):
+    with pytest.raises(ValueError):
+        usrs.create_user("test@gmail.com", USERNAME, "test_password", "Test", "Test", 1111111111)
 
 
 # Test to make sure the exception is handled 
@@ -37,6 +41,19 @@ def test_create_user_fail():
     with pytest.raises(ValueError):
         usrs.create_user("", "","" , "", "", 0)
         
+        
+def test_delete_user_ideal(create_test_user):
+    userId = create_test_user
+    usrs.delete_user(userId)
+    assert userId not in usrs.get_all_users()
+    
+
+def test_delete_non_user(create_test_user):
+    with pytest.raises(ValueError):
+        usrs.delete_user("")
+    
+    
+    
 # def test_exists():
 #     username = 'test'
 #     assert username in usrs.get_all_users()
