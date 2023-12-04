@@ -2,17 +2,21 @@ import pytest
 import hashlib
 import data.users as usrs
 from unittest.mock import patch
+USERNAME = "test_username"
 
 # fixture
 @pytest.fixture
 def create_test_user():
-    username = "test"
-    _id = usrs.create_user("test@gmail.com", "username", "test_password", "Test", "Test", 1111111111)
-    if _id:
-        yield username
+    if(USERNAME in usrs.get_all_users()):
+        usrs.delete_user(USERNAME)
+        
+    print(usrs.get_all_users())
+    id = usrs.create_user("test@gmail.com", USERNAME, "test_password", "Test", "Test", 1111111111)
+    if id:
+        yield USERNAME
 
-    if(username in usrs.get_all_users()):
-        usrs.delete_user(username)
+    if(USERNAME in usrs.get_all_users()):
+        usrs.delete_user(USERNAME)
 
 
 def test_get_all_users():
@@ -22,9 +26,10 @@ def test_get_all_users():
     # assert len(users) > 0  
 
 
-# def test_create_user_ideal():
-#     username = 'test'
-#     assert username in usrs.get_all_users()
+def test_create_user_ideal(create_test_user):
+    
+    print(usrs.get_all_users())
+    assert USERNAME in usrs.get_all_users()
 
 
 # Test to make sure the exception is handled 

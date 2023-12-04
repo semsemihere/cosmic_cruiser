@@ -80,6 +80,12 @@ def create_user(email, username, password, first_name, last_name, phone):
     # return _id
 
 
+def delete_user(username):
+    dbc.connect_db()
+    id = dbc.del_one(USERS_COLLECT, {'username': username})
+    return id is not None
+
+
 # # Remove the user from the db
 # def delete_user(username):
 #     if exists(username):
