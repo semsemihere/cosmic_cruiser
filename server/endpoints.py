@@ -194,7 +194,15 @@ class DelCategory(Resource):
 
 category_fields = api.model('NewCategory', {
     categ.NAME: fields.String,
+    categ.CATEGORY_ID: fields.Integer,
     categ.NUM_SECTIONS: fields.Integer,
+})
+
+
+nutrition_fields = api.model('NewCategory', {
+    nutrition.NAME: fields.String,
+    nutrition.SECTION_ID: fields.Integer,
+    nutrition.ARTICLE: fields.String,
 })
 
 
@@ -253,7 +261,7 @@ class Nutrition(Resource):
             RETURN: MAIN_MENU_EP,
         }
 
-    @api.expect(user_information)
+    @api.expect(nutrition_fields)
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     def post(self):
