@@ -1,0 +1,3 @@
+{"_id":{"$oid":"656cee412847d4eae39f8564"},"email":"sss@gmail.com","username":"theuser","password":"asdf","firstname":"Jane","lastname":"Doe","phonenumber":1231231234,"role":"user"}
+{"_id":{"$oid":"656cf13bd56f5fc73c035f01"},"email":"string","username":"string","password":"b45cffe084dd3d20d928bee85e7b0f21","firstname":"string","lastname":"string","phonenumber":1231231234,"role":"user"}
+{"_id":{"$oid":"656cff49c3439c1c1b8f7fc1"},"email":"asdfadfs","username":"asdfasdfasdfasdf","password":"7815696ecbf1c96e6894b779456d330e","firstname":"a","lastname":"b","phonenumber":12312312312,"role":"user"}
