@@ -26,6 +26,7 @@ HELLO_EP = '/hello'
 HELLO_RESP = 'hello'
 CATEGORIES_EP = '/categories'
 DEL_CATEGORY_EP = f'{CATEGORIES_EP}/{DELETE}'
+
 CATEGORIES_MENU_EP = '/category_menu'
 CATEGORIES_MENU_NM = 'Category Menu'
 CATEGORY_ID = 'Category ID'
@@ -33,6 +34,8 @@ CATEGORY_ID = 'Category ID'
 NUTRITION = 'nutrition'
 NUTRITION_EP = '/categories/nutrition'
 NUTRITION_MENU_EP = '/nutrition_menu'
+DEL_SECTION_EP = f'{NUTRITION_EP}/{DELETE}'
+
 
 USERS = 'users'
 USERS_EP = '/users'
@@ -280,3 +283,21 @@ class Nutrition(Resource):
 
         except ValueError as e:
             raise wz.NotAcceptable(f'{str(e)}')
+
+
+@api.route(f'{DEL_SECTION_EP}/<name>')
+class DeleteSection(Resource):
+    """
+    Deletes a section in nutrition by name.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
+    def delete(self, name):
+        """
+        Deletes a section by name.
+        """
+        try:
+            nutrition.delete_section(name)
+            return {name: 'Deleted'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
