@@ -13,6 +13,7 @@ import werkzeug.exceptions as wz
 import data.categories as categ
 import data.users as users
 import data.nutrition as nutrition
+import data.ems as ems
 
 app = Flask(__name__)
 api = Api(app)
@@ -26,6 +27,7 @@ HELLO_EP = '/hello'
 HELLO_RESP = 'hello'
 CATEGORIES_EP = '/categories'
 DEL_CATEGORY_EP = f'{CATEGORIES_EP}/{DELETE}'
+
 CATEGORIES_MENU_EP = '/category_menu'
 CATEGORIES_MENU_NM = 'Category Menu'
 CATEGORY_ID = 'Category ID'
@@ -33,6 +35,11 @@ CATEGORY_ID = 'Category ID'
 NUTRITION = 'nutrition'
 NUTRITION_EP = '/categories/nutrition'
 NUTRITION_MENU_EP = '/nutrition_menu'
+DEL_SECTION_EP = f'{NUTRITION_EP}/{DELETE}'
+
+EMS = "emergencyMedicalServices"
+EMS_EP = '/categories/emergency_medical_services'
+EMS_MENU_EP = '/emergency_medical_services_menu'
 
 USERS = 'users'
 USERS_EP = '/users'
@@ -199,10 +206,16 @@ category_fields = api.model('NewCategory', {
 })
 
 
-nutrition_fields = api.model('NewCategory', {
+nutrition_fields = api.model('NewNutrition', {
     nutrition.NAME: fields.String,
     nutrition.SECTION_ID: fields.Integer,
-    nutrition.ARTICLE: fields.String,
+    nutrition.ARTICLE: fields.Raw,
+})
+
+ems_fields = api.model('NewEMS', {
+    ems.EMS_SECTION_NAME: fields.String,
+    ems.EMS_SECTION_ID: fields.Integer,
+    ems.EMS_ARTICLES: fields.String,
 })
 
 
@@ -277,6 +290,62 @@ class Nutrition(Resource):
             new_section = nutrition.add_section(name, section_id, article)
 
             return {NUTRITION: new_section}
+
+        except ValueError as e:
+            raise wz.NotAcceptable(f'{str(e)}')
+
+
+@api.route(f'{DEL_SECTION_EP}/<name>')
+class DeleteSection(Resource):
+    """
+    Deletes a section in nutrition by name.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
+    def delete(self, name):
+        """
+        Deletes a section by name.
+        """
+        try:
+            nutrition.delete_section(name)
+            return {name: 'Deleted'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
+
+
+@api.route(f'{EMS_EP}')
+class EmergencyMedicalServices(Resource):
+    """
+    This class supports fetching a list of all EMS sections.
+    """
+    def get(self):
+        """
+        This method returns all emergency medical services.
+        """
+        return {
+            TYPE: DATA,
+            TITLE: 'ALL EMERGENCY MEDICAL SERVICES',
+            DATA: ems.get_ems_sections(),
+            MENU: EMS_MENU_EP,
+            RETURN: MAIN_MENU_EP,
+        }
+
+    @api.expect(ems_fields)
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    def post(self):
+        """
+        This method posts new ems.
+        """
+
+        name = request.json[ems.EMS_SECTION_NAME]
+        section_id = request.json[ems.EMS_SECTION_ID]
+        article = request.json[ems.EMS_ARTICLES]
+
+        try:
+            new_section = ems.add_ems_section(name, section_id, article)
+
+            return {EMS: new_section}
 
         except ValueError as e:
             raise wz.NotAcceptable(f'{str(e)}')
