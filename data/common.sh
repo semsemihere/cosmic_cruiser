@@ -26,9 +26,9 @@ BKUP_DIR="$DATA_DIR/bkup"
 EXP=/usr/bin/mongoexport
 IMP=/usr/bin/mongoimport
 
-if [ -z $MONGO_PASSWD ]
+if [ -z $MONGODB_PASSWORD ]
 then
-    echo "You must set MONGO_PASSWD in your env before running this script."
+    echo "You must set MONGODB_PASSWORD in your env before running this script."
     exit 1
 fi
 
