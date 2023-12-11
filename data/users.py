@@ -68,7 +68,8 @@ def create_user(email, username, password, first_name, last_name, phone):
     user = {}
     user[EMAIL] = email
     user[USERNAME] = username
-    user[PASSWORD] = hashlib.md5(password.encode()).hexdigest()
+    user[PASSWORD] = hashlib.sha3_512(password.encode('UTF-8'),
+                                      usedforsecurity=True).hexdigest()
     user[FIRSTNAME] = first_name
     user[LASTNAME] = last_name
     user[PHONE] = phone
@@ -107,12 +108,12 @@ def delete_user(username):
 #         return True
 #     return -1
 
-# def login_user(userId, passwordAttempt):
-#     if (not (userId in users)):
-#         return False
-#     if (hashlib.sha3_512(passwordAttempt.encode('UTF-8'),
-#         usedforsecurity=True)
-#         .hexdigest() == users
-#             [userId]['hashedPass'].hexdigest()):
-#         return True
-#     return False
+def login_user(userId, passwordAttempt):
+    if exists(userId):
+        users = get_all_users()
+        print(users[userId])
+        if (hashlib.sha3_512(passwordAttempt.encode('UTF-8'),
+                             usedforsecurity=True)
+                .hexdigest() == users[userId][PASSWORD]):
+            return True
+    return False

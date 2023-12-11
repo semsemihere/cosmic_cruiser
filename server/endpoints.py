@@ -144,6 +144,21 @@ class Users(Resource):
     """
     This class supports fetching a list of all users.
     """
+    @api.expect(user_information)
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Found')
+    def delete(self):
+        """
+        This method deletes user by name.
+        """
+        username = request.json[users.USERNAME]
+        try:
+            deleted_user = users.delete_user(username)
+            return {USERS: deleted_user}
+
+        except ValueError as e:
+            raise wz.NotAcceptable(f'{str(e)}')
+
     def get(self):
         """
         This method returns all users.
@@ -190,7 +205,7 @@ class DelCategory(Resource):
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
     def delete(self, name):
         """
-        Deletes a game by name.
+        Deletes a category by name.
         """
         try:
             categ.delete_category(name)
