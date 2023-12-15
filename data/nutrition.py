@@ -89,8 +89,23 @@ def delete_section(section_name: str):
         raise ValueError(f'Delete failure: {section_name} not in database.')
 
 
-# def exists(section_name: str) -> bool:
-#     return section_name in get_sections()
+def update_section_content(section_name: str, new_content: str) -> bool:
+    # first check if the section exists
+    if exists(section_name):
+        # update content of the section
+        update_query = {NAME: section_name}
+        new_values = {'$set': {ARTICLE: new_content}}
+
+        dbc.connect_db()
+        result = dbc.update_one(NUTRITION_COLLECT, update_query, new_values)
+
+        # check if update was successful
+        if result.modified_count > 0:
+            return True
+        else:
+            raise ValueError(f'update fialed: {section_name}.')
+    else:
+        raise ValueError(f'update fialed: {section_name} not in database.')
 
 
 def main():

@@ -246,6 +246,7 @@ finance_fields = api.model('NewFinance', {
     fin.FINANCES_ARTICLE: fields.Raw,
 })
 
+
 @api.route(f'{CATEGORIES_EP}')
 class Categories(Resource):
     """
@@ -340,6 +341,30 @@ class DeleteSection(Resource):
             raise wz.NotFound(f'{str(e)}')
 
 
+@api.route(f'{NUTRITION_EP}/<name>')
+class UpdateNutritionSection(Resource):
+    """
+    Updates  content of a section in the nutrition category.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
+    @api.response(HTTPStatus.BAD_REQUEST, 'Bad Request')
+    def put(self, name):
+
+        new_content = request.json.get('content')
+
+        if new_content is None:
+            raise wz.BadRequest('need to include content field')
+
+        try:
+            nutrition.update_section_content(name, new_content)
+            return {name: 'content updated successfully'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
+        except Exception as e:
+            raise wz.BadRequest(f'failed to update content: {str(e)}')
+
+
 @api.route(f'{EMS_EP}')
 class EmergencyMedicalServices(Resource):
     """
@@ -394,7 +419,6 @@ class DelEMS(Resource):
             return {ems_section_id: 'Deleted'}
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')
-
 
 
 @api.route(f'{FINANCES_EP}')

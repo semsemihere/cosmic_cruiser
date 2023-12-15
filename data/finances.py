@@ -60,7 +60,7 @@ def generate_section_id() -> str:
 
 
 def add_finances_section(section_name: str, section_id: str,
-                section_article: str) -> bool:
+                         section_article: str) -> bool:
     if exists(section_name):
         raise ValueError(f'Duplicate section name: {section_name=}')
     if not section_name:
