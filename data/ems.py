@@ -42,6 +42,7 @@ def add_ems_section(ems_section_name: str, ems_section_id: str,
 
 
 def delete_ems_section(ems_section_id: str):
+    # Deletes EMS section by id
     if exists(ems_section_id):
         return dbc.del_one(EMS_COLLECT, {EMS_SECTION_ID: ems_section_id})
     else:
@@ -49,6 +50,7 @@ def delete_ems_section(ems_section_id: str):
 
 
 def exists(section_id: str) -> bool:
+    # Checks ems section by id
     dbc.connect_db()
     return dbc.fetch_one(EMS_COLLECT, {EMS_SECTION_ID: section_id})
 

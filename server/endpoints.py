@@ -40,6 +40,7 @@ DEL_SECTION_EP = f'{NUTRITION_EP}/{DELETE}'
 EMS = "emergencyMedicalServices"
 EMS_EP = '/categories/emergency_medical_services'
 EMS_MENU_EP = '/emergency_medical_services_menu'
+DEL_EMS_SECTION_EP = f'{EMS_EP}/{DELETE}'
 
 USERS = 'users'
 USERS_EP = '/users'
@@ -223,13 +224,13 @@ category_fields = api.model('NewCategory', {
 
 nutrition_fields = api.model('NewNutrition', {
     nutrition.NAME: fields.String,
-    nutrition.SECTION_ID: fields.Integer,
+    nutrition.SECTION_ID: fields.String,
     nutrition.ARTICLE: fields.Raw,
 })
 
 ems_fields = api.model('NewEMS', {
     ems.EMS_SECTION_NAME: fields.String,
-    ems.EMS_SECTION_ID: fields.Integer,
+    ems.EMS_SECTION_ID: fields.String,
     ems.EMS_ARTICLES: fields.String,
 })
 
@@ -364,3 +365,21 @@ class EmergencyMedicalServices(Resource):
 
         except ValueError as e:
             raise wz.NotAcceptable(f'{str(e)}')
+
+
+@api.route(f'{DEL_EMS_SECTION_EP}/<ems_section_id>')
+class DelEMS(Resource):
+    """
+    Deletes a ems section by id.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
+    def delete(self, ems_section_id):
+        """
+        Deletes a ems section by id.
+        """
+        try:
+            ems.delete_ems_section(ems_section_id)
+            return {ems_section_id: 'Deleted'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
