@@ -14,6 +14,7 @@ import data.categories as categ
 import data.users as users
 import data.nutrition as nutrition
 import data.ems as ems
+import data.finances as fin
 
 app = Flask(__name__)
 api = Api(app)
@@ -41,6 +42,11 @@ EMS = "emergencyMedicalServices"
 EMS_EP = '/categories/emergency_medical_services'
 EMS_MENU_EP = '/emergency_medical_services_menu'
 DEL_EMS_SECTION_EP = f'{EMS_EP}/{DELETE}'
+
+FINANCES = 'finances'
+FINANCES_EP = '/categories/finances'
+FINANCES_MENU_EP = '/finances_menu'
+DEL_FINANCES_SECTION_EP = f'{FINANCES_EP}/{DELETE}'
 
 USERS = 'users'
 USERS_EP = '/users'
@@ -234,6 +240,11 @@ ems_fields = api.model('NewEMS', {
     ems.EMS_ARTICLES: fields.String,
 })
 
+finance_fields = api.model('NewFinance', {
+    fin.FINANCES_NAME: fields.String,
+    fin.FINANCES_SECTION_ID: fields.String,
+    fin.FINANCES_ARTICLE: fields.Raw,
+})
 
 @api.route(f'{CATEGORIES_EP}')
 class Categories(Resource):
@@ -381,5 +392,62 @@ class DelEMS(Resource):
         try:
             ems.delete_ems_section(ems_section_id)
             return {ems_section_id: 'Deleted'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
+
+
+
+@api.route(f'{FINANCES_EP}')
+class Finances(Resource):
+    """
+    This class supports fetching a list of all finance sections.
+    """
+    def get(self):
+        """
+        This method returns all finance.
+        """
+        return {
+            TYPE: DATA,
+            TITLE: 'ALL FINANCE',
+            DATA: fin.get_finances_sections(),
+            MENU: FINANCES_MENU_EP,
+            RETURN: MAIN_MENU_EP,
+        }
+
+    @api.expect(finance_fields)
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    def post(self):
+        """
+        This method posts new finance.
+        """
+
+        name = request.json[fin.FINANCES_NAME]
+        section_id = request.json[fin.FINANCES_SECTION_ID]
+        article = request.json[fin.FINANCES_ARTICLE]
+
+        try:
+            new_section = fin.add_finances_section(name, section_id, article)
+
+            return {FINANCES: new_section}
+
+        except ValueError as e:
+            raise wz.NotAcceptable(f'{str(e)}')
+
+
+@api.route(f'{DEL_FINANCES_SECTION_EP}/<name>')
+class DeleteFinancesSection(Resource):
+    """
+    Deletes a section in finance by name.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
+    def delete(self, name):
+        """
+        Deletes a section by name.
+        """
+        try:
+            fin.delete_finances_section(name)
+            return {name: 'Deleted'}
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')
