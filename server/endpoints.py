@@ -429,24 +429,6 @@ class EmergencyMedicalServices(Resource):
             raise wz.NotAcceptable(f'{str(e)}')
 
 
-@api.route(f'{DEL_FINANCES_SECTION_EP}/<name>')
-class DeleteFinancesSection(Resource):
-    """
-    Deletes a section in finance by name.
-    """
-    @api.response(HTTPStatus.OK, 'Success')
-    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
-    def delete(self, name):
-        """
-        Deletes a finance section by name.
-        """
-        try:
-            fin.delete_finances_section(name)
-            return {name: 'Deleted'}
-        except ValueError as e:
-            raise wz.NotFound(f'{str(e)}')
-
-
 @api.route(f'{EMS_EP}/<ems_section_id>/<new_content>')
 class UpdateEMSSection(Resource):
     """
@@ -471,6 +453,24 @@ finance_fields = api.model('NewFinance', {
     fin.FINANCES_SECTION_ID: fields.String,
     fin.FINANCES_ARTICLE: fields.String,
 })
+
+
+@api.route(f'{DEL_FINANCES_SECTION_EP}/<name>')
+class DeleteFinancesSection(Resource):
+    """
+    Deletes a section in finance by name.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
+    def delete(self, name):
+        """
+        Deletes a finance section by name.
+        """
+        try:
+            fin.delete_finances_section(name)
+            return {name: 'Deleted'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
 
 
 @api.route(f'{FINANCES_EP}')
@@ -509,3 +509,22 @@ class Finances(Resource):
 
         except ValueError as e:
             raise wz.NotAcceptable(f'{str(e)}')
+
+
+@api.route(f'{FINANCES_EP}/<finance_section_id>/<new_content>')
+class UpdateFinanceSection(Resource):
+    """
+    Updates content of a section in the finance category.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
+    @api.response(HTTPStatus.BAD_REQUEST, 'Bad Request')
+    def put(self, finance_section_id, new_content):
+
+        try:
+            fin.update_finance_section_content(finance_section_id, new_content)
+            return {finance_section_id: 'Updated content'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
+        except Exception as e:
+            raise wz.BadRequest(f'failed to update content: {str(e)}')

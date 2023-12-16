@@ -78,6 +78,22 @@ def add_finances_section(section_name: str, section_id: str,
     return _id is not None
 
 
+def update_finance_section_content(finance_section_id: str,
+                                   new_content: str) -> bool:
+    if exists(finance_section_id):
+        article = {}
+        article[FINANCES_ARTICLE] = new_content
+
+        filter_query = {FINANCES_SECTION_ID: finance_section_id}
+        update_query = {'$set': article}
+
+        dbc.connect_db()
+        _id = dbc.update_one(FINANCES_COLLECT, filter_query, update_query)
+        return _id is not None
+    else:
+        raise ValueError(f'Update failed: {finance_section_id} not in db.')
+
+
 def delete_finances_section(section_name: str):
     # check if the section to delete is in the database
     if exists(section_name):
