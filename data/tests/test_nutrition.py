@@ -78,12 +78,10 @@ def test_delete_section_not_there():
     with pytest.raises(ValueError):
         nutrition.delete_section(section_name)
 
-# def test_update_section_content(temp_section):
-#     section_name = temp_section
-#     new_content = 'Updated content for testing.'
+def test_update_section_content(temp_section):
+    section_name = temp_section
+    new_content = 'Updated content for testing.'
+    nutrition.update_section_content(section_name, new_content)
+    updated_section = nutrition.get_sections().get(section_name, {})
 
-#     # nutrition.add_section(section_name, nutrition.generate_section_id(), 'initial content')
-#     nutrition.update_section_content(section_name, new_content)
-#     updated_section = nutrition.get_sections().get(section_name, {})
-
-#     assert updated_section.get(nutrition.ARTICLE) == new_content
+    assert updated_section.get(nutrition.ARTICLE) == new_content
