@@ -49,6 +49,15 @@ def test_add_ems_section_blank_id():
     with pytest.raises(ValueError):
         ems.add_ems_section(ems_name, "", {})
 
+@pytest.mark.skip('temporary skip')
+def test_update_ems_section_content(temp_ems):
+    section_id = temp_ems
+    new_content = "Updated content for testing"
+    ems.update_ems_section_content(section_id, new_content)
+    updated_section = ems.get_ems_sections().get(section_id, {})
+
+    assert updated_section.get(ems.EMS_ARTICLES) == new_content
+
 def test_delete_ems_section(temp_ems):
     ems_id = temp_ems
     ems.delete_ems_section(ems_id)

@@ -447,6 +447,25 @@ class DeleteFinancesSection(Resource):
             raise wz.NotFound(f'{str(e)}')
 
 
+@api.route(f'{EMS_EP}/<ems_section_id>/<new_content>')
+class UpdateEMSSection(Resource):
+    """
+    Updates content of a section in the ems category.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
+    @api.response(HTTPStatus.BAD_REQUEST, 'Bad Request')
+    def put(self, ems_section_id, new_content):
+
+        try:
+            ems.update_ems_section_content(ems_section_id, new_content)
+            return {ems_section_id: 'Updated content'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
+        except Exception as e:
+            raise wz.BadRequest(f'failed to update content: {str(e)}')
+
+
 finance_fields = api.model('NewFinance', {
     fin.FINANCES_NAME: fields.String,
     fin.FINANCES_SECTION_ID: fields.String,
