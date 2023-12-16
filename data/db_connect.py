@@ -33,7 +33,8 @@ def connect_db():
 
             client = pm.MongoClient(f'mongodb+srv://semihong:{password}'
                                     + '@cosmiccrusier.3cyi8m1.mongodb.net/'
-                                    + '?retryWrites=true&w=majority')
+                                    + '?retryWrites=true&w=majority',
+                                    tls=False)
             # PA recommends these settings:
             # + 'connectTimeoutMS=30000&'
             # + 'socketTimeoutMS=None
