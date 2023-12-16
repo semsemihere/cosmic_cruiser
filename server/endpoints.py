@@ -26,17 +26,17 @@ MAIN_MENU_EP = '/MainMenu'
 MAIN_MENU_NM = "Welcome to Jack-of-All-Trades!"
 HELLO_EP = '/hello'
 HELLO_RESP = 'hello'
-CATEGORIES_EP = '/categories'
-DEL_CATEGORY_EP = f'{CATEGORIES_EP}/{DELETE}'
 
-CATEGORIES_MENU_EP = '/category_menu'
 CATEGORIES_MENU_NM = 'Category Menu'
 CATEGORY_ID = 'Category ID'
+CATEGORIES_EP = '/categories'
+CATEGORIES_MENU_EP = '/category_menu'
+DEL_CATEGORY_EP = f'{CATEGORIES_EP}/{DELETE}'
 
 NUTRITION = 'nutrition'
 NUTRITION_EP = '/categories/nutrition'
 NUTRITION_MENU_EP = '/nutrition_menu'
-DEL_SECTION_EP = f'{NUTRITION_EP}/{DELETE}'
+DEL_NUTRITION_SECTION_EP = f'{NUTRITION_EP}/{DELETE}'
 
 EMS = "emergencyMedicalServices"
 EMS_EP = '/categories/emergency_medical_services'
@@ -52,6 +52,7 @@ USERS = 'users'
 USERS_EP = '/users'
 USER_MENU_EP = '/user_menu'
 USER_MENU_NM = 'User Menu'
+DEL_USERS_EP = f'{USERS_EP}/{DELETE}'
 TYPE = 'Type'
 DATA = 'Data'
 TITLE = 'Title'
@@ -135,6 +136,23 @@ class UserMenu(Resource):
                }
 
 
+@api.route(f'{DEL_USERS_EP}/<username>')
+class DeleteUser(Resource):
+    """
+    This method deletes user.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
+    def delete(self, username):
+        # This method deletes a user by username.
+
+        try:
+            users.delete_user(username)
+            return {username: 'Deleted'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
+
+
 user_information = api.model('NewUser', {
     users.EMAIL: fields.String,
     users.USERNAME: fields.String,
@@ -149,23 +167,9 @@ user_information = api.model('NewUser', {
 @api.route(f'{USERS_EP}')
 class Users(Resource):
     """
-    This class supports fetching a list of all users.
+    This class supports various operations on users, such as
+    listing them, and adding a new user.
     """
-    @api.expect(user_information)
-    @api.response(HTTPStatus.OK, 'Success')
-    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Found')
-    def delete(self):
-        """
-        This method deletes user by name.
-        """
-        username = request.json[users.USERNAME]
-        try:
-            deleted_user = users.delete_user(username)
-            return {USERS: deleted_user}
-
-        except ValueError as e:
-            raise wz.NotAcceptable(f'{str(e)}')
-
     def get(self):
         """
         This method returns all users.
@@ -204,9 +208,9 @@ class Users(Resource):
 
 
 @api.route(f'{DEL_CATEGORY_EP}/<name>')
-class DelCategory(Resource):
+class DeleteCategory(Resource):
     """
-    Deletes a category by name.
+    This method deletes a category.
     """
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
@@ -228,30 +232,11 @@ category_fields = api.model('NewCategory', {
 })
 
 
-nutrition_fields = api.model('NewNutrition', {
-    nutrition.NAME: fields.String,
-    nutrition.SECTION_ID: fields.String,
-    nutrition.ARTICLE: fields.Raw,
-})
-
-ems_fields = api.model('NewEMS', {
-    ems.EMS_SECTION_NAME: fields.String,
-    ems.EMS_SECTION_ID: fields.String,
-    ems.EMS_ARTICLES: fields.String,
-})
-
-finance_fields = api.model('NewFinance', {
-    fin.FINANCES_NAME: fields.String,
-    fin.FINANCES_SECTION_ID: fields.String,
-    fin.FINANCES_ARTICLE: fields.Raw,
-})
-
-
 @api.route(f'{CATEGORIES_EP}')
 class Categories(Resource):
     """
-    This class supports various operations on games, such as
-    listing them, and adding a game.
+    This class supports various operations on categories, such as
+    listing them, and adding a new category.
     """
     def get(self):
         """
@@ -285,10 +270,36 @@ class Categories(Resource):
             raise wz.NotAcceptable(f'{str(e)}')
 
 
+@api.route(f'{DEL_NUTRITION_SECTION_EP}/<name>')
+class DeleteNutritionSection(Resource):
+    """
+    Deletes a section in nutrition by name.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
+    def delete(self, name):
+        """
+        Deletes a nutrition section by name.
+        """
+        try:
+            nutrition.delete_section(name)
+            return {name: 'Deleted'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
+
+
+nutrition_fields = api.model('NewNutrition', {
+    nutrition.NAME: fields.String,
+    nutrition.SECTION_ID: fields.String,
+    nutrition.ARTICLE: fields.String,
+})
+
+
 @api.route(f'{NUTRITION_EP}')
 class Nutrition(Resource):
     """
-    This class supports fetching a list of all nutrition sections.
+    This class supports various operations on nutrition, such as
+    listing them, and adding a new nutrition section.
     """
     def get(self):
         """
@@ -307,7 +318,7 @@ class Nutrition(Resource):
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     def post(self):
         """
-        This method posts new nutrition.
+        This method posts new nutrition section.
         """
 
         name = request.json[nutrition.NAME]
@@ -323,28 +334,10 @@ class Nutrition(Resource):
             raise wz.NotAcceptable(f'{str(e)}')
 
 
-@api.route(f'{DEL_SECTION_EP}/<name>')
-class DeleteSection(Resource):
-    """
-    Deletes a section in nutrition by name.
-    """
-    @api.response(HTTPStatus.OK, 'Success')
-    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
-    def delete(self, name):
-        """
-        Deletes a section by name.
-        """
-        try:
-            nutrition.delete_section(name)
-            return {name: 'Deleted'}
-        except ValueError as e:
-            raise wz.NotFound(f'{str(e)}')
-
-
 @api.route(f'{NUTRITION_EP}/<name>')
 class UpdateNutritionSection(Resource):
     """
-    Updates  content of a section in the nutrition category.
+    Updates content of a section in the nutrition category.
     """
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
@@ -365,10 +358,36 @@ class UpdateNutritionSection(Resource):
             raise wz.BadRequest(f'failed to update content: {str(e)}')
 
 
+@api.route(f'{DEL_EMS_SECTION_EP}/<ems_section_id>')
+class DeleteEMS(Resource):
+    """
+    Deletes a ems section by id.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
+    def delete(self, ems_section_id):
+        """
+        Deletes a ems section by id.
+        """
+        try:
+            ems.delete_ems_section(ems_section_id)
+            return {ems_section_id: 'Deleted'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
+
+
+ems_fields = api.model('NewEMS', {
+    ems.EMS_SECTION_NAME: fields.String,
+    ems.EMS_SECTION_ID: fields.String,
+    ems.EMS_ARTICLES: fields.String,
+})
+
+
 @api.route(f'{EMS_EP}')
 class EmergencyMedicalServices(Resource):
     """
-    This class supports fetching a list of all EMS sections.
+    This class supports various operations on EMS, such as
+    listing them, and adding a new EMS section.
     """
     def get(self):
         """
@@ -403,22 +422,29 @@ class EmergencyMedicalServices(Resource):
             raise wz.NotAcceptable(f'{str(e)}')
 
 
-@api.route(f'{DEL_EMS_SECTION_EP}/<ems_section_id>')
-class DelEMS(Resource):
+@api.route(f'{DEL_FINANCES_SECTION_EP}/<name>')
+class DeleteFinancesSection(Resource):
     """
-    Deletes a ems section by id.
+    Deletes a section in finance by name.
     """
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
-    def delete(self, ems_section_id):
+    def delete(self, name):
         """
-        Deletes a ems section by id.
+        Deletes a finance section by name.
         """
         try:
-            ems.delete_ems_section(ems_section_id)
-            return {ems_section_id: 'Deleted'}
+            fin.delete_finances_section(name)
+            return {name: 'Deleted'}
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')
+
+
+finance_fields = api.model('NewFinance', {
+    fin.FINANCES_NAME: fields.String,
+    fin.FINANCES_SECTION_ID: fields.String,
+    fin.FINANCES_ARTICLE: fields.String,
+})
 
 
 @api.route(f'{FINANCES_EP}')
@@ -457,21 +483,3 @@ class Finances(Resource):
 
         except ValueError as e:
             raise wz.NotAcceptable(f'{str(e)}')
-
-
-@api.route(f'{DEL_FINANCES_SECTION_EP}/<name>')
-class DeleteFinancesSection(Resource):
-    """
-    Deletes a section in finance by name.
-    """
-    @api.response(HTTPStatus.OK, 'Success')
-    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
-    def delete(self, name):
-        """
-        Deletes a section by name.
-        """
-        try:
-            fin.delete_finances_section(name)
-            return {name: 'Deleted'}
-        except ValueError as e:
-            raise wz.NotFound(f'{str(e)}')
