@@ -2,3 +2,4 @@
 {"_id":{"$oid":"6567943c545026aea2b24292"},"name":"test","numSections":0}
 {"_id":{"$oid":"656a4ba6b6f59d3b52b47c64"},"name":"hello","numSections":10}
 {"_id":{"$oid":"656d108079f46bf3dab0c5e4"},"name":"string","categoryID":"101010","numSections":0,"categoryContent":"content"}
+{"_id":{"$oid":"657cec2b7ee9c96186c77336"},"name":"categoryname","categoryID":"12312","numSections":2}
