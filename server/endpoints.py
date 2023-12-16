@@ -334,7 +334,7 @@ class Nutrition(Resource):
             raise wz.NotAcceptable(f'{str(e)}')
 
 
-@api.route(f'{NUTRITION_EP}/<name>')
+@api.route(f'{NUTRITION_EP}/<name>/<new_content>')
 class UpdateNutritionSection(Resource):
     """
     Updates content of a section in the nutrition category.
@@ -342,20 +342,27 @@ class UpdateNutritionSection(Resource):
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
     @api.response(HTTPStatus.BAD_REQUEST, 'Bad Request')
-    def put(self, name):
-
-        new_content = request.json.get('content')
-
-        if new_content is None:
-            raise wz.BadRequest('need to include content field')
+    def put(self, name, new_content):
 
         try:
             nutrition.update_section_content(name, new_content)
-            return {name: 'content updated successfully'}
+            return {name: 'Updated content'}
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')
         except Exception as e:
             raise wz.BadRequest(f'failed to update content: {str(e)}')
+        # new_content = request.json.get('nutritionContent')
+
+        # if new_content is None:
+        #     raise wz.BadRequest('need to include content field')
+
+        # try:
+        #     nutrition.update_section_content(name, new_content)
+        #     return {name: 'content updated successfully'}
+        # except ValueError as e:
+        #     raise wz.NotFound(f'{str(e)}')
+        # except Exception as e:
+        #     raise wz.BadRequest(f'failed to update content: {str(e)}')
 
 
 @api.route(f'{DEL_EMS_SECTION_EP}/<ems_section_id>')
