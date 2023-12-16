@@ -90,22 +90,22 @@ def delete_section(section_name: str):
 
 
 def update_section_content(section_name: str, new_content: str) -> bool:
-    # first check if the section exists
     if exists(section_name):
-        # update content of the section
-        update_query = {NAME: section_name}
-        new_values = {'$set': {ARTICLE: new_content}}
+        # the article content
+        article = {}
+        article[ARTICLE] = new_content
+
+        # update existing section with new article content
+        filter_query = {NAME: section_name}
+        update_query = {'$set': article}
 
         dbc.connect_db()
-        result = dbc.update_one(NUTRITION_COLLECT, update_query, new_values)
+        _id = dbc.update_one(NUTRITION_COLLECT, filter_query, update_query)
 
-        # check if update was successful
-        if result.modified_count > 0:
-            return True
-        else:
-            raise ValueError(f'update fialed: {section_name}.')
+        # check if the update was successful
+        return _id is not None
     else:
-        raise ValueError(f'update fialed: {section_name} not in database.')
+        raise ValueError(f'Update failed: {section_name} not in database.')
 
 
 def main():
