@@ -80,6 +80,16 @@ def test_user_delete(create_test_user):
     print(resp_json)
     assert resp_json[username] == 'Deleted'
 
+@patch('data.users.create_user', side_effect=ValueError(), autospec=True)
+def test_post_bad_user(mock_post):
+    resp = TEST_CLIENT.post(ep.USERS_EP, json={usrs.EMAIL:"test@gmail.com", usrs.USERNAME: USERNAME,usrs.PASSWORD:PASSWORD,usrs.FIRSTNAME:"test",usrs.LASTNAME:"test",usrs.PHONE:1111111111})
+    assert resp.status_code == NOT_ACCEPTABLE
+    
+@patch('data.users.create_user', return_value=USERNAME, autospec=True)
+def test_post_user(mock_post):
+    resp = TEST_CLIENT.post(ep.USERS_EP, json={usrs.EMAIL:"test@gmail.com", usrs.USERNAME: USERNAME,usrs.PASSWORD:PASSWORD,usrs.FIRSTNAME:"test",usrs.LASTNAME:"test",usrs.PHONE:1111111111})
+    assert resp.status_code == OK
+    
 
 @pytest.mark.skip('bad test, just showing how skip works')
 def test_to_skip_categ():
