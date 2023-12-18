@@ -56,7 +56,7 @@ def test_delete_non_user(create_test_user):
     
     
 def test_login_user_ideal(create_test_user):
-    assert(usrs.login_user(USERNAME,PASSWORD))
+    assert(usrs.login_user(create_test_user,PASSWORD))
     
 def test_login_bad_user():
     assert(not(usrs.login_user(BAD_USERNAME,BAD_PASSWORD)))

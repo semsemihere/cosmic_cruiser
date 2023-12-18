@@ -1,7 +1,9 @@
 
 import server.endpoints as ep
 from unittest.mock import patch
+import werkzeug.exceptions as wz
 import data.categories as categ
+import data.users as usrs
 import pytest
 
 from http.client import (
@@ -12,10 +14,24 @@ from http.client import (
     OK,
     SERVICE_UNAVAILABLE,
 )
-
+USERNAME = "test_username"
+BAD_USERNAME = ""
+PASSWORD = "test_password"
+BAD_PASSWORD= ""
 
 TEST_CLIENT = ep.app.test_client()
+@pytest.fixture
+def create_test_user():
+    if(USERNAME in usrs.get_all_users()):
+        usrs.delete_user(USERNAME)
+        
+    print(usrs.get_all_users())
+    id = usrs.create_user("test@gmail.com", USERNAME, PASSWORD, "Test", "Test", 1111111111)
+    if id:
+        yield USERNAME
 
+    if(USERNAME in usrs.get_all_users()):
+        usrs.delete_user(USERNAME)
 
 def test_hello():
     resp = TEST_CLIENT.get(ep.HELLO_EP)
@@ -41,6 +57,28 @@ def test_main_menu():
     print(resp_json)
     assert isinstance(resp_json, dict)
     assert resp_json[ep.TITLE] == ep.MAIN_MENU_NM
+
+def test_user_menu():
+    resp = TEST_CLIENT.get(ep.USER_MENU_EP)
+    resp_json = resp.get_json()
+    print(resp_json)
+    assert isinstance(resp_json, dict)
+    assert resp_json[ep.TITLE] == ep.USER_MENU_NM
+
+def test_bad_user_delete(create_test_user):
+    username = create_test_user
+    usrs.delete_user(username)
+    resp = TEST_CLIENT.delete(ep.DEL_USERS_EP+'/'+username)
+    resp_json = resp.get_json()
+    print(resp_json)
+    assert resp.status_code == NOT_FOUND
+
+def test_user_delete(create_test_user):
+    username = create_test_user
+    resp = TEST_CLIENT.delete(ep.DEL_USERS_EP+'/'+username)
+    resp_json = resp.get_json()
+    print(resp_json)
+    assert resp_json[username] == 'Deleted'
 
 
 @pytest.mark.skip('bad test, just showing how skip works')
