@@ -4,6 +4,7 @@ from unittest.mock import patch
 import werkzeug.exceptions as wz
 import data.categories as categ
 import data.users as usrs
+import data.nutrition as nutr
 import pytest
 
 from http.client import (
@@ -137,3 +138,19 @@ def test_category_add_db_failure(mock_add):
     """
     resp = TEST_CLIENT.post(ep.CATEGORIES_EP, json=categ.get_test_category())
     assert resp.status_code == SERVICE_UNAVAILABLE
+
+
+def test_get_nutrition_sections():
+    resp = TEST_CLIENT.get(ep.NUTRITION_EP)
+    assert resp.status_code == OK
+    resp_json = resp.get_json()
+    assert isinstance(resp_json, dict)
+
+
+@patch('data.nutrition.add_section', return_value=nutr.MOCK_ID, autospec=True)
+def test_add_nutrition_section(mock_add):
+    """
+    Testing we do the right thing with a good return from add_section.
+    """
+    resp = TEST_CLIENT.post(ep.NUTRITION_EP, json=nutr.get_test_section())
+    assert resp.status_code == OK
