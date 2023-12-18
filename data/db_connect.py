@@ -41,9 +41,12 @@ def connect_db():
             # + '&connect=false'
             # + 'maxPoolsize=1')
             # but they don't seem necessary
+            return "1"
         else:
             print("Connecting to Mongo locally.")
             client = pm.MongoClient()
+
+            return "0"
 
 
 # function to insert single doc into collection
