@@ -34,9 +34,9 @@ def get_finances_sections() -> dict:
     return dbc.fetch_all_as_dict(FINANCES_NAME, FINANCES_COLLECT)
 
 
-def exists(name: str) -> bool:
+def exists(section_id: str) -> bool:
     dbc.connect_db()
-    return dbc.fetch_one(FINANCES_COLLECT, {FINANCES_NAME: name})
+    return dbc.fetch_one(FINANCES_COLLECT, {FINANCES_SECTION_ID: section_id})
 
 
 def _get_test_name():
@@ -61,10 +61,10 @@ def generate_section_id() -> str:
 
 def add_finances_section(section_name: str, section_id: str,
                          section_article: str) -> bool:
-    if exists(section_name):
-        raise ValueError(f'Duplicate section name: {section_name=}')
-    if not section_name:
-        raise ValueError("Category name cannot be blank!")
+    if exists(section_id):
+        raise ValueError(f'Duplicate section name: {section_id=}')
+    if not section_id:
+        raise ValueError("Finance ID cannot be blank!")
 
     # section_id = generate_section_id()
     # return section_id
@@ -94,14 +94,14 @@ def update_finance_section_content(finance_section_id: str,
         raise ValueError(f'Update failed: {finance_section_id} not in db.')
 
 
-def delete_finances_section(section_name: str):
+def delete_finances_section(section_id: str):
     # check if the section to delete is in the database
-    if exists(section_name):
+    if exists(section_id):
         # del nutrition[section_name]
         # dbc.del_one(FINANCES_COLLECT, {FINANCES_NAME: section_name})
-        return dbc.del_one(FINANCES_COLLECT, {FINANCES_NAME: section_name})
+        return dbc.del_one(FINANCES_COLLECT, {FINANCES_SECTION_ID: section_id})
     else:
-        raise ValueError(f'Delete failure: {section_name} not in database.')
+        raise ValueError(f'Delete failure: {section_id} not in database.')
 
 
 # def exists(section_name: str) -> bool:

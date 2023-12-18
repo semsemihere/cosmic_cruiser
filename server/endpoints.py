@@ -454,20 +454,20 @@ finance_fields = api.model('NewFinance', {
 })
 
 
-@api.route(f'{DEL_FINANCES_SECTION_EP}/<name>')
+@api.route(f'{DEL_FINANCES_SECTION_EP}/<finance_section_id>')
 class DeleteFinancesSection(Resource):
     """
     Deletes a section in finance by name.
     """
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
-    def delete(self, name):
+    def delete(self, finance_section_id):
         """
         Deletes a finance section by name.
         """
         try:
-            fin.delete_finances_section(name)
-            return {name: 'Deleted'}
+            fin.delete_finances_section(finance_section_id)
+            return {finance_section_id: 'Deleted'}
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')
 

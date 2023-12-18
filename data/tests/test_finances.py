@@ -7,9 +7,9 @@ def temp_section():
     finances_section_name = fin._get_test_name()
     finances_section_id = fin.generate_section_id()
     ret = fin.add_finances_section(finances_section_name, finances_section_id, "article")
-    yield finances_section_name
-    if fin.exists(finances_section_name):
-        fin.delete_finances_section(finances_section_name)
+    yield finances_section_id
+    if fin.exists(finances_section_id):
+        fin.delete_finances_section(finances_section_id)
 
 
 def test_get_finances_sections(temp_section):
@@ -23,7 +23,8 @@ def test_get_finances_sections(temp_section):
         assert isinstance(section, str)
         assert isinstance(finances_sections[section], dict)
 
-    assert fin.exists(temp_section)
+    finance_section_id = temp_section
+    assert fin.exists(finance_section_id)
 
 
 def test_get_test_name():
@@ -51,22 +52,22 @@ def test_add_finances_section():
     new_name = fin._get_test_name()
     new_id = fin.generate_section_id()
     ret = fin.add_finances_section(new_name, new_id, "article")
-    assert fin.exists(new_name)
+    assert fin.exists(new_id)
     assert isinstance(ret, bool)
-    fin.delete_finances_section(new_name)
+    fin.delete_finances_section(new_id)
 
 def test_add_finances_section_duplicate_name(temp_section):
-    # Duplicate section name raises a ValueError
-    duplicate_name = temp_section
-    finances_section_id = fin.generate_section_id()
+    # Duplicate section name id a ValueError
+    finance_name = fin._get_test_name()
+    finance_duplicate_id = temp_section
     with pytest.raises(ValueError):
-        fin.add_finances_section(duplicate_name, finances_section_id, "article")
+        fin.add_finances_section(finance_name, finance_duplicate_id, "article")
 
-def test_add_finances_section_blank_name():
-    # Blank section name raises a ValueError
-    finances_section_id = fin.generate_section_id()
+def test_add_finances_section_blank_id():
+    # Blank section id raises a ValueError
+    finance_name = fin._get_test_name()
     with pytest.raises(ValueError):
-        fin.add_finances_section("", finances_section_id, "article")
+        fin.add_finances_section(finance_name, "", "article")
 
 def test_update_finance_section_content(temp_section):
     # print("asdf: ", fin.get_finances_sections())
@@ -88,11 +89,11 @@ def test_update_finance_section_content_fail(temp_section):
 
 
 def test_delete_finances_section(temp_section):
-    finances_section_name = temp_section
-    fin.delete_finances_section(finances_section_name)
-    assert not fin.exists(finances_section_name)
+    finances_section_id = temp_section
+    fin.delete_finances_section(finances_section_id)
+    assert not fin.exists(finances_section_id)
 
 def test_delete_finances_section_not_there():
-    finances_section_name = fin._get_test_name()
+    finances_section_id = fin.generate_section_id()
     with pytest.raises(ValueError):
-        fin.delete_finances_section(finances_section_name)
+        fin.delete_finances_section(finances_section_id)

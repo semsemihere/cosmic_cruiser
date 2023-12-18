@@ -27,7 +27,7 @@ def get_ems_sections() -> dict:
 def add_ems_section(ems_section_name: str, ems_section_id: str,
                     ems_articles: dict) -> bool:
     if exists(ems_section_id):
-        raise ValueError(f'Duplicate EMS section: {ems_section_name=}')
+        raise ValueError(f'Duplicate EMS section: {ems_section_id=}')
     if not ems_section_id:
         raise ValueError("EMS section ID cannot be blank!")
 
