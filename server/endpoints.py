@@ -182,6 +182,7 @@ class Users(Resource):
             RETURN: MAIN_MENU_EP,
         }
 
+    @api.expect(user_information)
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     def post(self):
