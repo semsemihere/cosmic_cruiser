@@ -74,40 +74,7 @@ def test_bad_exists_request():
 @pytest.mark.skip('bad test just to show how to skip')
 def test_to_skip():
     assert (usrs.create_user("test")=="test")
-        
-"""   
-def test_delete_user():
-    userId = create_test_user
-    usrs.delete_user(userId)
-    users = usrs.get_all_users()
-    assert (not(userId in users))
-
-    
-def test_user_exists_delete_user():
-    username = create_test_user
-    usrs.delete_user(username)
-    
-    assert usrs.exists(username)
-
-def test_dup_user(create_test_user): 
-    user=usrs.create_user("test", "test_password","test@gmail.com", "Test", "Test", 1111111111)
-    assert(user==-1) 
-
-def test_update_user(create_test_user):
-    userId = create_test_user
-    field = 'username'
-    newValue = "test2"
-    usrs.update_user(userId,field,newValue)
-    assert(usrs.exists(userId)[field]==newValue)
-
-def test_bad_update_user(create_test_user):
-    username = ""
-    userId = hashlib.sha3_512(username.encode('UTF-8'),usedforsecurity=True).hexdigest()
-    field = 'username'
-    newValue = "test2"
-    assert(usrs.update_user(userId,field,newValue)==-1)
 
 def test_login_user(create_test_user):
-    userId = create_test_user
-    assert(usrs.login_user(userId,"test_password")==True)
-"""
+    # password = "wrong_password"
+    assert not usrs.login_user(USERNAME, BAD_PASSWORD)
