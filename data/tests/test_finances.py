@@ -68,6 +68,25 @@ def test_add_finances_section_blank_name():
     with pytest.raises(ValueError):
         fin.add_finances_section("", finances_section_id, "article")
 
+def test_update_finance_section_content(temp_section):
+    # print("asdf: ", fin.get_finances_sections())
+    # print(temp_section)
+    # print("asdf: ", fin.get_finances_sections()[temp_section])
+    
+    updated_content = 'updated the content'
+    fin.update_finance_section_content(temp_section, updated_content)
+    # print("qwer: ", fin.get_finances_sections())
+    
+    for key in fin.get_finances_sections():
+        if fin.get_finances_sections()[key] == updated_content:
+            assert True
+    
+def test_update_finance_section_content_fail(temp_section):
+    with pytest.raises(ValueError):
+        fin.update_finance_section_content('non-existing section',"content")
+
+
+
 def test_delete_finances_section(temp_section):
     finances_section_name = temp_section
     fin.delete_finances_section(finances_section_name)

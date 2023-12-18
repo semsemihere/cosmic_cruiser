@@ -108,9 +108,9 @@ def delete_finances_section(section_name: str):
 #     return section_name in get_finances_sections()
 
 
-def main():
-    print(get_finances_sections())
+# def main():
+#     print(get_finances_sections())
 
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()

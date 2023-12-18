@@ -98,9 +98,9 @@ def delete_category(category_name: str):
 #     return category_name in get_categories()
 
 
-def main():
-    print(get_categories())
+# def main():
+#     print(get_categories())
 
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()

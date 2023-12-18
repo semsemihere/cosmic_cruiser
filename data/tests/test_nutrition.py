@@ -85,3 +85,7 @@ def test_update_section_content(temp_section):
     updated_section = nutrition.get_sections().get(section_name, {})
 
     assert updated_section.get(nutrition.ARTICLE) == new_content
+
+def test_update_section_content_fail(temp_section):
+    with pytest.raises(ValueError):
+        nutrition.update_section_content('non-existing section',"content")

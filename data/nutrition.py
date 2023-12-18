@@ -108,9 +108,9 @@ def update_section_content(section_name: str, new_content: str) -> bool:
         raise ValueError(f'Update failed: {section_name} not in database.')
 
 
-def main():
-    print(get_sections())
+# def main():
+#     print(get_sections())
 
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
