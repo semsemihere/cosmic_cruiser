@@ -66,7 +66,7 @@ def test_update_ems_section_content(temp_ems):
 
     # assert updated_section.get(ems.EMS_ARTICLES) == new_content
 
-def test_update_ems_section_content_fail(temp_ems):
+def test_update_ems_section_content_fail():
     with pytest.raises(ValueError):
         ems.update_ems_section_content('non-existing section',"content")
 

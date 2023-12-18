@@ -269,20 +269,20 @@ class Categories(Resource):
             raise wz.NotAcceptable(f'{str(e)}')
 
 
-@api.route(f'{DEL_NUTRITION_SECTION_EP}/<name>')
+@api.route(f'{DEL_NUTRITION_SECTION_EP}/<nutrition_section_id>')
 class DeleteNutritionSection(Resource):
     """
     Deletes a section in nutrition by name.
     """
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
-    def delete(self, name):
+    def delete(self, nutrition_section_id):
         """
-        Deletes a nutrition section by name.
+        Deletes a nutrition section by nutrition_section_id.
         """
         try:
-            nutrition.delete_section(name)
-            return {name: 'Deleted'}
+            nutrition.delete_section(nutrition_section_id)
+            return {nutrition_section_id: 'Deleted'}
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')
 
@@ -333,7 +333,7 @@ class Nutrition(Resource):
             raise wz.NotAcceptable(f'{str(e)}')
 
 
-@api.route(f'{NUTRITION_EP}/<name>/<new_content>')
+@api.route(f'{NUTRITION_EP}/<nutrition_section_id>/<new_content>')
 class UpdateNutritionSection(Resource):
     """
     Updates content of a section in the nutrition category.
@@ -341,11 +341,12 @@ class UpdateNutritionSection(Resource):
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
     @api.response(HTTPStatus.BAD_REQUEST, 'Bad Request')
-    def put(self, name, new_content):
+    def put(self, nutrition_section_id, new_content):
 
         try:
-            nutrition.update_section_content(name, new_content)
-            return {name: 'Updated content'}
+            nutrition.update_nutrition_section_content(nutrition_section_id,
+                                                       new_content)
+            return {nutrition_section_id: 'Updated content'}
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')
         except Exception as e:
@@ -356,7 +357,7 @@ class UpdateNutritionSection(Resource):
         #     raise wz.BadRequest('need to include content field')
 
         # try:
-        #     nutrition.update_section_content(name, new_content)
+        #     nutrition.update_nutrition_section_content(name, new_content)
         #     return {name: 'content updated successfully'}
         # except ValueError as e:
         #     raise wz.NotFound(f'{str(e)}')

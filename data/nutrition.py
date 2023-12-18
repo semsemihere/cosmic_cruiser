@@ -30,14 +30,14 @@ ARTICLE = 'nutritionContent'
 
 
 def get_sections() -> dict:
-    # return nutrition, by name
+    # return nutrition, by id
     dbc.connect_db()
     return dbc.fetch_all_as_dict(NAME, NUTRITION_COLLECT)
 
 
-def exists(name: str) -> bool:
+def exists(section_id: str) -> bool:
     dbc.connect_db()
-    return dbc.fetch_one(NUTRITION_COLLECT, {NAME: name})
+    return dbc.fetch_one(NUTRITION_COLLECT, {SECTION_ID: section_id})
 
 
 def _get_test_name():
@@ -62,10 +62,10 @@ def generate_section_id() -> str:
 
 def add_section(section_name: str, section_id: str,
                 section_article: str) -> bool:
-    if exists(section_name):
-        raise ValueError(f'Duplicate section name: {section_name=}')
-    if not section_name:
-        raise ValueError("Category name cannot be blank!")
+    if exists(section_id):
+        raise ValueError(f'Duplicate section id: {section_id=}')
+    if not section_id:
+        raise ValueError("Nutrition id cannot be blank!")
 
     # section_id = generate_section_id()
     # return section_id
@@ -79,24 +79,23 @@ def add_section(section_name: str, section_id: str,
     return _id is not None
 
 
-def delete_section(section_name: str):
+def delete_section(section_id: str):
     # check if the section to delete is in the database
-    if exists(section_name):
-        # del nutrition[section_name]
-        # dbc.del_one(NUTRITION_COLLECT, {NAME: section_name})
-        return dbc.del_one(NUTRITION_COLLECT, {NAME: section_name})
+    if exists(section_id):
+        return dbc.del_one(NUTRITION_COLLECT, {SECTION_ID: section_id})
     else:
-        raise ValueError(f'Delete failure: {section_name} not in database.')
+        raise ValueError(f'Delete failure: {section_id} not in database.')
 
 
-def update_section_content(section_name: str, new_content: str) -> bool:
-    if exists(section_name):
+def update_nutrition_section_content(section_id: str,
+                                     new_content: str) -> bool:
+    if exists(section_id):
         # the article content
         article = {}
         article[ARTICLE] = new_content
 
         # update existing section with new article content
-        filter_query = {NAME: section_name}
+        filter_query = {SECTION_ID: section_id}
         update_query = {'$set': article}
 
         dbc.connect_db()
@@ -105,7 +104,7 @@ def update_section_content(section_name: str, new_content: str) -> bool:
         # check if the update was successful
         return _id is not None
     else:
-        raise ValueError(f'Update failed: {section_name} not in database.')
+        raise ValueError(f'Update failed: {section_id} not in database.')
 
 
 # def main():
