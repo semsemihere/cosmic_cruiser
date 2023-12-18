@@ -24,14 +24,23 @@ def test_hello():
     print(f'{resp_json=}')
     assert ep.HELLO_RESP in resp_json
 
+# def test_endpoints():
+#     TEST_CLIENT.get(ep.)
 
-# def test_list_users():
-#     resp = TEST_CLIENT.get(ep.USERS_EP)
-#     resp_json = resp.get_json()
-#     assert isinstance(resp_json, dict)
-#     assert ep.TITLE in resp_json
-#     assert ep.TYPE in resp_json
-#     assert ep.DATA in resp_json
+def test_list_users():
+    resp = TEST_CLIENT.get(ep.USERS_EP)
+    resp_json = resp.get_json()
+    assert isinstance(resp_json, dict)
+    assert ep.TITLE in resp_json
+    assert ep.TYPE in resp_json
+    assert ep.DATA in resp_json
+
+def test_main_menu():
+    resp = TEST_CLIENT.get(ep.MAIN_MENU_EP)
+    resp_json = resp.get_json()
+    print(resp_json)
+    assert isinstance(resp_json, dict)
+    assert resp_json[ep.TITLE] == ep.MAIN_MENU_NM
 
 
 @pytest.mark.skip('bad test, just showing how skip works')
