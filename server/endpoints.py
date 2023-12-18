@@ -182,21 +182,20 @@ class Users(Resource):
             RETURN: MAIN_MENU_EP,
         }
 
-    @api.expect(user_information)
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     def post(self):
         """
         This method posts new user.
         """
-        email = request.json[users.EMAIL]
-        username = request.json[users.USERNAME]
-        password = request.json[users.PASSWORD]
-        first_name = request.json[users.FIRSTNAME]
-        last_name = request.json[users.LASTNAME]
-        phone = request.json[users.PHONE]
-
         try:
+            email = request.json[users.EMAIL]
+            username = request.json[users.USERNAME]
+            password = request.json[users.PASSWORD]
+            first_name = request.json[users.FIRSTNAME]
+            last_name = request.json[users.LASTNAME]
+            phone = request.json[users.PHONE]
+
             new_user = users.create_user(email, username,
                                          password, first_name,
                                          last_name, phone)
