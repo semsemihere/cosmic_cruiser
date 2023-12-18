@@ -3,7 +3,9 @@ import hashlib
 import data.users as usrs
 from unittest.mock import patch
 USERNAME = "test_username"
+BAD_USERNAME = ""
 PASSWORD = "test_password"
+BAD_PASSWORD= ""
 # fixture
 @pytest.fixture
 def create_test_user():
@@ -55,6 +57,9 @@ def test_delete_non_user(create_test_user):
     
 def test_login_user_ideal(create_test_user):
     assert(usrs.login_user(USERNAME,PASSWORD))
+    
+def test_login_bad_user():
+    assert(not(usrs.login_user(BAD_USERNAME,BAD_PASSWORD)))
     
     
 def test_exists(create_test_user):
