@@ -28,7 +28,10 @@ def test_get_ems_sections(temp_ems):
     ems_section_id = temp_ems
     assert ems.exists(ems_section_id)
 
-    ADD_NAME = "New EMS"
+def test_get_test_section():
+    assert isinstance(ems.get_test_section(), dict)
+
+ADD_NAME = "New EMS"
 
 def test_add_ems_section():
     new_name = ems._get_test_name()

@@ -101,6 +101,12 @@ def test_to_skip_categ():
     assert(categ.add_category("test")=="test")
 
 
+def test_list_categories():
+    resp = TEST_CLIENT.get(ep.CATEGORIES_EP)
+    resp_json = resp.get_json()
+    assert isinstance(resp_json, dict)
+    assert resp_json[ep.DATA] == categ.get_categories()
+
 @patch('data.categories.delete_category', autospec=True)
 def test_category_delete(mock_del):
     """
@@ -153,14 +159,24 @@ def test_good_update_category_name(mock_update):
     assert resp.status_code == OK
 
 @patch('data.categories.update_category_name', side_effect=ValueError(), autospec=True)
-def test_bad_update_category_name(mock_update):
+def test_bad_value_error_update_category_name(mock_update):
     """
-    Testing bad category name update
+    Testing bad value error category name update
     """
     category_id = categ.generate_category_id()
     new_category_name = "NEW CATEGORY NAME"
     resp = TEST_CLIENT.put(f'{ep.UPDATE_CATEGORY_NAME_EP}/{category_id}/{new_category_name}', json=categ.get_test_category())
     assert resp.status_code == NOT_FOUND
+
+@patch('data.categories.update_category_name', side_effect=Exception(), autospec=True)
+def test_bad_exception_update_category_name(mock_update):
+    """
+    Testing bad exception category name update
+    """
+    category_id = categ.generate_category_id()
+    new_category_name = "NEW CATEGORY NAME"
+    resp = TEST_CLIENT.put(f'{ep.UPDATE_CATEGORY_NAME_EP}/{category_id}/{new_category_name}', json=categ.get_test_category())
+    assert resp.status_code == BAD_REQUEST
 
 @patch('data.categories.update_category_sections', return_value=categ.MOCK_ID, autospec=True)
 def test_good_update_category_sections(mock_update):
@@ -173,15 +189,24 @@ def test_good_update_category_sections(mock_update):
     assert resp.status_code == OK
 
 @patch('data.categories.update_category_sections', side_effect=ValueError(), autospec=True)
-def test_bad_update_category_sections(mock_update):
+def test_bad_value_error_update_category_sections(mock_update):
     """
-    Testing bad category num section update
+    Testing bad value error category num section update
     """
     category_id = categ.generate_category_id()
     updated_num_sections = "1"
     resp = TEST_CLIENT.put(f'{ep.UPDATE_CATEGORY_SECTIONS_EP}/{category_id}/{updated_num_sections}', json=categ.get_test_category())
     assert resp.status_code == NOT_FOUND
 
+@patch('data.categories.update_category_sections', side_effect=Exception(), autospec=True)
+def test_bad_exception_update_category_sections(mock_update):
+    """
+    Testing bad exception category name update
+    """
+    category_id = categ.generate_category_id()
+    updated_num_sections = "1"
+    resp = TEST_CLIENT.put(f'{ep.UPDATE_CATEGORY_SECTIONS_EP}/{category_id}/{updated_num_sections}', json=categ.get_test_category())
+    assert resp.status_code == BAD_REQUEST
 
 def test_get_nutrition_sections():
     resp = TEST_CLIENT.get(ep.NUTRITION_EP)
@@ -248,15 +273,24 @@ def test_good_update_nutrition_section_content(mock_update):
 
 
 @patch('data.nutrition.update_nutrition_section_content', side_effect=ValueError(), autospec=True)
-def test_bad_update_nutrition_section_content(mock_update):
+def test_bad_value_error_update_nutrition_section_content(mock_update):
     """
-    Testing we do the right thing with a good return from update_nutrition_section_content.
+    Testing we do the right thing with a value error when updating nutrition contents.
     """
     section_id = nutr.generate_section_id()
     new_content = "TESTING NEW CONTENT"
     resp = TEST_CLIENT.put(f'{ep.NUTRITION_EP}/{section_id}/{new_content}', json=nutr.get_test_section())
     assert resp.status_code == NOT_FOUND
 
+@patch('data.nutrition.update_nutrition_section_content', side_effect=Exception(), autospec=True)
+def test_bad_exception_update_nutrition_section_content(mock_update):
+    """
+    Testing we do the right thing with an exception when updating nutrition contents.
+    """
+    section_id = nutr.generate_section_id()
+    new_content = "TESTING NEW CONTENT"
+    resp = TEST_CLIENT.put(f'{ep.NUTRITION_EP}/{section_id}/{new_content}', json=nutr.get_test_section())
+    assert resp.status_code == BAD_REQUEST
 
 def test_get_ems_sections():
     resp = TEST_CLIENT.get(ep.EMS_EP)
@@ -323,15 +357,24 @@ def test_good_update_ems_section_content(mock_update):
 
 
 @patch('data.ems.update_ems_section_content', side_effect=ValueError(), autospec=True)
-def test_bad_update_ems_section_content(mock_update):
+def test_bad_value_error_update_ems_section_content(mock_update):
     """
-    Testing we do the right thing with a good return from update_ems_section_content.
+    Testing we do the right thing with a value error from update_ems_section_content.
     """
     section_id = ems.generate_section_id()
     new_content = "TESTING NEW CONTENT"
     resp = TEST_CLIENT.put(f'{ep.EMS_EP}/{section_id}/{new_content}', json=ems.get_test_section())
     assert resp.status_code == NOT_FOUND
 
+@patch('data.ems.update_ems_section_content', side_effect=Exception(), autospec=True)
+def test_bad_exception_update_ems_section_content(mock_update):
+    """
+    Testing we do the right thing with a exception from update_ems_section_content.
+    """
+    section_id = ems.generate_section_id()
+    new_content = "TESTING NEW CONTENT"
+    resp = TEST_CLIENT.put(f'{ep.EMS_EP}/{section_id}/{new_content}', json=ems.get_test_section())
+    assert resp.status_code == BAD_REQUEST
 
 def test_get_finances_sections():
     resp = TEST_CLIENT.get(ep.FINANCES_EP)
@@ -398,11 +441,21 @@ def test_good_update_finance_section_content(mock_update):
 
 
 @patch('data.finances.update_finance_section_content', side_effect=ValueError(), autospec=True)
-def test_bad_update_finance_section_content(mock_update):
+def test_bad_value_error_update_finance_section_content(mock_update):
     """
-    Testing we do the right thing with a good return from update_finance_section_content.
+    Testing we do the right thing with a value error from update_finance_section_content.
     """
     section_id = fin.generate_section_id()
     new_content = "TESTING NEW CONTENT"
     resp = TEST_CLIENT.put(f'{ep.FINANCES_EP}/{section_id}/{new_content}', json=fin.get_test_section())
     assert resp.status_code == NOT_FOUND
+
+@patch('data.finances.update_finance_section_content', side_effect=Exception(), autospec=True)
+def test_bad_exception_update_finance_section_content(mock_update):
+    """
+    Testing we do the right thing with a exception from update_finance_section_content.
+    """
+    section_id = fin.generate_section_id()
+    new_content = "TESTING NEW CONTENT"
+    resp = TEST_CLIENT.put(f'{ep.FINANCES_EP}/{section_id}/{new_content}', json=fin.get_test_section())
+    assert resp.status_code == BAD_REQUEST

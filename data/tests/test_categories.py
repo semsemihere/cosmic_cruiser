@@ -26,7 +26,6 @@ def test_get_categories(temp_category):
 
     assert categ.exists(temp_category)
 
-
 def test_get_test_name():
     name = categ._get_test_name()
     assert isinstance(name, str)
@@ -76,12 +75,20 @@ def test_update_category_name(temp_category):
         if key == updated_name:
             assert True
 
+def test_update_category_name_fail():
+    with pytest.raises(ValueError):
+        categ.update_category_name('non-existing id',"name")
+
 def test_update_category_num_sections(temp_category):
     updated_num_sections = 99
     categ.update_category_sections(temp_category, updated_num_sections)
     for key in categ.get_categories():
         if categ.get_categories()[key] == updated_num_sections:
             assert True
+
+def test_update_category_num_sections_fail():
+    with pytest.raises(ValueError):
+        categ.update_category_sections('non-existing id', 10)
 
 def test_delete_category(temp_category):
     categ.delete_category(temp_category)
