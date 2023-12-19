@@ -13,6 +13,19 @@ client = None
 MONGO_ID = '_id'
 
 
+def get_client():
+    return client
+
+
+def set_client(assigment):
+    global client
+    client = assigment
+
+
+def get_cloud_status():
+    return os.environ.get("CLOUD_MONGO", LOCAL)
+
+
 def connect_db():
     """
     This provides a uniform way to connect to the DB across all uses.
@@ -21,33 +34,34 @@ def connect_db():
     We should probably either return a client OR set a
     client global.
     """
-    global client
-    if client is None:  # not connected yet!
+    if get_client() is None:  # not connected yet!
         print("Setting client because it is None.")
-        if os.environ.get("CLOUD_MONGO", LOCAL) == CLOUD:
+        if get_cloud_status() == CLOUD:
             password = os.environ.get("MONGODB_PASSWORD")
             if not password:
                 raise ValueError('You must set your password '
                                  + 'to use Mongo in the cloud.')
             print("Connecting to Mongo in the cloud.")
 
-            client = pm.MongoClient(f'mongodb+srv://semihong:{password}'
-                                    + '@cosmiccrusier.3cyi8m1.mongodb.net/'
-                                    + '?retryWrites=true&w=majority',
-                                    # tls=False
-                                    )
+            set_client(pm.MongoClient(f'mongodb+srv://semihong:{password}'
+                                      + '@cosmiccrusier.3cyi8m1.mongodb.net/'
+                                      + '?retryWrites=true&w=majority',
+                                      )
+                       )
             # PA recommends these settings:
             # + 'connectTimeoutMS=30000&'
             # + 'socketTimeoutMS=None
             # + '&connect=false'
             # + 'maxPoolsize=1')
             # but they don't seem necessary
-            return "1"
+            return 1
         else:
             print("Connecting to Mongo locally.")
-            client = pm.MongoClient()
+            set_client(pm.MongoClient())
 
-            return "0"
+            return 0
+    else:
+        return 3
 
 
 # function to insert single doc into collection
