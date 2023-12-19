@@ -8,7 +8,6 @@ TEST_COLLECT = 'test_collect'
 # can be used for field and value:
 TEST_NAME = 'test'
 
-
 @pytest.fixture(scope='function')
 def temp_rec():
     dbc.connect_db()
@@ -32,8 +31,8 @@ def test_connect_db_cloud_failed_password(mock_client, mock_cloud_status, mock_p
 
 @patch('data.db_connect.get_client', return_value=None, autospec=True)
 @patch('data.db_connect.get_cloud_status', return_value=dbc.CLOUD, autospec=True)
-@patch('data.db_connect.get_cloud_password', return_value='asdf1234', autospec=True)
-def test_connect_db_cloud_success(mock_client, mock_cloud_status, mock_password):
+def test_connect_db_cloud_success(mock_client, mock_cloud_status):
+    dbc.set_cloud_password("asdf1234")
     assert dbc.connect_db() == 1
 
 def test_connect_db_already_connected():

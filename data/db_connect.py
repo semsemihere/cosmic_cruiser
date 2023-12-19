@@ -30,6 +30,11 @@ def get_cloud_password():
     return os.environ.get("MONGODB_PASSWORD")
 
 
+def set_cloud_password(password):
+    os.environ["MONGODB_PASSWORD"] = password
+    return password
+
+
 def connect_db():
     """
     This provides a uniform way to connect to the DB across all uses.
