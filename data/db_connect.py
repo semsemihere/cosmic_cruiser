@@ -26,6 +26,10 @@ def get_cloud_status():
     return os.environ.get("CLOUD_MONGO", LOCAL)
 
 
+def get_cloud_password():
+    return os.environ.get("MONGODB_PASSWORD")
+
+
 def connect_db():
     """
     This provides a uniform way to connect to the DB across all uses.
