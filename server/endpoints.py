@@ -148,8 +148,9 @@ class DeleteUser(Resource):
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
     def delete(self, username):
-        # This method deletes a user by username.
-
+        """
+        Delete a user by username.
+        """
         try:
             users.delete_user(username)
             return {username: 'Deleted'}
@@ -176,7 +177,7 @@ class Users(Resource):
     """
     def get(self):
         """
-        This method returns all users.
+        Return all users.
         """
         return {
             TYPE: DATA,
@@ -191,7 +192,7 @@ class Users(Resource):
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     def post(self):
         """
-        This method posts new user.
+        Add a user
         """
         try:
             email = request.json[users.EMAIL]
@@ -214,13 +215,13 @@ class Users(Resource):
 @api.route(f'{DEL_CATEGORY_EP}/<category_id>')
 class DeleteCategory(Resource):
     """
-    This method deletes a category by id.
+    Deletes a category by id.
     """
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
     def delete(self, category_id):
         """
-        Deletes a category by id.
+        Delete a category by id.
         """
         try:
             categ.delete_category(category_id)
@@ -244,7 +245,7 @@ class Categories(Resource):
     """
     def get(self):
         """
-        This method returns all categories.
+        Return all categories.
         """
         return {
             TYPE: DATA,
@@ -283,7 +284,9 @@ class UpdateCategoryName(Resource):
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
     @api.response(HTTPStatus.BAD_REQUEST, 'Bad Request')
     def put(self, category_id, new_category_name):
-
+        """
+        Update the name of a category by id
+        """
         try:
             categ.update_category_name(category_id, new_category_name)
             return {new_category_name: 'Updated category name'}
@@ -302,7 +305,9 @@ class UpdateCategoryNumSections(Resource):
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
     @api.response(HTTPStatus.BAD_REQUEST, 'Bad Request')
     def put(self, category_id, new_num_sections):
-
+        """
+        Update the number of sections in a category by id
+        """
         try:
             categ.update_category_sections(category_id, new_num_sections)
             return {new_num_sections: 'Updated number of sections'}
@@ -321,7 +326,7 @@ class DeleteNutritionSection(Resource):
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
     def delete(self, nutrition_section_id):
         """
-        Deletes a nutrition section by nutrition_section_id.
+        Delete a nutrition by id.
         """
         try:
             nutrition.delete_section(nutrition_section_id)
@@ -345,7 +350,7 @@ class Nutrition(Resource):
     """
     def get(self):
         """
-        This method returns all nutrition.
+        Return all nutritions.
         """
         return {
             TYPE: DATA,
@@ -360,7 +365,7 @@ class Nutrition(Resource):
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     def post(self):
         """
-        This method posts new nutrition section.
+        Add a nutrition
         """
 
         name = request.json[nutrition.NAME]
@@ -385,7 +390,9 @@ class UpdateNutritionSection(Resource):
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
     @api.response(HTTPStatus.BAD_REQUEST, 'Bad Request')
     def put(self, nutrition_section_id, new_content):
-
+        """
+        Update the contents of a nutrition by id.
+        """
         try:
             nutrition.update_nutrition_section_content(nutrition_section_id,
                                                        new_content)
@@ -411,13 +418,13 @@ class UpdateNutritionSection(Resource):
 @api.route(f'{DEL_EMS_SECTION_EP}/<ems_section_id>')
 class DeleteEMS(Resource):
     """
-    Deletes a ems section by id.
+    Deletes a emergency medical service by id.
     """
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
     def delete(self, ems_section_id):
         """
-        Deletes a ems section by id.
+        Delete a emergency medical service by id.
         """
         try:
             ems.delete_ems_section(ems_section_id)
@@ -441,7 +448,7 @@ class EmergencyMedicalServices(Resource):
     """
     def get(self):
         """
-        This method returns all emergency medical services.
+        Return all emergency medical services.
         """
         return {
             TYPE: DATA,
@@ -456,7 +463,7 @@ class EmergencyMedicalServices(Resource):
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     def post(self):
         """
-        This method posts new ems.
+        Add a emergency medical service.
         """
 
         name = request.json[ems.EMS_SECTION_NAME]
@@ -474,14 +481,13 @@ class EmergencyMedicalServices(Resource):
 
 @api.route(f'{EMS_EP}/<ems_section_id>/<new_content>')
 class UpdateEMSSection(Resource):
-    """
-    Updates content of a section in the ems category.
-    """
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
     @api.response(HTTPStatus.BAD_REQUEST, 'Bad Request')
     def put(self, ems_section_id, new_content):
-
+        """
+        Update the contents of a emergency medical service by id.
+        """
         try:
             ems.update_ems_section_content(ems_section_id, new_content)
             return {ems_section_id: 'Updated content'}
@@ -501,13 +507,13 @@ finance_fields = api.model('NewFinance', {
 @api.route(f'{DEL_FINANCES_SECTION_EP}/<finance_section_id>')
 class DeleteFinancesSection(Resource):
     """
-    Deletes a section in finance by name.
+    Delete a section in finance by name.
     """
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
     def delete(self, finance_section_id):
         """
-        Deletes a finance section by name.
+        Delete a finance by id.
         """
         try:
             fin.delete_finances_section(finance_section_id)
@@ -523,7 +529,7 @@ class Finances(Resource):
     """
     def get(self):
         """
-        This method returns all finance.
+        Return all finances
         """
         return {
             TYPE: DATA,
@@ -538,7 +544,7 @@ class Finances(Resource):
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     def post(self):
         """
-        This method posts new finance.
+        Add a finance
         """
 
         name = request.json[fin.FINANCES_NAME]
@@ -563,7 +569,9 @@ class UpdateFinanceSection(Resource):
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
     @api.response(HTTPStatus.BAD_REQUEST, 'Bad Request')
     def put(self, finance_section_id, new_content):
-
+        """
+        Update the contents of a finance by id.
+        """
         try:
             fin.update_finance_section_content(finance_section_id, new_content)
             return {finance_section_id: 'Updated content'}
