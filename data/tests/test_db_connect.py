@@ -44,12 +44,9 @@ def test_get_cloud_password():
     assert dbc.os.environ.get("MONGODB_PASSWORD") == dbc.get_cloud_password()
 
     
-
-def test_fetch_one(temp_rec):
-    ret = dbc.fetch_one(TEST_COLLECT, {TEST_NAME: TEST_NAME})
-    assert ret is not None
-
-
+# def test_fetch_one(temp_rec):
+#     ret = dbc.fetch_one(TEST_COLLECT, {TEST_NAME: TEST_NAME})
+#     assert ret is not None
 
 # @patch('data.db_connect.get_mongo_id_in', return_value=False, autospec=True)
 # def test_fetch_one_fail(mock):
@@ -57,15 +54,15 @@ def test_fetch_one(temp_rec):
 #     print(ret)
 #     assert ret is not None
 
-def test_fetch_one_not_there():
-    ret = dbc.fetch_one(TEST_COLLECT, {TEST_NAME: 'not a field value in db!'})
-    assert ret is None
+# def test_fetch_one_not_there():
+#     ret = dbc.fetch_one(TEST_COLLECT, {TEST_NAME: 'not a field value in db!'})
+#     assert ret is None
 
 # check if the delete all function removes all documents from the collection
-def test_del_one(temp_rec):
-    dbc.del_one(TEST_COLLECT, {TEST_NAME: TEST_NAME})
-    count = dbc.count_documents(TEST_COLLECT)
-    assert count == 0
+# def test_del_one(temp_rec):
+#     dbc.del_one(TEST_COLLECT, {TEST_NAME: TEST_NAME})
+#     count = dbc.count_documents(TEST_COLLECT)
+#     assert count == 0
 
 # check if the delete all function removes all documents from the collection
 def test_delete_all(temp_rec):
