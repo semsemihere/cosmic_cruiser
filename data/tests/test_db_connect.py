@@ -16,6 +16,12 @@ def temp_rec():
     yield
     dbc.client[TEST_DB][TEST_COLLECT].delete_one({TEST_NAME: TEST_NAME})
 
+@patch('data.db_connect.get_client', return_value=None, autospec=True)
+@patch('data.db_connect.get_cloud_status', return_value=dbc.CLOUD, autospec=True)
+def test_connect_db_cloud_success(mock_client, mock_cloud_status):
+    dbc.set_cloud_password("asdf1234")
+    assert dbc.connect_db() == 1
+
 
 @patch('data.db_connect.get_client', return_value=None, autospec=True)
 @patch('data.db_connect.get_cloud_status', return_value=dbc.LOCAL, autospec=True)
@@ -29,11 +35,7 @@ def test_connect_db_cloud_failed_password(mock_client, mock_cloud_status, mock_p
     with pytest.raises(ValueError):
         dbc.connect_db()
 
-@patch('data.db_connect.get_client', return_value=None, autospec=True)
-@patch('data.db_connect.get_cloud_status', return_value=dbc.CLOUD, autospec=True)
-def test_connect_db_cloud_success(mock_client, mock_cloud_status):
-    dbc.set_cloud_password("asdf1234")
-    assert dbc.connect_db() == 1
+
 
 def test_connect_db_already_connected():
     assert dbc.connect_db() == 3
