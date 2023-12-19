@@ -26,6 +26,10 @@ def get_cloud_status():
     return os.environ.get("CLOUD_MONGO", LOCAL)
 
 
+def get_cloud_password():
+    return os.environ.get("MONGODB_PASSWORD")
+
+
 def connect_db():
     """
     This provides a uniform way to connect to the DB across all uses.
@@ -37,7 +41,7 @@ def connect_db():
     if get_client() is None:  # not connected yet!
         print("Setting client because it is None.")
         if get_cloud_status() == CLOUD:
-            password = os.environ.get("MONGODB_PASSWORD")
+            password = get_cloud_password()
             if not password:
                 raise ValueError('You must set your password '
                                  + 'to use Mongo in the cloud.')
@@ -70,10 +74,14 @@ def insert_one(collection, doc, db=MONGO_DB):
     return client[db][collection].insert_one(doc)
 
 
+def get_mongo_id_in(doc):
+    return MONGO_ID in doc
+
+
 # function to return first doc found with filer
 def fetch_one(collection, filt, db=MONGO_DB):
     for doc in client[db][collection].find(filt):
-        if MONGO_ID in doc:
+        if get_mongo_id_in(doc):
             # Convert mongo ID to a string so it works as JSON
             doc[MONGO_ID] = str(doc[MONGO_ID])
         return doc
