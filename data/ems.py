@@ -24,6 +24,14 @@ def get_ems_sections() -> dict:
     return dbc.fetch_all_as_dict(EMS_SECTION_NAME, EMS_COLLECT)
 
 
+def get_test_section():
+    test_section = {}
+    test_section[EMS_SECTION_NAME] = _get_test_name()
+    test_section[EMS_SECTION_ID] = generate_section_id()
+    test_section[EMS_ARTICLES] = 'article'
+    return test_section
+
+
 def add_ems_section(ems_section_name: str, ems_section_id: str,
                     ems_articles: dict) -> bool:
     if exists(ems_section_id):

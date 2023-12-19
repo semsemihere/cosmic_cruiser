@@ -5,7 +5,12 @@ import werkzeug.exceptions as wz
 import data.categories as categ
 import data.users as usrs
 import data.nutrition as nutr
+import data.finances as fin
+import data.ems as ems
+
 import pytest
+
+from http import HTTPStatus
 
 from http.client import (
     BAD_REQUEST,
@@ -154,3 +159,72 @@ def test_add_nutrition_section(mock_add):
     """
     resp = TEST_CLIENT.post(ep.NUTRITION_EP, json=nutr.get_test_section())
     assert resp.status_code == OK
+
+
+@patch('data.nutrition.add_section', side_effect=ValueError(), autospec=True)
+def test_bad_add_nutrition_section(mock_add):
+    """
+    Testing we do the right thing with a value error from add_section.
+    """
+    resp = TEST_CLIENT.post(ep.NUTRITION_EP, json=nutr.get_test_section())
+    assert resp.status_code == NOT_ACCEPTABLE
+
+
+# @patch('data.nutrition.add_section', return_value=None)
+# def test_nutrition_add_db_failure(mock_add):
+#     """
+#     Testing we do the right thing with a null ID return from add_section.
+#     """
+#     resp = TEST_CLIENT.post(ep.NUTRITION_EP, json=nutr.get_test_section())
+#     # assert resp.status_code == SERVICE_UNAVAILABLE
+#     assert resp.status_code == HTTPStatus.SERVICE_UNAVAILABLE
+
+
+def test_get_ems_sections():
+    resp = TEST_CLIENT.get(ep.EMS_EP)
+    assert resp.status_code == OK
+    resp_json = resp.get_json()
+    assert isinstance(resp_json, dict)
+
+
+@patch('data.ems.add_ems_section', return_value=ems.MOCK_ID, autospec=True)
+def test_add_ems_section(mock_add):
+    """
+    Testing we do the right thing with a good return from add_ems_section.
+    """
+    resp = TEST_CLIENT.post(ep.EMS_EP, json=ems.get_test_section())
+    assert resp.status_code == OK
+
+
+@patch('data.ems.add_ems_section', side_effect=ValueError(), autospec=True)
+def test_bad_add_ems_section(mock_add):
+    """
+    Testing we do the right thing with a value error from add_ems_section.
+    """
+    resp = TEST_CLIENT.post(ep.EMS_EP, json=ems.get_test_section())
+    assert resp.status_code == NOT_ACCEPTABLE
+
+
+def test_get_finances_sections():
+    resp = TEST_CLIENT.get(ep.FINANCES_EP)
+    assert resp.status_code == OK
+    resp_json = resp.get_json()
+    assert isinstance(resp_json, dict)
+
+
+@patch('data.finances.add_finances_section', return_value=fin.MOCK_ID, autospec=True)
+def test_add_finances_section(mock_add):
+    """
+    Testing we do the right thing with a good return from add_finances_section.
+    """
+    resp = TEST_CLIENT.post(ep.FINANCES_EP, json=fin.get_test_section())
+    assert resp.status_code == OK
+
+
+@patch('data.finances.add_finances_section', side_effect=ValueError(), autospec=True)
+def test_bad_add_finances_section(mock_add):
+    """
+    Testing we do the right thing with a value error from add_finances_section.
+    """
+    resp = TEST_CLIENT.post(ep.FINANCES_EP, json=fin.get_test_section())
+    assert resp.status_code == NOT_ACCEPTABLE
