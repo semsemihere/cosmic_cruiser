@@ -39,6 +39,10 @@ def test_connect_db_cloud_failed_password(mock_client, mock_cloud_status, mock_p
 def test_connect_db_already_connected():
     assert dbc.connect_db() == 3
 
+
+def test_get_cloud_password(): 
+    assert dbc.os.environ.get("MONGODB_PASSWORD") == dbc.get_cloud_password()
+
 def test_fetch_one(temp_rec):
     ret = dbc.fetch_one(TEST_COLLECT, {TEST_NAME: TEST_NAME})
     assert ret is not None
