@@ -25,8 +25,8 @@ def set_client(assigment):
 def get_cloud_status():
     return os.environ.get("CLOUD_MONGO", LOCAL)
 
-def get_cloud_password():
-    return os.environ.get("MONGODB_PASSWORD")
+# def get_cloud_password():
+#     return os.environ.get("MONGODB_PASSWORD")
 
 def connect_db():
     """
