@@ -44,9 +44,11 @@ def test_get_cloud_password():
 
     
 
-# def test_fetch_one(temp_rec):
-#     ret = dbc.fetch_one(TEST_COLLECT, {TEST_NAME: TEST_NAME})
-#     assert ret is not None
+def test_fetch_one(temp_rec):
+    ret = dbc.fetch_one(TEST_COLLECT, {TEST_NAME: TEST_NAME})
+    assert ret is not None
+
+
 
 # @patch('data.db_connect.get_mongo_id_in', return_value=False, autospec=True)
 # def test_fetch_one_fail(mock):
