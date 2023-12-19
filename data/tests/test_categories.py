@@ -26,13 +26,12 @@ def test_get_categories(temp_category):
 
     assert categ.exists(temp_category)
 
-
 def test_get_test_name():
     name = categ._get_test_name()
     assert isinstance(name, str)
     assert len(name) > 0
-    
-    
+
+
 def test_get_test_category():
     assert isinstance(categ.get_test_category(), dict)
 

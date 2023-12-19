@@ -24,39 +24,22 @@ def temp_rec():
 def test_connect_db_local_success(mock_client,mock_cloud):
     assert dbc.connect_db() == 0
 
-# @patch('data.db_connect.get_client', return_value=None, autospec=True)
-# @patch('data.db_connect.get_cloud_status', return_value=dbc.CLOUD, autospec=True)
-# @patch('data.db_connect.get_cloud_password', return_value=None, autospec=True)
-# def test_connect_db_cloud_failed_password(mock_client, mock_cloud_status, mock_password):
-#     with pytest.raises(ValueError):
-#         dbc.connect_db()
-
 @patch('data.db_connect.get_client', return_value=None, autospec=True)
 @patch('data.db_connect.get_cloud_status', return_value=dbc.CLOUD, autospec=True)
-@patch('data.db_connect.get_cloud_password', return_value='asdf1234', autospec=True)
-def test_connect_db_cloud_success(mock_client, mock_cloud_status, mock_password):
-    assert dbc.connect_db() == 1
+def test_connect_db_cloud_success(mock_client, mock_cloud_status):
+    with pytest.raises(ValueError):
+        dbc.connect_db()
 
 def test_connect_db_already_connected():
     assert dbc.connect_db() == 3
 
-def test_get_cloud_password(): 
-    assert dbc.os.environ.get("MONGODB_PASSWORD") == dbc.get_cloud_password()
+def test_fetch_one(temp_rec):
+    ret = dbc.fetch_one(TEST_COLLECT, {TEST_NAME: TEST_NAME})
+    assert ret is not None
 
-    
-# def test_fetch_one(temp_rec):
-#     ret = dbc.fetch_one(TEST_COLLECT, {TEST_NAME: TEST_NAME})
-#     assert ret is not None
-
-# @patch('data.db_connect.get_mongo_id_in', return_value=False, autospec=True)
-# def test_fetch_one_fail(mock):
-#     ret = dbc.fetch_one(TEST_COLLECT, {TEST_NAME: TEST_NAME})
-#     print(ret)
-#     assert ret is not None
-
-# def test_fetch_one_not_there():
-#     ret = dbc.fetch_one(TEST_COLLECT, {TEST_NAME: 'not a field value in db!'})
-#     assert ret is None
+def test_fetch_one_not_there(temp_rec):
+    ret = dbc.fetch_one(TEST_COLLECT, {TEST_NAME: 'not a field value in db!'})
+    assert ret is None
 
 # check if the delete all function removes all documents from the collection
 # def test_del_one(temp_rec):
