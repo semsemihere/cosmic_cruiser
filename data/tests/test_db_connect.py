@@ -18,12 +18,11 @@ def temp_rec():
     dbc.client[TEST_DB][TEST_COLLECT].delete_one({TEST_NAME: TEST_NAME})
 
 
-# test for db password and connection
 @patch('data.db_connect.get_client', return_value=None, autospec=True)
 @patch('data.db_connect.get_cloud_status', return_value=0, autospec=True)
 def test_connect_db_local_success(mock_client,mock_cloud):
     assert dbc.connect_db() == 0
-
+    
 @patch('data.db_connect.get_client', return_value=None, autospec=True)
 @patch('data.db_connect.get_cloud_status', return_value=dbc.CLOUD, autospec=True)
 def test_connect_db_cloud_success(mock_client, mock_cloud_status):
