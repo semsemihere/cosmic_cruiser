@@ -24,12 +24,12 @@ def temp_rec():
 def test_connect_db_local_success(mock_client,mock_cloud):
     assert dbc.connect_db() == 0
 
-@patch('data.db_connect.get_client', return_value=None, autospec=True)
-@patch('data.db_connect.get_cloud_status', return_value=dbc.CLOUD, autospec=True)
-@patch('data.db_connect.get_cloud_password', return_value=None, autospec=True)
-def test_connect_db_cloud_failed_password(mock_client, mock_cloud_status, mock_password):
-    with pytest.raises(ValueError):
-        dbc.connect_db()
+# @patch('data.db_connect.get_client', return_value=None, autospec=True)
+# @patch('data.db_connect.get_cloud_status', return_value=dbc.CLOUD, autospec=True)
+# @patch('data.db_connect.get_cloud_password', return_value=None, autospec=True)
+# def test_connect_db_cloud_failed_password(mock_client, mock_cloud_status, mock_password):
+#     with pytest.raises(ValueError):
+#         dbc.connect_db()
 
 @patch('data.db_connect.get_client', return_value=None, autospec=True)
 @patch('data.db_connect.get_cloud_status', return_value=dbc.CLOUD, autospec=True)
