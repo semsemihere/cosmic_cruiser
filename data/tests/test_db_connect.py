@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import patch
 import data.db_connect as dbc
-
+import os
 
 TEST_DB = dbc.MONGO_DB
 TEST_COLLECT = 'test_collect'
@@ -19,15 +19,29 @@ def temp_rec():
 
 
 # test for db password and connection
-@patch('os.environ.get', return_value="0", autospec=True)
-# @patch('client', return_value=None, autospec=True)
-@pytest.mark.skip('having difficulty fixing the connection error')
-def test_connect_db_local_success(temp_rec):
+@patch('data.db_connect.get_client', return_value=None, autospec=True)
+@patch('data.db_connect.get_cloud_status', return_value=0, autospec=True)
+def test_connect_db_local_success(mock_client,mock_cloud):
     assert dbc.connect_db() == 0
 
-def test_fetch_one(temp_rec):
-    ret = dbc.fetch_one(TEST_COLLECT, {TEST_NAME: TEST_NAME})
-    assert ret is not None
+# @patch('data.db_connect.get_client', return_value=None, autospec=True)
+# @patch('data.db_connect.get_cloud_status', return_value=dbc.CLOUD, autospec=True)
+# @patch('data.db_connect.get_cloud_password', return_value=None, autospec=True)
+# def test_connect_db_cloud_failed_password(mock_client, mock_cloud_status, mock_password):
+#     with pytest.raises(ValueError):
+#         dbc.connect_db()
+
+@patch('data.db_connect.get_client', return_value=None, autospec=True)
+@patch('data.db_connect.get_cloud_status', return_value=dbc.CLOUD, autospec=True)
+@patch('data.db_connect.get_cloud_password', return_value='asdf1234', autospec=True)
+def test_connect_db_cloud_success(mock_client, mock_cloud_status, mock_password):
+    assert dbc.connect_db() == 1
+
+def test_connect_db_already_connected():
+    assert dbc.connect_db() == 3
+
+def test_get_cloud_password(): 
+    assert dbc.os.environ.get("MONGODB_PASSWORD") == dbc.get_cloud_password()
 
     
 # def test_fetch_one(temp_rec):
@@ -67,5 +81,3 @@ def test_fetch_all(temp_rec):
 def test_fetch_all_as_dict(temp_rec):
     fetched = dbc.fetch_all_as_dict(TEST_NAME, TEST_NAME) 
     assert isinstance(fetched, dict) 
-    
-    
