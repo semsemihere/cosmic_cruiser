@@ -20,7 +20,8 @@ def temp_rec():
 
 # test for db password and connection
 @patch('data.db_connect.get_client', return_value=None, autospec=True)
-def test_connect_db_local_success(mock):
+@patch('data.db_connect.get_cloud_status', return_value=0, autospec=True)
+def test_connect_db_local_success(mock_client,mock_cloud):
     assert dbc.connect_db() == 0
 
 @patch('data.db_connect.get_client', return_value=None, autospec=True)
