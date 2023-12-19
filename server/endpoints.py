@@ -18,7 +18,9 @@ import data.finances as fin
 
 app = Flask(__name__)
 api = Api(app)
-
+NAME = 'name'
+SECTIONS = 'sections'
+UPDATE = 'update'
 DELETE = 'delete'
 DEFAULT = 'Default'
 MENU = 'menu'
@@ -31,6 +33,8 @@ CATEGORIES_MENU_NM = 'Category Menu'
 CATEGORY_ID = 'Category ID'
 CATEGORIES_EP = '/categories'
 CATEGORIES_MENU_EP = '/category_menu'
+UPDATE_CATEGORY_NAME_EP = f'{CATEGORIES_EP}/{UPDATE}/{NAME}'
+UPDATE_CATEGORY_SECTIONS_EP = f'{CATEGORIES_EP}/{UPDATE}/{SECTIONS}'
 DEL_CATEGORY_EP = f'{CATEGORIES_EP}/{DELETE}'
 
 NUTRITION = 'nutrition'
@@ -207,27 +211,27 @@ class Users(Resource):
             raise wz.NotAcceptable(f'{str(e)}')
 
 
-@api.route(f'{DEL_CATEGORY_EP}/<name>')
+@api.route(f'{DEL_CATEGORY_EP}/<category_id>')
 class DeleteCategory(Resource):
     """
-    This method deletes a category.
+    This method deletes a category by id.
     """
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
-    def delete(self, name):
+    def delete(self, category_id):
         """
-        Deletes a category by name.
+        Deletes a category by id.
         """
         try:
-            categ.delete_category(name)
-            return {name: 'Deleted'}
+            categ.delete_category(category_id)
+            return {category_id: 'Deleted'}
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')
 
 
 category_fields = api.model('NewCategory', {
     categ.NAME: fields.String,
-    categ.CATEGORY_ID: fields.Integer,
+    categ.CATEGORY_ID: fields.String,
     categ.NUM_SECTIONS: fields.Integer,
 })
 
@@ -268,6 +272,44 @@ class Categories(Resource):
             return {CATEGORY_ID: new_id}
         except ValueError as e:
             raise wz.NotAcceptable(f'{str(e)}')
+
+
+@api.route(f'{UPDATE_CATEGORY_NAME_EP}/<category_id>/<new_category_name>')
+class UpdateCategoryName(Resource):
+    """
+    Updates name of a specific category.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
+    @api.response(HTTPStatus.BAD_REQUEST, 'Bad Request')
+    def put(self, category_id, new_category_name):
+
+        try:
+            categ.update_category_name(category_id, new_category_name)
+            return {new_category_name: 'Updated category name'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
+        except Exception as e:
+            raise wz.BadRequest(f'failed to update category name: {str(e)}')
+
+
+@api.route(f'{UPDATE_CATEGORY_SECTIONS_EP}/<category_id>/<new_num_sections>')
+class UpdateCategoryNumSections(Resource):
+    """
+    Updates number of sections under a specific category.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
+    @api.response(HTTPStatus.BAD_REQUEST, 'Bad Request')
+    def put(self, category_id, new_num_sections):
+
+        try:
+            categ.update_category_sections(category_id, new_num_sections)
+            return {new_num_sections: 'Updated number of sections'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
+        except Exception as e:
+            raise wz.BadRequest(f'failed to update num sections: {str(e)}')
 
 
 @api.route(f'{DEL_NUTRITION_SECTION_EP}/<nutrition_section_id>')

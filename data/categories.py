@@ -39,9 +39,9 @@ def get_categories() -> dict:
     return dbc.fetch_all_as_dict(NAME, CATEGORIES_COLLECT)
 
 
-def exists(name: str) -> bool:
+def exists(category_id: str) -> bool:
     dbc.connect_db()
-    return dbc.fetch_one(CATEGORIES_COLLECT, {NAME: name})
+    return dbc.fetch_one(CATEGORIES_COLLECT, {CATEGORY_ID: category_id})
 
 
 def _get_test_name():
@@ -66,10 +66,10 @@ def generate_category_id() -> str:
 
 def add_category(category_name: str, category_id: str,
                  num_sections: int) -> bool:
-    if exists(category_name):
-        raise ValueError(f'Duplicate category name: {category_name=}')
-    if not category_name:
-        raise ValueError("Category name cannot be blank!")
+    if exists(category_id):
+        raise ValueError(f'Duplicate category ID: {category_id=}')
+    if not category_id:
+        raise ValueError("Category ID cannot be blank!")
 
     # categories[category_name] = {NUM_SECTIONS: num_sections}
     # category_id = generate_category_id()
@@ -84,14 +84,45 @@ def add_category(category_name: str, category_id: str,
     return _id is not None
 
 
-def delete_category(category_name: str):
+def update_category_name(category_id: str, new_category_name: str) -> bool:
+    if exists(category_id):
+        category = {}
+        category[NAME] = new_category_name
+
+        filter_query = {CATEGORY_ID: category_id}
+        update_query = {'$set': category}
+
+        dbc.connect_db()
+        _id = dbc.update_one(CATEGORIES_COLLECT, filter_query, update_query)
+        return _id is not None
+    else:
+        raise ValueError(f'Update failed: {category_id} not in database.')
+
+
+def update_category_sections(category_id: str,
+                             updated_num_sections: str) -> bool:
+    if exists(category_id):
+        category = {}
+        category[NUM_SECTIONS] = int(updated_num_sections)
+
+        filter_query = {CATEGORY_ID: category_id}
+        update_query = {'$set': category}
+
+        dbc.connect_db()
+        _id = dbc.update_one(CATEGORIES_COLLECT, filter_query, update_query)
+        return _id is not None
+    else:
+        raise ValueError(f'Update failed: {category_id} not in database.')
+
+
+def delete_category(category_id: str):
     # check if the category to delete is in the database
-    if exists(category_name):
+    if exists(category_id):
         # del categories[category_name]
         # dbc.del_one(CATEGORIES_COLLECT, {NAME: category_name})
-        return dbc.del_one(CATEGORIES_COLLECT, {NAME: category_name})
+        return dbc.del_one(CATEGORIES_COLLECT, {CATEGORY_ID: category_id})
     else:
-        raise ValueError(f'Delete failure: {category_name} not in database.')
+        raise ValueError(f'Delete failure: {category_id} not in database.')
 
 
 # def exists(category_name: str) -> bool:

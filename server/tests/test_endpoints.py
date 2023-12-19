@@ -142,6 +142,46 @@ def test_category_add_db_failure(mock_add):
     resp = TEST_CLIENT.post(ep.CATEGORIES_EP, json=categ.get_test_category())
     assert resp.status_code == SERVICE_UNAVAILABLE
 
+@patch('data.categories.update_category_name', return_value=categ.MOCK_ID, autospec=True)
+def test_good_update_category_name(mock_update):
+    """
+    Testing successful category name update
+    """
+    category_id = categ.generate_category_id()
+    new_category_name = "NEW CATEGORY NAME"
+    resp = TEST_CLIENT.put(f'{ep.UPDATE_CATEGORY_NAME_EP}/{category_id}/{new_category_name}', json=categ.get_test_category())
+    assert resp.status_code == OK
+
+@patch('data.categories.update_category_name', side_effect=ValueError(), autospec=True)
+def test_bad_update_category_name(mock_update):
+    """
+    Testing bad category name update
+    """
+    category_id = categ.generate_category_id()
+    new_category_name = "NEW CATEGORY NAME"
+    resp = TEST_CLIENT.put(f'{ep.UPDATE_CATEGORY_NAME_EP}/{category_id}/{new_category_name}', json=categ.get_test_category())
+    assert resp.status_code == NOT_FOUND
+
+@patch('data.categories.update_category_sections', return_value=categ.MOCK_ID, autospec=True)
+def test_good_update_category_sections(mock_update):
+    """
+    Testing successful category num section update
+    """
+    category_id = categ.generate_category_id()
+    updated_num_sections = "1"
+    resp = TEST_CLIENT.put(f'{ep.UPDATE_CATEGORY_SECTIONS_EP}/{category_id}/{updated_num_sections}', json=categ.get_test_category())
+    assert resp.status_code == OK
+
+@patch('data.categories.update_category_sections', side_effect=ValueError(), autospec=True)
+def test_bad_update_category_sections(mock_update):
+    """
+    Testing bad category num section update
+    """
+    category_id = categ.generate_category_id()
+    updated_num_sections = "1"
+    resp = TEST_CLIENT.put(f'{ep.UPDATE_CATEGORY_SECTIONS_EP}/{category_id}/{updated_num_sections}', json=categ.get_test_category())
+    assert resp.status_code == NOT_FOUND
+
 
 def test_get_nutrition_sections():
     resp = TEST_CLIENT.get(ep.NUTRITION_EP)

@@ -8,9 +8,9 @@ def temp_category():
     category_name = categ._get_test_name()
     category_id = categ.generate_category_id()
     ret = categ.add_category(category_name, category_id, 0)
-    yield category_name
-    if categ.exists(category_name):
-        categ.delete_category(category_name)
+    yield category_id
+    if categ.exists(category_id):
+        categ.delete_category(category_id)
 
 
 def test_get_categories(temp_category):
@@ -52,29 +52,42 @@ def test_add_category():
     new_name = categ._get_test_name()
     new_id = categ.generate_category_id()
     ret = categ.add_category(new_name, new_id, 4)
-    assert categ.exists(new_name)
+    assert categ.exists(new_id)
     assert isinstance(ret, bool)
-    categ.delete_category(new_name)
+    categ.delete_category(new_id)
 
-def test_add_category_duplicate_name(temp_category):
-    # Duplicate category name raises a ValueError
-    duplicate_name = temp_category
-    category_id = categ.generate_category_id()
+def test_add_category_duplicate_ID(temp_category):
+    # Duplicate category ID raises a ValueError
+    category_name = categ._get_test_name()
+    duplicate_id = temp_category
     with pytest.raises(ValueError):
-        categ.add_category(duplicate_name, category_id, 4)
+        categ.add_category(category_name, duplicate_id, 4)
 
-def test_add_category_blank_name():
-    # Blank category name raises a ValueError
-    category_id = categ.generate_category_id()
-    with pytest.raises(ValueError):
-        categ.add_category("", category_id, 4)
-
-def test_delete_category(temp_category):
-    category_name = temp_category
-    categ.delete_category(category_name)
-    assert not categ.exists(category_name)
-
-def test_delete_category_not_there():
+def test_add_category_blank_id():
+    # Blank category ID raises a ValueError
     category_name = categ._get_test_name()
     with pytest.raises(ValueError):
-        categ.delete_category(category_name)
+        categ.add_category(category_name, "", 4)
+
+def test_update_category_name(temp_category):
+    updated_name = "New category name"
+    categ.update_category_name(temp_category, updated_name)
+    for key in categ.get_categories():
+        if key == updated_name:
+            assert True
+
+def test_update_category_num_sections(temp_category):
+    updated_num_sections = 99
+    categ.update_category_sections(temp_category, updated_num_sections)
+    for key in categ.get_categories():
+        if categ.get_categories()[key] == updated_num_sections:
+            assert True
+
+def test_delete_category(temp_category):
+    categ.delete_category(temp_category)
+    assert not categ.exists(temp_category)
+
+def test_delete_category_not_there():
+    category_id = categ.generate_category_id()
+    with pytest.raises(ValueError):
+        categ.delete_category(category_id)
