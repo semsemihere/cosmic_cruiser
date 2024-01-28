@@ -7,6 +7,8 @@ Christy Lin, George Gonzalez, Nishma Shakya, Semi Hong
 # Timeline
 <img width="1201" alt="Screenshot 2023-10-22 at 9 55 19 PM" src="https://github.com/semsemihere/cosmic_cruiser/assets/71098021/f4d3fc54-1337-4802-90af-d71bcdf77317">
 
+# Progress and Goals 
+[Progress and Goals](ProgressAndGoals.md)
 
 # Project Endpoints
 - Home
@@ -25,7 +27,6 @@ Christy Lin, George Gonzalez, Nishma Shakya, Semi Hong
 - History
 - Subscriptions
 - Quiz Questions for Course Completion
-
 
 
 
