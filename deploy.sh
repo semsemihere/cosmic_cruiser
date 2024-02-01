@@ -1,5 +1,6 @@
 #!/bin/bash
 # This shell script deploys a new version to a server.
+# It does this by SSHing to PythonAnywhere and running rebuild.
 
 PROJ_DIR=cosmic_cruiser
 VENV=CosmicCruisers
