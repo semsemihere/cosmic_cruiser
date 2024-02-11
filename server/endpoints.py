@@ -9,6 +9,7 @@ from flask import Flask, request
 from flask_restx import Resource, Api, fields
 from flask_cors import CORS
 
+
 import werkzeug.exceptions as wz
 
 import data.categories as categ
