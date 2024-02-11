@@ -7,6 +7,7 @@ from http import HTTPStatus
 
 from flask import Flask, request
 from flask_restx import Resource, Api, fields
+from flask_cors import CORS
 
 import werkzeug.exceptions as wz
 
@@ -18,6 +19,8 @@ import data.finances as fin
 
 app = Flask(__name__)
 api = Api(app)
+CORS(app)
+
 NAME = 'name'
 SECTIONS = 'sections'
 UPDATE = 'update'
