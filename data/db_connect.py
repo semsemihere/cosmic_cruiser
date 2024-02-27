@@ -57,7 +57,8 @@ def connect_db():
                                       + '?retryWrites=true&w=majority'
                                       + '&connectTimeoutMS=30000'
                                       + '&socketTimeoutMS=None'
-                                      + '&connect=false'
+                                      + '&socketKeepAlive=True'
+                                      + '&connect=False'
                                       + '&maxPoolsize=1'))
             # PA recommends these settings:
 
