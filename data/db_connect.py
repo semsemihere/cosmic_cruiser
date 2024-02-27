@@ -54,14 +54,13 @@ def connect_db():
 
             set_client(pm.MongoClient(f'mongodb+srv://semihong:{password}'
                                       + '@cosmiccrusier.3cyi8m1.mongodb.net/'
-                                      + '?retryWrites=true&w=majority',
-                                      )
-                       )
+                                      + '?retryWrites=true&w=majority'
+                                      + '&connectTimeoutMS=30000'
+                                      + '&socketTimeoutMS=None'
+                                      + '&connect=false'
+                                      + '&maxPoolsize=1'))
             # PA recommends these settings:
-            # + 'connectTimeoutMS=30000&'
-            # + 'socketTimeoutMS=None
-            # + '&connect=false'
-            # + 'maxPoolsize=1')
+
             # but they don't seem necessary
             return 1
         else:
