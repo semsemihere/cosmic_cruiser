@@ -3,7 +3,7 @@ import os
 
 import requests
 from requests.auth import HTTPDigestAuth
-from ipify import get_ip
+import ipify
 
 import pymongo as pm
 
@@ -19,7 +19,7 @@ MONGO_ID = '_id'
 atlas_group_id = ""
 atlas_api_key_public = "<your atlas public API key>"
 atlas_api_key_private = "<your atlas private API key>"
-ip = get_ip()
+# ip = get_ip()
 
 # resp = requests.post(
 #     "https://cloud.mongodb.com/api/atlas/v1.0/groups/{atlas_group_id}/accessList".format(atlas_group_id=atlas_group_id),
