@@ -3,21 +3,12 @@ import os
 
 import pymongo as pm
 
-import ssl
-
 LOCAL = "0"
 CLOUD = "1"
 
 MONGO_DB = 'ccDB'
 
-client = pm.MongoClient((f'mongodb+srv://semihong:asdf1234'
-                                      + '@cosmiccrusier.3cyi8m1.mongodb.net/'
-                                      + '?retryWrites=true&w=majority'
-                                      + '&connectTimeoutMS=30000'
-                                      + '&socketTimeoutMS=None'
-                                      + '&socketKeepAlive=True'
-                                      + '&connect=False'
-                                      + '&maxPoolsize=1'), ssl_cert_reqs=ssl.CERT_NONE)
+client = None
 
 MONGO_ID = '_id'
 
