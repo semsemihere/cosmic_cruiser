@@ -3,7 +3,7 @@ import os
 
 import requests
 from requests.auth import HTTPDigestAuth
-# import ipify
+# from ipify import get_ip
 
 import pymongo as pm
 
@@ -16,9 +16,9 @@ client = None
 
 MONGO_ID = '_id'
 
-atlas_group_id = ""
-atlas_api_key_public = "<your atlas public API key>"
-atlas_api_key_private = "<your atlas private API key>"
+atlas_group_id = "654813f0dcedf2724700d7b4"
+atlas_api_key_public = " ngyyvmyf"
+atlas_api_key_private = "100b54e7-8f74-44d7-aaa0-1a2b4b38bdb2"
 # ip = get_ip()
 
 # resp = requests.post(
