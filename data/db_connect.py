@@ -5,6 +5,8 @@ import os
 # from requests.auth import HTTPDigestAuth
 # from ipify import get_ip
 
+import pymongo as pm
+
 LOCAL = "0"
 CLOUD = "1"
 
