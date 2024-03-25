@@ -1,8 +1,8 @@
 
 import os
 
-import requests
-from requests.auth import HTTPDigestAuth
+# import requests
+# from requests.auth import HTTPDigestAuth
 # from ipify import get_ip
 
 import pymongo as pm
