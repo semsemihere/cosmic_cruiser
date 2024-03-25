@@ -14,7 +14,6 @@ client = None
 MONGO_ID = '_id'
 
 
-
 def get_client():
     return client
 
