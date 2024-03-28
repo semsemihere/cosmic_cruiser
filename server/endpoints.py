@@ -455,6 +455,7 @@ class NutritionSections(Resource):
         except ValueError as e:
             raise wz.NotAcceptable(f'{str(e)}')
 
+
 @api.route(f'{DEL_EMS_SECTION_EP}/<ems_section_id>')
 class DeleteEMS(Resource):
     """
