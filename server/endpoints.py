@@ -44,6 +44,7 @@ DEL_CATEGORY_EP = f'{CATEGORIES_EP}/{DELETE}'
 NUTRITION = 'nutrition'
 NUTRITION_EP = '/categories/nutrition'
 NUTRITION_MENU_EP = '/nutrition_menu'
+NUTRITION_ARTICLE_MENU_EP = 'nutrition_article_menu'
 DEL_NUTRITION_SECTION_EP = f'{NUTRITION_EP}/{DELETE}'
 
 EMS = "emergencyMedicalServices"
@@ -339,9 +340,16 @@ class DeleteNutritionSection(Resource):
             raise wz.NotFound(f'{str(e)}')
 
 
-nutrition_fields = api.model('NewNutrition', {
+nutrition_section_fields = api.model('NewNutritionSection', {
     nutrition.NAME: fields.String,
     nutrition.SECTION_ID: fields.String,
+})
+
+
+nutrition_article_fields = api.model('NewNutritionArticle', {
+    nutrition.NAME: fields.String,
+    nutrition.ARTICLE_ID: fields.String,
+    nutrition.ARTICLE: fields.String,
 })
 
 
@@ -363,7 +371,7 @@ class Nutrition(Resource):
             RETURN: MAIN_MENU_EP,
         }
 
-    @api.expect(nutrition_fields)
+    @api.expect(nutrition_section_fields)
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     def post(self):
@@ -423,38 +431,38 @@ class NutritionSections(Resource):
     This class supports various operations on nutrition, such as
     listing them, and adding a new nutrition section.
     """
-    def get(self):
+    def get(self, nutrition_section_id):
         """
         Return all nutrition articles within a specific section.
         """
+
         return {
             TYPE: DATA,
             TITLE: 'ALL NUTRITION',
-            DATA: nutrition.get_sections(),
-            MENU: NUTRITION_MENU_EP,
+            DATA: nutrition.get_articles(nutrition_section_id),
+            MENU: NUTRITION_ARTICLE_MENU_EP,
             RETURN: MAIN_MENU_EP,
         }
 
-    @api.expect(nutrition_fields)
+    @api.expect(nutrition_article_fields)
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     def post(self):
         """
-        Add a nutrition article
+        Add a nutrition section
         """
 
         name = request.json[nutrition.NAME]
-        section_id = request.json[nutrition.SECTION_ID]
-        article = request.json[nutrition.ARTICLE]
+        article_id = request.json[nutrition.ARTICLE_ID]
+        article_content  = requestion.json[nutrition.ARTICLE]
 
         try:
-            new_section = nutrition.add_section(name, section_id, article)
+            new_article = nutrition.add_article(name, article_id, article_content)
 
-            return {NUTRITION: new_section}
+            return {NUTRITION: new_article}
 
         except ValueError as e:
             raise wz.NotAcceptable(f'{str(e)}')
-
 
 @api.route(f'{DEL_EMS_SECTION_EP}/<ems_section_id>')
 class DeleteEMS(Resource):

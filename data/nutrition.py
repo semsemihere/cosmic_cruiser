@@ -14,6 +14,7 @@ MOCK_ID = '0' * ID_LEN
 
 NAME = 'name'
 SECTION_ID = 'sectionID'
+ARTICLE_ID = 'articleID'
 # NUM_SECTIONS = "numSections"
 ARTICLE = 'nutritionContent'
 
@@ -30,9 +31,15 @@ ARTICLE = 'nutritionContent'
 
 
 def get_sections() -> dict:
-    # return nutrition, by id
+    # return nutrition sections, by id
     dbc.connect_db()
     return dbc.fetch_all_as_dict(NAME, NUTRITION_COLLECT)
+
+
+def get_articles(section_id: str) -> dict:
+    # return nutrition articles
+    dbc.connect_db()
+    return dbc.fetch_all(NUTRITION_COLLECT, {SECTION_ID: section_id})
 
 
 def exists(section_id: str) -> bool:
@@ -104,6 +111,23 @@ def update_nutrition_section_content(section_id: str,
     else:
         raise ValueError(f'Update failed: {section_id} not in database.')
 
+
+def add_article(article_name: str, article_id: str, article_content: str) -> bool:
+    if exists(section_id):
+        raise ValueError(f'Duplicate section id: {section_id=}')
+    if not section_id:
+        raise ValueError("Nutrition id cannot be blank!")
+
+    # section_id = generate_section_id()
+    # return section_id
+
+    article = {}
+    article[NAME] = article_name
+    article[ARTICLE_ID] = article_id
+    article[ARTICLE] = article_content
+    dbc.connect_db()
+    _id = dbc.insert_one(NUTRITION_COLLECT, article)
+    return _id is not None
 
 # def main():
 #     print(get_sections())
