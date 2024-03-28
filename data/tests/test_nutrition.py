@@ -6,7 +6,7 @@ import data.nutrition as nutrition
 def temp_section():
     section_name = nutrition._get_test_name()
     section_id = nutrition.generate_section_id()
-    ret = nutrition.add_section(section_name, section_id, "article")
+    ret = nutrition.add_section(section_name, section_id)
     yield section_id
     if nutrition.exists(section_id):
         nutrition.delete_section(section_id)
@@ -51,7 +51,7 @@ def test_add_section():
     # assert isinstance(ret, str)
     new_name = nutrition._get_test_name()
     new_id = nutrition.generate_section_id()
-    ret = nutrition.add_section(new_name, new_id, "article")
+    ret = nutrition.add_section(new_name, new_id)
     assert nutrition.exists(new_id)
     assert isinstance(ret, bool)
     nutrition.delete_section(new_id)
@@ -61,13 +61,13 @@ def test_add_section_duplicate_id(temp_section):
     nutrition_name = nutrition._get_test_name()
     duplicate_section_id = temp_section
     with pytest.raises(ValueError):
-        nutrition.add_section(nutrition_name, duplicate_section_id, "article")
+        nutrition.add_section(nutrition_name, duplicate_section_id)
 
 def test_add_section_blank_id():
     # Blank section name raises a ValueError
     nutrition_name = nutrition._get_test_name()
     with pytest.raises(ValueError):
-        nutrition.add_section(nutrition_name, "", "article")
+        nutrition.add_section(nutrition_name, "")
 
 def test_delete_section(temp_section):
     section_id = temp_section

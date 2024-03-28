@@ -60,8 +60,7 @@ def generate_section_id() -> str:
     return _id
 
 
-def add_section(section_name: str, section_id: str,
-                section_article: str) -> bool:
+def add_section(section_name: str, section_id: str) -> bool:
     if exists(section_id):
         raise ValueError(f'Duplicate section id: {section_id=}')
     if not section_id:
@@ -73,7 +72,6 @@ def add_section(section_name: str, section_id: str,
     section = {}
     section[NAME] = section_name
     section[SECTION_ID] = section_id
-    section[ARTICLE] = section_article
     dbc.connect_db()
     _id = dbc.insert_one(NUTRITION_COLLECT, section)
     return _id is not None
