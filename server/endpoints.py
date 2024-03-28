@@ -454,15 +454,18 @@ class NutritionSections(Resource):
 
         name = request.json[nutrition.NAME]
         article_id = request.json[nutrition.ARTICLE_ID]
-        article_content  = requestion.json[nutrition.ARTICLE]
+        article_content = request.json[nutrition.ARTICLE]
 
         try:
-            new_article = nutrition.add_article(name, article_id, article_content)
+            new_article = nutrition.add_article(name,
+                                                article_id,
+                                                article_content)
 
             return {NUTRITION: new_article}
 
         except ValueError as e:
             raise wz.NotAcceptable(f'{str(e)}')
+
 
 @api.route(f'{DEL_EMS_SECTION_EP}/<ems_section_id>')
 class DeleteEMS(Resource):
