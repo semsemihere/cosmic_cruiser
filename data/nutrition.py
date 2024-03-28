@@ -112,10 +112,12 @@ def update_nutrition_section_content(section_id: str,
         raise ValueError(f'Update failed: {section_id} not in database.')
 
 
-def add_article(article_name: str, article_id: str, article_content: str) -> bool:
-    if exists(section_id):
-        raise ValueError(f'Duplicate section id: {section_id=}')
-    if not section_id:
+def add_article(article_name: str,
+                article_id: str,
+                article_content: str) -> bool:
+    if exists(article_id):
+        raise ValueError(f'Duplicate section id: {article_id=}')
+    if not article_id:
         raise ValueError("Nutrition id cannot be blank!")
 
     # section_id = generate_section_id()
