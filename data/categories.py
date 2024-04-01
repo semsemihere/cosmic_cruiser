@@ -15,6 +15,7 @@ MOCK_ID = '0' * ID_LEN
 NAME = 'name'
 CATEGORY_ID = 'categoryID'
 NUM_SECTIONS = "numSections"
+ARTICLES = "articles"
 
 TEST_CATEGORY_NAME = "Nutrition/Cooking"
 
@@ -64,11 +65,12 @@ def generate_category_id() -> str:
     return _id
 
 
-def add_article_to_category(category_id: str):
-    # , article_id: str, article_name: str) -> bool:
+def add_article_to_category(category_id: str,
+                            article_id: str,
+                            article_name: str) -> bool:
     categories = get_categories()
-    if (category_id in categories):
-        print(category_id)
+    if category_id in categories:
+        categories[category_id][ARTICLES] = {article_id, article_name}
         return True
     else:
         return False
@@ -89,6 +91,7 @@ def add_category(category_name: str, category_id: str,
     category[NAME] = category_name
     category[CATEGORY_ID] = category_id
     category[NUM_SECTIONS] = num_sections
+    category[ARTICLES] = {}
     dbc.connect_db()
     _id = dbc.insert_one(CATEGORIES_COLLECT, category)
     return _id is not None
