@@ -64,6 +64,16 @@ def generate_category_id() -> str:
     return _id
 
 
+def add_article_to_category(category_id: str):
+    # , article_id: str, article_name: str) -> bool:
+    categories = get_categories()
+    if (category_id in categories):
+        print(category_id)
+        return True
+    else:
+        return False
+
+
 def add_category(category_name: str, category_id: str,
                  num_sections: int) -> bool:
     if exists(category_id):

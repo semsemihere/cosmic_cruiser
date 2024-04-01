@@ -44,6 +44,9 @@ def test_generate_category_id():
 
 ADD_NAME = "New Category"
 
+def test_add_article():
+    assert categ.add_article_to_category("") == False
+
 def test_add_category():
     # ret = categ.add_category(ADD_NAME, 4)
     # assert categ.exists(ADD_NAME)
