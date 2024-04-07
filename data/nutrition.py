@@ -23,6 +23,7 @@ ARTICLE = 'nutritionContent'
 # nutrition = {
 #     'health': {
 #         ARTICLE: "api",
+#         ARTICLE: "api",
 #     },
 #     'cooking': {
 #         ARTICLE: "api",

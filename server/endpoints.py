@@ -435,7 +435,6 @@ class NutritionSections(Resource):
         """
         Return all nutrition articles within a specific section.
         """
-
         return {
             TYPE: DATA,
             TITLE: 'ALL NUTRITION',

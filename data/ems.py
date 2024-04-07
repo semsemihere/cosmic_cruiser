@@ -12,6 +12,7 @@ BIG_NUM = 100_000_000_000_000_000_000
 MOCK_ID = '0' * ID_LEN
 
 EMS_SECTION_NAME = 'emsName'
+EMS_ARTICLE_ID = 'articleID'
 EMS_SECTION_ID = 'emsID'
 EMS_ARTICLES = 'emsArticle'
 
@@ -30,6 +31,7 @@ def get_test_section():
     test_section[EMS_SECTION_ID] = generate_section_id()
     test_section[EMS_ARTICLES] = 'article'
     return test_section
+
 
 
 def add_ems_section(ems_section_name: str, ems_section_id: str,
@@ -88,3 +90,34 @@ def generate_section_id() -> str:
     # generates a 24 digit id with leading 0's
     _id = str(random.randint(0, BIG_NUM)).rjust(ID_LEN, "0")
     return _id
+
+
+def get_ems_articles(section_id: str, article_id: str) -> dict:
+    # return all ems articles given section id
+    dbc.connect_db()
+    return dbc.fetch_articles_as_dict(EMS_SECTION_NAME, EMS_COLLECT)
+
+def add_ems_article(article_name: str,
+                article_id: str,
+                article_content: str) -> bool:
+    if exists(article_id):
+        raise ValueError(f'Duplicate section id: {article_id=}')
+    if not article_id:
+        raise ValueError("EMS id cannot be blank!")
+
+    article = {}
+    article[EMS_SECTION_NAME] = article_name
+    article[EMS_ARTICLE_ID] = article_id
+    article[EMS_ARTICLES] = article_content
+    dbc.connect_db()
+    _id = dbc.insert_one(EMS_COLLECT, article)
+    return _id is not None
+
+
+# # get test article
+# def get_test_section():
+#     test_section = {}
+#     test_section[EMS_SECTION_NAME] = _get_test_name()
+#     test_section[EMS_SECTION_ID] = generate_section_id()
+#     test_section[EMS_ARTICLES] = 'article'
+#     return test_section

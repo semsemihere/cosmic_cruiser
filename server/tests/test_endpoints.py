@@ -317,6 +317,15 @@ def test_bad_add_ems_section(mock_add):
     assert resp.status_code == NOT_ACCEPTABLE
 
 
+# @patch('data.ems.add_ems_article', side_effect=ValueError(), autospec=True)
+# def test_bad_add_ems_article(mock_add):
+#     """
+#     Testing we do the right thing with a value error from add_ems_article.
+#     """
+#     resp = TEST_CLIENT.post(ep.EMS_EP, json=ems.get_test_section())
+#     assert resp.status_code == NOT_ACCEPTABLE
+
+
 @pytest.mark.skip('temporary skip (broken test)')
 def test_ems_add_db_failure(mock_add):
     """

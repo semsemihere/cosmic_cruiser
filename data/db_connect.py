@@ -123,3 +123,24 @@ def fetch_all_as_dict(key, collection, db=MONGO_DB):
 def update_one(collection, filter_query, update_query, db=MONGO_DB):
     result = client[db][collection].update_one(filter_query, update_query)
     return result.modified_count > 0 if result else False
+
+
+
+
+def fetch_articles_as_dict(section_id_key, article_id_key, collection, db=MONGO_DB):
+    ret = {}
+    for doc in client[db][collection].find():
+        section_id = doc.get(section_id_key)
+        if section_id:  # make srure section ID exists in the document
+            article_id = doc.get(article_id_key)
+            del doc[MONGO_ID]
+            ret[article_id] = doc
+    return ret
+
+
+# def fetch_articles_as_dict(section_id, collection, db=MONGO_DB):
+#     ret = {}
+#     for doc in client[db][collection].find({"emsID": section_id}):
+#         article_id = doc[section_id]
+#         ret[article_id] = doc
+#     return ret
