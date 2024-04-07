@@ -13,7 +13,6 @@ MOCK_ID = '0' * ID_LEN
 
 EMS_SECTION_NAME = 'emsName'
 EMS_SECTION_ID = 'emsID'
-EMS_ARTICLE_ID = 'emsArticleID'
 EMS_ARTICLES = 'emsArticle'
 
 ems_sections = {}
@@ -24,10 +23,6 @@ def get_ems_sections() -> dict:
     dbc.connect_db()
     return dbc.fetch_all_as_dict(EMS_SECTION_NAME, EMS_COLLECT)
 
-# get articles
-def get_ems_articles(section_id: str) -> dict:
-    dbc.connect_db()
-    return dbc.fetch_all(EMS_COLLECT, {EMS_SECTION_ID: section_id})
 
 def get_test_section():
     test_section = {}
