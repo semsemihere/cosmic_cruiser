@@ -92,6 +92,14 @@ def delete_section(section_id: str):
         raise ValueError(f'Delete failure: {section_id} not in database.')
 
 
+def delete_nutrition_article(article_id: str):
+    # check if article exists
+    if exists(article_id):
+        return dbc.del_one(NUTRITION_COLLECT, {ARTICLE_ID: article_id})
+    else:
+        raise ValueError(f'Delete failure: {article_id} not in database.')
+
+
 def update_nutrition_section_content(section_id: str,
                                      new_content: str) -> bool:
     if exists(section_id):

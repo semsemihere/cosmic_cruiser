@@ -585,7 +585,7 @@ class Finances(Resource):
         """
         return {
             TYPE: DATA,
-            TITLE: 'ALL FINANCE',
+            TITLE: 'ALL FINANCES',
             DATA: fin.get_finances_sections(),
             MENU: FINANCES_MENU_EP,
             RETURN: MAIN_MENU_EP,
