@@ -45,13 +45,14 @@ def test_generate_category_id():
 ADD_NAME = "New Category"
 
 def test_add_article_no_category():
-    assert categ.add_article_to_category("","","") == False
+    assert categ.add_article_to_category("","","","") == False
     
-
 def test_add_article(temp_category):
-    assert categ.add_article_to_category(temp_category,"","") == False
+    assert categ.add_article_to_category(temp_category,"","","") == False
     
-
+def test_del_article(temp_category):
+    assert categ.delete_article_from_category(temp_category,"",) == None
+    
 def test_add_category():
     # ret = categ.add_category(ADD_NAME, 4)
     # assert categ.exists(ADD_NAME)

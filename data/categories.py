@@ -67,13 +67,22 @@ def generate_category_id() -> str:
 
 def add_article_to_category(category_id: str,
                             article_id: str,
-                            article_name: str) -> bool:
+                            article_name: str,
+                            content: str) -> bool:
     categories = get_categories()
     if category_id in categories:
-        categories[category_id][ARTICLES] = {article_id, article_name}
+        categories[category_id][ARTICLES][article_id] = {article_name, content}
         return True
     else:
         return False
+
+
+def delete_article_from_category(category_id: str,
+                                 article_id: str) -> bool:
+    categories = get_categories()
+    if category_id in categories:
+        categories[category_id][ARTICLES].pop(article_id)
+        return True
 
 
 def add_category(category_name: str, category_id: str,
