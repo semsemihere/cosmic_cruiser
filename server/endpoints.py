@@ -17,7 +17,6 @@ import data.users as users
 import data.nutrition as nutrition
 import data.ems as ems
 import data.finances as fin
-import data.form as login
 
 app = Flask(__name__)
 api = Api(app)
@@ -68,10 +67,6 @@ DATA = 'Data'
 TITLE = 'Title'
 RETURN = 'Return'
 
-USERS_LOGIN = 'login'
-LOGIN_EP = '/users/login'
-SIGNUP_EP = '/users/signup'
-
 
 @api.route(HELLO_EP)
 class HelloWorld(Resource):
@@ -99,15 +94,6 @@ class Endpoints(Resource):
         """
         endpoints = sorted(rule.rule for rule in api.app.url_map.iter_rules())
         return {"Available endpoints": endpoints}
-
-@api.route(f'{LOGIN_EP}')
-class Login(Resource):
-    """
-    Enable user to login
-    """
-    def get(self):
-        return login.get_form()
-
 
 
 @api.route(f'{MAIN_MENU_EP}')
