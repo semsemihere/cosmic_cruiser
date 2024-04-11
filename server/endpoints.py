@@ -385,7 +385,9 @@ class Nutrition(Resource):
         article_ids = request.json[nutrition.ARTICLE_IDS]
 
         try:
-            new_section = nutrition.add_section(section_name, section_id, article_ids)
+            new_section = nutrition.add_section(section_name,
+                                                section_id,
+                                                article_ids)
 
             return {NUTRITION: new_section}
 
