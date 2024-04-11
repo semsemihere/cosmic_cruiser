@@ -37,10 +37,10 @@ def get_sections() -> dict:
     return dbc.fetch_all_as_dict(SECTION_ID, NUTRITION_COLLECT)
 
 
-def get_articles(section_id: str) -> dict:
+def get_articles(nutrition_section_id: str) -> dict:
     # return nutrition articles
     dbc.connect_db()
-    return dbc.fetch_all(NUTRITION_COLLECT, {SECTION_ID: section_id})
+    return dbc.fetch_articles_by_section(nutrition_section_id, NUTRITION_COLLECT)
 
 
 def exists(section_id: str) -> bool:
@@ -122,7 +122,8 @@ def update_nutrition_section_content(section_id: str,
         raise ValueError(f'Update failed: {section_id} not in database.')
 
 
-def add_article(article_name: str,
+def add_article(section_id: str,
+                article_name: str,
                 article_id: str,
                 article_content: str) -> bool:
     if exists(article_id):
@@ -136,9 +137,18 @@ def add_article(article_name: str,
     article = {}
     article[ARTICLE_NAME] = article_name
     article[ARTICLE_ID] = article_id
-    article[ARTICLE_IDS] = article_content
+    article[ARTICLE_CONTENT] = article_content
+    
     dbc.connect_db()
+    section_doc = dbc.fetch_one(NUTRITION_COLLECT, {SECTION_ID: section_id})
+    
+    if section_doc:
+        dbc.update_one(NUTRITION_COLLECT, {SECTION_ID: section_id}, {"$push": {ARTICLE_IDS: article_id}})
+    else:
+        raise ValueError(f'Section not found: {section_id}')
+    
     _id = dbc.insert_one(NUTRITION_COLLECT, article)
+    
     return _id is not None
 
 # def main():
