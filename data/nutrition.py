@@ -12,12 +12,13 @@ BIG_NUM = 100_000_000_000_000_000_000
 
 MOCK_ID = '0' * ID_LEN
 
-NAME = 'name'
+SECTION_NAME = 'sectionName'
 SECTION_ID = 'sectionID'
+ARTICLE_NAME = 'articleName'
 ARTICLE_ID = 'articleID'
 # NUM_SECTIONS = "numSections"
-ARTICLE = 'nutritionContent'
-
+ARTICLE_IDS = 'arrayOfArticleIDs'
+ARTICLE_CONTENT = 'articleContent'
 # TEST_CATEGORY_NAME = "Nutrition/Cooking"
 
 # nutrition = {
@@ -33,7 +34,7 @@ ARTICLE = 'nutritionContent'
 def get_sections() -> dict:
     # return nutrition sections, by id
     dbc.connect_db()
-    return dbc.fetch_all_as_dict(NAME, NUTRITION_COLLECT)
+    return dbc.fetch_all_as_dict(SECTION_ID, NUTRITION_COLLECT)
 
 
 def get_articles(section_id: str) -> dict:
@@ -55,9 +56,9 @@ def _get_test_name():
 
 def get_test_section():
     test_section = {}
-    test_section[NAME] = _get_test_name()
+    test_section[SECTION_NAME] = _get_test_name()
     test_section[SECTION_ID] = generate_section_id()
-    test_section[ARTICLE] = 'article'
+    test_section[ARTICLE_IDS] = 'article'
     return test_section
 
 
@@ -67,7 +68,7 @@ def generate_section_id() -> str:
     return _id
 
 
-def add_section(section_name: str, section_id: str) -> bool:
+def add_section(section_name: str, section_id: str, article_ids: list) -> bool:
     if exists(section_id):
         raise ValueError(f'Duplicate section id: {section_id=}')
     if not section_id:
@@ -77,8 +78,9 @@ def add_section(section_name: str, section_id: str) -> bool:
     # return section_id
 
     section = {}
-    section[NAME] = section_name
+    section[SECTION_NAME] = section_name
     section[SECTION_ID] = section_id
+    section[ARTICLE_IDS] = article_ids
     dbc.connect_db()
     _id = dbc.insert_one(NUTRITION_COLLECT, section)
     return _id is not None
@@ -105,7 +107,7 @@ def update_nutrition_section_content(section_id: str,
     if exists(section_id):
         # the article content
         article = {}
-        article[ARTICLE] = new_content
+        article[ARTICLE_IDS] = new_content
 
         # update existing section with new article content
         filter_query = {SECTION_ID: section_id}
@@ -132,9 +134,9 @@ def add_article(article_name: str,
     # return section_id
 
     article = {}
-    article[NAME] = article_name
+    article[ARTICLE_NAME] = article_name
     article[ARTICLE_ID] = article_id
-    article[ARTICLE] = article_content
+    article[ARTICLE_IDS] = article_content
     dbc.connect_db()
     _id = dbc.insert_one(NUTRITION_COLLECT, article)
     return _id is not None

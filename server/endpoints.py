@@ -340,16 +340,17 @@ class DeleteNutritionSection(Resource):
             raise wz.NotFound(f'{str(e)}')
 
 
-nutrition_section_fields = api.model('NewNutritionSection', {
-    nutrition.NAME: fields.String,
-    nutrition.SECTION_ID: fields.String,
+nutrition_article_fields = api.model('NewNutritionArticle', {
+    nutrition.ARTICLE_NAME: fields.String,
+    nutrition.ARTICLE_ID: fields.String,
+    nutrition.ARTICLE_CONTENT: fields.String,
 })
 
 
-nutrition_article_fields = api.model('NewNutritionArticle', {
-    nutrition.NAME: fields.String,
-    nutrition.ARTICLE_ID: fields.String,
-    nutrition.ARTICLE: fields.String,
+nutrition_section_fields = api.model('NewNutritionSection', {
+    nutrition.SECTION_NAME: fields.String,
+    nutrition.SECTION_ID: fields.String,
+    nutrition.ARTICLE_IDS: fields.List(fields.String),
 })
 
 
@@ -379,11 +380,12 @@ class Nutrition(Resource):
         Add a nutrition section
         """
 
-        name = request.json[nutrition.NAME]
+        section_name = request.json[nutrition.SECTION_NAME]
         section_id = request.json[nutrition.SECTION_ID]
+        article_ids = request.json[nutrition.ARTICLE_IDS]
 
         try:
-            new_section = nutrition.add_section(name, section_id)
+            new_section = nutrition.add_section(section_name, section_id, article_ids)
 
             return {NUTRITION: new_section}
 
