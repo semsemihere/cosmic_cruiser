@@ -40,7 +40,8 @@ def get_sections() -> dict:
 def get_articles(nutrition_section_id: str) -> dict:
     # return nutrition articles
     dbc.connect_db()
-    return dbc.fetch_articles_by_section(nutrition_section_id, NUTRITION_COLLECT)
+    return dbc.fetch_articles_by_section(nutrition_section_id,
+                                         NUTRITION_COLLECT)
 
 
 def exists(section_id: str) -> bool:
@@ -138,17 +139,19 @@ def add_article(section_id: str,
     article[ARTICLE_NAME] = article_name
     article[ARTICLE_ID] = article_id
     article[ARTICLE_CONTENT] = article_content
-    
+
     dbc.connect_db()
     section_doc = dbc.fetch_one(NUTRITION_COLLECT, {SECTION_ID: section_id})
-    
+
     if section_doc:
-        dbc.update_one(NUTRITION_COLLECT, {SECTION_ID: section_id}, {"$push": {ARTICLE_IDS: article_id}})
+        dbc.update_one(NUTRITION_COLLECT,
+                       {SECTION_ID: section_id},
+                       {"$push": {ARTICLE_IDS: article_id}})
     else:
         raise ValueError(f'Section not found: {section_id}')
-    
+
     _id = dbc.insert_one(NUTRITION_COLLECT, article)
-    
+
     return _id is not None
 
 # def main():

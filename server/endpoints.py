@@ -364,7 +364,7 @@ class NutritionSections(Resource):
         """
         Return all nutrition sections.
         """
-        
+
         return {
             TYPE: DATA,
             TITLE: 'ALL NUTRITION',

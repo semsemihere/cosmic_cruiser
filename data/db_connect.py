@@ -120,12 +120,13 @@ def fetch_all_as_dict(key, collection, db=MONGO_DB):
     return ret
 
 
-def fetch_articles_by_section(nutrition_section_id, collection, db=MONGO_DB):
-    ret = {}
-    for doc in client[db][collection].find({nutrition_section_id: nutrition_section_id}):
-        del doc[MONGO_ID]
-        ret[doc[ARTICLE_ID]] = doc
-    return ret
+# def fetch_articles_by_section(nutrition_section_id, collection, db=MONGO_DB):
+#     ret = {}
+#     for doc in client[db][collection].find({nutrition_section_id:
+#                                             nutrition_section_id}):
+#         del doc[MONGO_ID]
+#         ret[doc[ARTICLE_ID]] = doc
+#     return ret
 
 
 def update_one(collection, filter_query, update_query, db=MONGO_DB):
