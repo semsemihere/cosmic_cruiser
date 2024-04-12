@@ -369,7 +369,7 @@ nutrition_section_fields = api.model('NewNutritionSection', {
 
 
 @api.route(f'{NUTRITION_EP}')
-class Nutrition(Resource):
+class NutritionSections(Resource):
     """
     This class supports various operations on nutrition, such as
     listing them, and adding a new nutrition section.
@@ -378,6 +378,7 @@ class Nutrition(Resource):
         """
         Return all nutrition sections.
         """
+
         return {
             TYPE: DATA,
             TITLE: 'ALL NUTRITION',
@@ -443,8 +444,8 @@ class UpdateNutritionSection(Resource):
         #     raise wz.BadRequest(f'failed to update content: {str(e)}')
 
 
-@api.route(f'{NUTRITION_EP}/<nutrition_section_id>/')
-class NutritionSections(Resource):
+@api.route(f'{NUTRITION_EP}/<nutrition_section_id>/articles')
+class NutritionArticles(Resource):
     """
     This class supports various operations on nutrition, such as
     listing them, and adding a new nutrition section.
@@ -465,21 +466,22 @@ class NutritionSections(Resource):
     @api.expect(nutrition_article_fields)
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
-    def post(self):
+    def post(self, nutrition_section_id):
         """
         Add a nutrition section
         """
 
-        name = request.json[nutrition.NAME]
+        article_name = request.json[nutrition.ARTICLE_NAME]
         article_id = request.json[nutrition.ARTICLE_ID]
-        article_content = request.json[nutrition.ARTICLE]
+        article_content = request.json[nutrition.ARTICLE_CONTENT]
 
         try:
-            new_article = nutrition.add_article(name,
+            new_article = nutrition.add_article(nutrition_section_id,
+                                                article_name,
                                                 article_id,
                                                 article_content)
 
-            return {NUTRITION: new_article}
+            return {NUTRITION: new_article}, HTTPStatus.CREATED
 
         except ValueError as e:
             raise wz.NotAcceptable(f'{str(e)}')
