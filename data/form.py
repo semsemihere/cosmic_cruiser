@@ -8,12 +8,20 @@ from data.form_filler import FLD_NM  # for tests
 
 USERNAME = 'username'
 PASSWORD = 'password'
+ROLES = ['Admin', 'User']
 
 LOGIN_FORM_FLDS = [
     {
         FLD_NM: 'Instructions',
-        ff.QSTN: 'Enter your username and password.',
+        ff.QSTN: 'Enter your role, username and password.',
         ff.INSTRUCTIONS: True,
+    },
+    {
+        FLD_NM: 'Role',
+        ff.QSTN: 'What is your role:',
+        ff.CHOICES: ROLES,
+        ff.PARAM_TYPE: ff.QUERY_STR,
+        ff.OPT: False,
     },
     {
         FLD_NM: USERNAME,

@@ -12,6 +12,7 @@ from flask_cors import CORS
 
 import werkzeug.exceptions as wz
 
+import data.form as login
 import data.categories as categ
 import data.users as users
 import data.nutrition as nutrition
@@ -66,6 +67,19 @@ TYPE = 'Type'
 DATA = 'Data'
 TITLE = 'Title'
 RETURN = 'Return'
+
+LOGIN = 'login'
+LOGIN_EP = '/login'
+LOGIN_FORM = 'login_form'
+
+
+@api.route(f'{LOGIN_EP}')
+class Login(Resource):
+    def get(sef):
+        """
+        get returns
+        """
+        return {LOGIN_FORM: login.get_form()}
 
 
 @api.route(HELLO_EP)
