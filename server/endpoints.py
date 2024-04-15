@@ -101,13 +101,13 @@ class Login(Resource):
         # user = users.exists(username)
 
         if not username or not password:
-            return ({'message': 'user or password missing'}, 
+            return ({'message': 'user or password missing'},
                     HTTPStatus.UNAUTHORIZED)
 
         if users.login_user(username, password):
             return ({'message': 'Login successful'}, HTTPStatus.OK)
         else:
-            return ({'message': 'Invalid username or password'}, 
+            return ({'message': 'Invalid username or password'},
                     HTTPStatus.UNAUTHORIZED)
 
 
