@@ -13,6 +13,10 @@ def temp_category():
         categ.delete_category(category_id)
 
 
+def test_get_article():
+    title = categ.get_article()
+    assert isinstance(title,str) == True
+    
 def test_get_categories(temp_category):
     categories = categ.get_categories()
 

@@ -3,6 +3,9 @@ categories.py: the interface to our categories data.
 """
 import random
 import data.db_connect as dbc
+import requests
+from bs4 import BeautifulSoup
+
 
 CATEGORIES_COLLECT = 'categories'
 
@@ -32,6 +35,16 @@ categories = {}
 #         NUM_SECTIONS: 5,
 #     },
 # }
+
+
+def get_article():
+    response = requests.get(
+        url="https://en.wikipedia.org/wiki/Web_scraping",
+    )
+    soup = BeautifulSoup(response.content, 'html.parser')
+
+    title = soup.find(id="firstHeading")
+    return (title.string)
 
 
 def get_categories() -> dict:
