@@ -37,13 +37,16 @@ categories = {}
 # }
 
 
-def get_article():
+def get_article(article_name: str):
+    parameters = {'q': article_name, 'limit': 1}
     response = requests.get(
-        url="https://en.wikipedia.org/wiki/Web_scraping",
+        url='https://api.wikimedia.org/core/v1/wikipedia/search/page',
+        params=parameters
     )
     soup = BeautifulSoup(response.content, 'html.parser')
 
     title = soup.find(id="firstHeading")
+    print(title)
     return (title.string)
 
 

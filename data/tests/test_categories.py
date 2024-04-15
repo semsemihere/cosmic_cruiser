@@ -14,7 +14,7 @@ def temp_category():
 
 
 def test_get_article():
-    title = categ.get_article()
+    title = categ.get_article("testing")
     assert isinstance(title,str) == True
     
 def test_get_categories(temp_category):
