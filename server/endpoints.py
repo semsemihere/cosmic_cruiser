@@ -79,6 +79,7 @@ login_fields = api.model('Login', {
     'password': fields.String(required=True)
 })
 
+
 @api.route(f'{LOGIN_EP}')
 class Login(Resource):
     """
@@ -89,7 +90,7 @@ class Login(Resource):
         get returns
         """
         return {LOGIN_FORM: login.get_form()}
-    
+
     @api.expect(login_fields)
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.UNAUTHORIZED, 'Unauthorized')
@@ -97,15 +98,17 @@ class Login(Resource):
         username = request.json['username']
         password = request.json['password']
 
-        user = users.exists(username)
+        # user = users.exists(username)
 
         if not username or not password:
-            return {'message': 'user or password missing'}, HTTPStatus.UNAUTHORIZED
+            return ({'message': 'user or password missing'}, 
+                    HTTPStatus.UNAUTHORIZED)
 
         if users.login_user(username, password):
-            return {'message': 'Login successful'}, HTTPStatus.OK
+            return ({'message': 'Login successful'}, HTTPStatus.OK)
         else:
-            return {'message': 'Invalid username or password'}, HTTPStatus.UNAUTHORIZED
+            return ({'message': 'Invalid username or password'}, 
+                    HTTPStatus.UNAUTHORIZED)
 
 
 @api.route(HELLO_EP)
