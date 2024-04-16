@@ -4,7 +4,7 @@ categories.py: the interface to our categories data.
 import random
 import data.db_connect as dbc
 import requests
-from bs4 import BeautifulSoup
+# from bs4 import BeautifulSoup
 
 
 CATEGORIES_COLLECT = 'categories'
