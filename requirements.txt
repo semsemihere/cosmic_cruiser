@@ -3,3 +3,5 @@ flask-restx==1.1.0
 flask-cors
 pymongo[srv]
 werkzeug
+requests
+bs4
