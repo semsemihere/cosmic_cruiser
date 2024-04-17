@@ -27,7 +27,7 @@ categories = {}
 
 # categories = {
 #     'Emergency Services/Resources': {
-#         NUM_SECTIONS: 3,
+#         articles: [(title,url),(title2,url2)]
 #     },
 #     'Financial Literacy': {
 #         NUM_SECTIONS: 4,
@@ -53,11 +53,10 @@ def get_article(article_name: str):
     parameters = {'q': search_query, 'limit': number_of_results}
     response = requests.get(url, params=parameters)
     response = json.loads(response.text)
-
+    display_title, article_description = "", ""
     for page in response['pages']:
         display_title = page['title']
-        return display_title
-        print(display_title)
+
         article_url = 'https://' + language_code + '.wikipedia.org/wiki/' + page['key']
         try:
             article_description = page['description']
@@ -67,7 +66,7 @@ def get_article(article_name: str):
             thumbnail_url = 'https:' + page['thumbnail']['url']
         except:
             thumbnail_url = 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Wikipedia-logo-v2.svg/200px-Wikipedia-logo-v2.svg.png'
-
+    return display_title + " | " + article_description
 
 def get_categories() -> dict:
     # return categories
