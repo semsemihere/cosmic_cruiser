@@ -5,3 +5,4 @@ pymongo[srv]
 werkzeug
 requests
 bs4
+json

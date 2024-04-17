@@ -124,9 +124,10 @@ class HelloWorld(Resource):
         """
         return {HELLO_RESP: 'world'}
 
+
 @api.route('/categories/create_article/<articleName>')
 class CreateArticle(Resource):
-    def get(self,articleName):
+    def get(self, articleName):
         return categ.get_article(articleName)
 
 
