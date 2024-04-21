@@ -115,8 +115,9 @@ def fetch_all(collection, db=MONGO_DB):
 def fetch_all_as_dict(key, collection, db=MONGO_DB):
     ret = {}
     for doc in client[db][collection].find():
-        del doc[MONGO_ID]
-        ret[doc[key]] = doc
+        if key in doc:
+            del doc[MONGO_ID]
+            ret[doc[key]] = doc
     return ret
 
 
