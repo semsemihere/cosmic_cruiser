@@ -40,7 +40,8 @@ def get_sections() -> dict:
 def get_articles(nutrition_section_id: str) -> dict:
     # return nutrition articles
     dbc.connect_db()
-    return dbc.fetch_articles_by_section(nutrition_section_id,
+    return dbc.fetch_articles_by_section(nutrition_section_id, SECTION_ID,
+                                         ARTICLE_ID,
                                          NUTRITION_COLLECT)
 
 
