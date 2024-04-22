@@ -132,10 +132,7 @@ def fetch_articles_by_section(nutrition_section_id,
             if doc[section_key] == nutrition_section_id:
                 # print(doc)
                 for article_id in doc['arrayOfArticleIDs']:
-                # Add the article ID and its corresponding document to the result dictionary
-                    # print(article_id)
                     article_ids.append(article_id)
-    # print(article_ids)
 
     for doc in client[db][collection].find():
         if article_key in doc:
@@ -143,7 +140,7 @@ def fetch_articles_by_section(nutrition_section_id,
                 if doc[article_key] == _id:
                     del doc[MONGO_ID]
                     ret[doc[article_key]] = doc
-                    
+
     return ret
 
 
