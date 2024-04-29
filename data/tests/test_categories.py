@@ -23,7 +23,7 @@ def temp_category_name():
 
 
 
-def test_get_article():
+def test__article():
     url = categ.get_article("web scrapping")
     assert isinstance(url,str) == True
     
