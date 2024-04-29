@@ -18,14 +18,14 @@ LOGIN_FORM_FLDS = [
     },
     {
         FLD_NM: 'Role',
-        ff.QSTN: 'What is your role:',
+        ff.QSTN: 'Role:',
         ff.CHOICES: ROLES,
         ff.PARAM_TYPE: 'dropdown',
         ff.OPT: False,
     },
     {
         FLD_NM: USERNAME,
-        ff.QSTN: 'User name:',
+        ff.QSTN: 'Username:',
         ff.PARAM_TYPE: ff.QUERY_STR,
         ff.OPT: False,
     },
