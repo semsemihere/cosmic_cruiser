@@ -51,8 +51,7 @@ def get_article(article_name: str):
     for page in response['pages']:
         display_title = page['title']
 
-        # article_url = 'https://' +
-        # language_code + '.wikipedia.org/wiki/' + page['key']
+        article_url = 'https://' + language_code + '.wikipedia.org/wiki/' + page['key']
         try:
             article_description = page['description']
         except Exception:
@@ -62,7 +61,7 @@ def get_article(article_name: str):
         # except:
         #     thumbnail_url = 'https://upload.wikimedia.org/wikipedia/commons
         # /thumb/8/80/Wikipedia-logo-v2.svg/200px-Wikipedia-logo-v2.svg.png'
-    return display_title + " | " + article_description
+    return article_url
 
 
 def get_categories() -> dict:
@@ -97,12 +96,12 @@ def generate_category_id() -> str:
 
 
 def add_article_to_category(category_id: str,
-                            article_id: str,
-                            article_name: str,
-                            content: str) -> bool:
+                            article_name: str) -> bool:
     categories = get_categories()
+    print(categories.keys())
     if category_id in categories:
-        categories[category_id][ARTICLES][article_id] = {article_name, content}
+        categories[category_id][ARTICLES][len(categories[category_id][ARTICLES].keys())+1] = (article_name, get_article(article_name))
+        print(categories[category_id][ARTICLES][len(categories[category_id][ARTICLES].keys())])
         return True
     else:
         return False

@@ -130,6 +130,11 @@ class CreateArticle(Resource):
     def get(self, articleName):
         return categ.get_article(articleName)
 
+@api.route('/categories/add_article_to_category/<categoryID>/<articleName>')
+class CreateArticle(Resource):
+    def get(self,categoryID ,articleName):
+        return categ.add_article_to_category(categoryID, articleName)
+
 
 @api.route('/endpoints')
 class Endpoints(Resource):
