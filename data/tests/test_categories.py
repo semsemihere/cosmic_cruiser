@@ -12,10 +12,20 @@ def temp_category():
     if categ.exists(category_id):
         categ.delete_category(category_id)
 
+@pytest.fixture(scope='function')
+def temp_category_name():
+    category_name = categ._get_test_name()+'temp'
+    category_id = categ.generate_category_id()+"1"
+    ret = categ.add_category(category_name, category_id, 0)
+    yield category_name
+    if categ.exists(category_id):
+        categ.delete_category(category_id)
+
+
 
 def test_get_article():
-    title = categ.get_article("web scrapping")
-    assert isinstance(title,str) == True
+    url = categ.get_article("web scrapping")
+    assert isinstance(url,str) == True
     
 def test_get_categories(temp_category):
     categories = categ.get_categories()
@@ -49,10 +59,13 @@ def test_generate_category_id():
 ADD_NAME = "New Category"
 
 def test_add_article_no_category():
-    assert categ.add_article_to_category("","","","") == False
+    assert categ.add_article_to_category("","") == False
+    
+def test_add_article_category(temp_category_name):
+    assert categ.add_article_to_category(temp_category_name,"testing") == True
     
 def test_add_article(temp_category):
-    assert categ.add_article_to_category(temp_category,"","","") == False
+    assert categ.add_article_to_category(temp_category,"") == False
     
 def test_del_article(temp_category):
     assert categ.delete_article_from_category(temp_category,"",) == None

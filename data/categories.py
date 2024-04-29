@@ -47,15 +47,17 @@ def get_article(article_name: str):
     parameters = {'q': article_name, 'limit': number_of_results}
     response = requests.get(url, params=parameters)
     response = json.loads(response.text)
-    display_title, article_description = "", ""
+    # display_title, article_description = "", ""
     for page in response['pages']:
-        display_title = page['title']
+        # display_title = page['title']
 
-        article_url = 'https://' + language_code + '.wikipedia.org/wiki/' + page['key']
-        try:
-            article_description = page['description']
-        except Exception:
-            article_description = 'a Wikipedia article'
+        article_url = 'https://'
+        article_url += language_code
+        article_url += '.wikipedia.org/wiki/'
+        article_url += str(page['key'])
+        # article_description = page['description']
+
+        # article_description = 'a Wikipedia article'
         # try:
         #     thumbnail_url = 'https:' + page['thumbnail']['url']
         # except:
@@ -100,8 +102,9 @@ def add_article_to_category(category_id: str,
     categories = get_categories()
     print(categories.keys())
     if category_id in categories:
-        categories[category_id][ARTICLES][len(categories[category_id][ARTICLES].keys())+1] = (article_name, get_article(article_name))
-        print(categories[category_id][ARTICLES][len(categories[category_id][ARTICLES].keys())])
+        articleId = len(categories[category_id][ARTICLES].keys())+1
+        articleObjectTuple = (article_name, get_article(article_name))
+        categories[category_id][ARTICLES][articleId] = articleObjectTuple
         return True
     else:
         return False
