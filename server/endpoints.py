@@ -2,7 +2,6 @@
 This is the file containing all of the endpoints for our flask app.
 The endpoint called `endpoints` will return all available endpoints.
 """
-
 from http import HTTPStatus
 
 from flask import Flask, request
@@ -198,7 +197,6 @@ class UserMenu(Resource):
                        },
                    },
                }
-
 
 @api.route(f'{DEL_USERS_EP}/<username>')
 class DeleteUser(Resource):
@@ -471,18 +469,6 @@ class UpdateNutritionSection(Resource):
             raise wz.NotFound(f'{str(e)}')
         except Exception as e:
             raise wz.BadRequest(f'failed to update content: {str(e)}')
-        # new_content = request.json.get('nutritionContent')
-
-        # if new_content is None:
-        #     raise wz.BadRequest('need to include content field')
-
-        # try:
-        #     nutrition.update_nutrition_section_content(name, new_content)
-        #     return {name: 'content updated successfully'}
-        # except ValueError as e:
-        #     raise wz.NotFound(f'{str(e)}')
-        # except Exception as e:
-        #     raise wz.BadRequest(f'failed to update content: {str(e)}')
 
 
 @api.route(f'{NUTRITION_EP}/<nutrition_section_id>/articles')
@@ -512,9 +498,9 @@ class NutritionArticles(Resource):
         Add a nutrition section
         """
 
-        article_name = request.json[nutrition.ARTICLE_NAME]
-        article_id = request.json[nutrition.ARTICLE_ID]
-        article_content = request.json[nutrition.ARTICLE_CONTENT]
+        article_name = request.json['name']
+        article_id = request.json['number']
+        article_content = categ.get_article(article_name)
 
         try:
             new_article = nutrition.add_article(nutrition_section_id,
@@ -579,9 +565,9 @@ class EmergencyMedicalServices(Resource):
         Add a emergency medical service.
         """
 
-        name = request.json[ems.EMS_SECTION_NAME]
-        section_id = request.json[ems.EMS_SECTION_ID]
-        article = request.json[ems.EMS_ARTICLES]
+        name = request.json['name']
+        section_id = request.json['number']
+        article = categ.get_article(name)
 
         try:
             new_section = ems.add_ems_section(name, section_id, article)
@@ -609,6 +595,7 @@ class UpdateEMSSection(Resource):
         except Exception as e:
             raise wz.BadRequest(f'failed to update content: {str(e)}')
 
+##### FINANCE #####
 
 finance_fields = api.model('NewFinance', {
     fin.FINANCES_NAME: fields.String,
@@ -659,10 +646,9 @@ class Finances(Resource):
         """
         Add a finance
         """
-
-        name = request.json[fin.FINANCES_NAME]
-        section_id = request.json[fin.FINANCES_SECTION_ID]
-        article = request.json[fin.FINANCES_ARTICLE]
+        name = request.json['name']
+        section_id = request.json['sectionID']
+        article = categ.get_article(name)
 
         try:
             new_section = fin.add_finances_section(name, section_id, article)
