@@ -145,5 +145,6 @@ def fetch_articles_by_section(nutrition_section_id,
 
 
 def update_one(collection, filter_query, update_query, db=MONGO_DB):
+    print('this is dbconnect!', client[db][collection])
     result = client[db][collection].update_one(filter_query, update_query)
     return result.modified_count > 0 if result else False

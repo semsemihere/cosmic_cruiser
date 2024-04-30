@@ -435,9 +435,12 @@ class NutritionSections(Resource):
         Add a nutrition section
         """
 
-        section_name = request.json[nutrition.SECTION_NAME]
-        section_id = request.json[nutrition.SECTION_ID]
-        article_ids = request.json[nutrition.ARTICLE_IDS]
+        # section_name = request.json[nutrition.SECTION_NAME]
+        # section_id = request.json[nutrition.SECTION_ID]
+        # article_ids = request.json[nutrition.ARTICLE_IDS]
+        section_name = request.json['name']
+        section_id = request.json['number']
+        article_ids = []
 
         try:
             new_section = nutrition.add_section(section_name,
@@ -596,10 +599,16 @@ class UpdateEMSSection(Resource):
 
 
 # FINANCE #####
+articles_nested = api.model('articles',{
+    'title':fields.String,
+    'content':fields.String
+    },
+)
+
 finance_fields = api.model('NewFinance', {
     fin.FINANCES_NAME: fields.String,
     fin.FINANCES_SECTION_ID: fields.String,
-    fin.FINANCES_ARTICLE: fields.String,
+    fin.FINANCES_ARTICLES: fields.Nested(articles_nested),
 })
 
 
@@ -647,7 +656,8 @@ class Finances(Resource):
         """
         name = request.json['name']
         section_id = request.json['sectionID']
-        article = categ.get_article(name)
+        # article = categ.get_article(name)
+        article = {}
 
         try:
             new_section = fin.add_finances_section(name, section_id, article)
@@ -657,22 +667,38 @@ class Finances(Resource):
         except ValueError as e:
             raise wz.NotAcceptable(f'{str(e)}')
 
+@api.route(f'{FINANCES_EP}/<finance_section>/<finance_section_id>')
+class FinanceSectionArticles(Resource):
+    def get(self,finance_section, finance_section_id):
+        """
+        Return all finances
+        """
+        return {
+            TYPE: DATA,
+            TITLE: 'ALL FINANCES',
+            DATA: fin.exists(finance_section_id),
+            MENU: FINANCES_MENU_EP,
+            RETURN: MAIN_MENU_EP,
+        }
+    
 
-@api.route(f'{FINANCES_EP}/<finance_section_id>/<new_content>')
+@api.route(f'{FINANCES_EP}/<finance_section>/<finance_section_id>/<article_title>/<article_content>')
 class UpdateFinanceSection(Resource):
     """
-    Updates content of a section in the finance category.
+    updates finance section
     """
+    
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
     @api.response(HTTPStatus.BAD_REQUEST, 'Bad Request')
-    def put(self, finance_section_id, new_content):
+    def put(self, finance_section, finance_section_id, article_title, article_content):
         """
         Update the contents of a finance by id.
         """
         try:
-            fin.update_finance_section_content(finance_section_id, new_content)
-            return {finance_section_id: 'Updated content'}
+            fin.update_finance_section_article(finance_section, finance_section_id, article_title, article_content)
+            # return {finance_section_id: 'Updated content'}
+            return fin.get_finances_sections()
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')
         except Exception as e:
