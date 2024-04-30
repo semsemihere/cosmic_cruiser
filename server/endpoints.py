@@ -198,6 +198,7 @@ class UserMenu(Resource):
                    },
                }
 
+
 @api.route(f'{DEL_USERS_EP}/<username>')
 class DeleteUser(Resource):
     """
@@ -442,7 +443,6 @@ class NutritionSections(Resource):
             new_section = nutrition.add_section(section_name,
                                                 section_id,
                                                 article_ids)
-
             return {NUTRITION: new_section}
 
         except ValueError as e:
@@ -507,7 +507,6 @@ class NutritionArticles(Resource):
                                                 article_name,
                                                 article_id,
                                                 article_content)
-
             return {NUTRITION: new_article}, HTTPStatus.CREATED
 
         except ValueError as e:
@@ -595,8 +594,8 @@ class UpdateEMSSection(Resource):
         except Exception as e:
             raise wz.BadRequest(f'failed to update content: {str(e)}')
 
-##### FINANCE #####
 
+# FINANCE #####
 finance_fields = api.model('NewFinance', {
     fin.FINANCES_NAME: fields.String,
     fin.FINANCES_SECTION_ID: fields.String,
