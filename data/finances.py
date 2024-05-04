@@ -80,19 +80,21 @@ def add_finances_section(section_name: str, section_id: str,
     _id = dbc.insert_one(FINANCES_COLLECT, section)
     return _id is not None
 
-# def get_finance_section_article(finance_section: str, finance_section_id: str):
+# def get_finance_section_article(finance_section:
+# str, finance_section_id: str):
 #     if exists(finance_section_id):
-       
 #         dbc.connect_db()
-        
-
-#         return dbc.fetch_one(FINANCES_COLLECT, {FINANCES_SECTION_ID: section_id})
+#         return dbc.fetch_one(FINANCES_COLLECT,
+#               {FINANCES_SECTION_ID: section_id})
 #     else:
-#         raise ValueError(f'Update failed: {finance_section_id} not in db.')
+#         raise ValueError(f'Update failed:
+# {finance_section_id} not in db.')
 
 
-def update_finance_section_article(finance_section: str, finance_section_id: str, 
-                                   article_title: str, article_content: str) -> bool:
+def update_finance_section_article(finance_section: str,
+                                   finance_section_id: str,
+                                   article_title: str,
+                                   article_content: str) -> bool:
     if exists(finance_section_id):
         # article = {}
         # article[FINANCES_ARTICLES] = new_content
@@ -102,11 +104,10 @@ def update_finance_section_article(finance_section: str, finance_section_id: str
         article = db[finance_section][FINANCES_ARTICLES]
         print("before addign", article)
         article[article_title] = article_content
-        print("after adding ",article)
-        
+        print("after adding ", article)
 
         filter_query = {FINANCES_SECTION_ID: finance_section_id}
-        update_query = {'$set': {FINANCES_ARTICLES:article}}
+        update_query = {'$set': {FINANCES_ARTICLES: article}}
 
         _id = dbc.update_one(FINANCES_COLLECT, filter_query, update_query)
         return _id is not None
