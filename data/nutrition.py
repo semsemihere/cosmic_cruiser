@@ -91,7 +91,10 @@ def add_section(section_name: str, section_id: str, article_ids: list) -> bool:
 def delete_section(section_id: str):
     # check if the section to delete is in the database
     if exists(section_id):
-        return dbc.del_section(section_id, SECTION_ID, ARTICLE_ID, NUTRITION_COLLECT)
+        return dbc.del_section(section_id,
+                               SECTION_ID,
+                               ARTICLE_ID,
+                               NUTRITION_COLLECT)
     else:
         raise ValueError(f'Delete failure: {section_id} not in database.')
 
