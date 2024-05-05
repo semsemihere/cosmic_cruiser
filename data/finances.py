@@ -14,23 +14,19 @@ MOCK_ID = '0' * ID_LEN
 
 FINANCES_NAME = 'name'
 FINANCES_SECTION_ID = 'sectionID'
-# FINANCES_ARTICLES = 'articles'
-# FINANCES_ARTICLE_ID = 'articleID'
-FINANCES_ARTICLES_CONTENTS = 'articles'
-
+FINANCES_ARTICLES = 'articles'
+# FINANCES_ARTICLES = {'':''}
 
 # TEST_CATEGORY_FINANCES_NAME = "Nutrition/Cooking"
 
 # finances = {
 #     'section1': {
-#        'name': 'title',
-#        'sectionID' : 'sectionID',
-#        'content': [],
+#        'title': 'title',
+#        'content': 'content',
 #     },
-#     'Tax': {
-#         'name': "Tax",
-#         'sectionID' : '1239',
-#         'content': ['111', '112', '113'],
+#     'tax': {
+#         'title': "What is Tax",
+#         'content': "Tax is very interesting",
 #     },
 # }
 
@@ -56,7 +52,7 @@ def get_test_section():
     test_section = {}
     test_section[FINANCES_NAME] = _get_test_name()
     test_section[FINANCES_SECTION_ID] = generate_section_id()
-    test_section[FINANCES_ARTICLES_CONTENTS] = []
+    test_section[FINANCES_ARTICLES] = {}
     return test_section
 
 
@@ -67,7 +63,7 @@ def generate_section_id() -> str:
 
 
 def add_finances_section(section_name: str, section_id: str,
-                         section_article: list) -> bool:
+                         section_article: dict) -> bool:
     if exists(section_id):
         raise ValueError(f'Duplicate section name: {section_id=}')
     if not section_id:
@@ -79,7 +75,7 @@ def add_finances_section(section_name: str, section_id: str,
     section = {}
     section[FINANCES_NAME] = section_name
     section[FINANCES_SECTION_ID] = section_id
-    section[FINANCES_ARTICLES_CONTENTS] = section_article
+    section[FINANCES_ARTICLES] = section_article
     dbc.connect_db()
     _id = dbc.insert_one(FINANCES_COLLECT, section)
     return _id is not None
@@ -97,20 +93,21 @@ def add_finances_section(section_name: str, section_id: str,
 
 def update_finance_section_article(finance_section: str,
                                    finance_section_id: str,
-                                   article_id: str) -> bool:
+                                   article_title: str,
+                                   article_content: str) -> bool:
     if exists(finance_section_id):
         # article = {}
         # article[FINANCES_ARTICLES] = new_content
         print("asdfaasfd")
         dbc.connect_db()
         db = dbc.fetch_all_as_dict(FINANCES_NAME, FINANCES_COLLECT)
-        articles = db[finance_section][FINANCES_ARTICLES_CONTENTS]
-        print("before adding", articles)
-        articles.append(article_id)
-        print("after adding ", articles)
+        article = db[finance_section][FINANCES_ARTICLES]
+        print("before addign", article)
+        article[article_title] = article_content
+        print("after adding ", article)
 
         filter_query = {FINANCES_SECTION_ID: finance_section_id}
-        update_query = {'$set': {FINANCES_ARTICLES_CONTENTS: articles}}
+        update_query = {'$set': {FINANCES_ARTICLES: article}}
 
         _id = dbc.update_one(FINANCES_COLLECT, filter_query, update_query)
         return _id is not None
