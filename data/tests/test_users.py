@@ -13,7 +13,7 @@ def create_test_user():
         usrs.delete_user(USERNAME)
         
     print(usrs.get_all_users())
-    id = usrs.create_user("test@gmail.com", USERNAME, PASSWORD, "Test", "Test", 1111111111)
+    id = usrs.create_user("test@gmail.com", USERNAME, PASSWORD, "Test", "Test", 1111111111, 'admin')
     if id:
         yield USERNAME
 
@@ -35,13 +35,13 @@ def test_create_user_ideal(create_test_user):
 
 def test_create_dup_user(create_test_user):
     with pytest.raises(ValueError):
-        usrs.create_user("test@gmail.com", USERNAME, PASSWORD, "Test", "Test", 1111111111)
+        usrs.create_user("test@gmail.com", USERNAME, PASSWORD, "Test", "Test", 1111111111, 'admin')
 
 
 # Test to make sure the exception is handled 
 def test_create_user_fail():
     with pytest.raises(ValueError):
-        usrs.create_user("", "","" , "", "", 0)
+        usrs.create_user("", "","" , "", "", 0, '')
         
         
 def test_delete_user_ideal(create_test_user):

@@ -601,17 +601,24 @@ class UpdateEMSSection(Resource):
 
 
 # FINANCE #####
-articles_nested = api.model('articles', {
-    'title': fields.String,
-    'content': fields.String
-    },
-)
+# articles_nested = api.model('articles', {
+#     'title': fields.String,
+#     'content': fields.String
+#     },
+# )
+
+
+# finance_fields = api.model('NewFinance', {
+#     fin.FINANCES_NAME: fields.String,
+#     fin.FINANCES_SECTION_ID: fields.String,
+#     fin.FINANCES_ARTICLES_CONTENTS: fields.Nested(articles_nested),
+# })
 
 
 finance_fields = api.model('NewFinance', {
     fin.FINANCES_NAME: fields.String,
     fin.FINANCES_SECTION_ID: fields.String,
-    fin.FINANCES_ARTICLES: fields.Nested(articles_nested),
+    fin.FINANCES_ARTICLES_CONTENTS: fields.List(fields.String),
 })
 
 
@@ -660,7 +667,7 @@ class Finances(Resource):
         name = request.json['name']
         section_id = request.json['sectionID']
         # article = categ.get_article(name)
-        article = {}
+        article = []
 
         try:
             new_section = fin.add_finances_section(name, section_id, article)
@@ -687,7 +694,7 @@ class FinanceSectionArticles(Resource):
 
 
 @api.route(f'{FINANCES_EP}/<finance_section>/<finance_section_id>/' +
-           '<article_title>/<article_content>')
+           '<article_id>')
 class UpdateFinanceSection(Resource):
     """
     updates finance section
@@ -697,14 +704,14 @@ class UpdateFinanceSection(Resource):
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
     @api.response(HTTPStatus.BAD_REQUEST, 'Bad Request')
     def put(self, finance_section, finance_section_id,
-            article_title, article_content):
+            article_id):
         """
         Update the contents of a finance by id.
         """
         try:
             fin.update_finance_section_article(
                 finance_section, finance_section_id,
-                article_title, article_content)
+                article_id)
             # return {finance_section_id: 'Updated content'}
             return fin.get_finances_sections()
         except ValueError as e:
