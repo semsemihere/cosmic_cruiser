@@ -81,12 +81,13 @@ def delete_user(username):
 #         return True
 #     return -1
 
-def login_user(userId, passwordAttempt):
+def login_user(userId, passwordAttempt, role):
     if exists(userId):
         users = get_all_users()
         print(users[userId])
         if (hashlib.sha3_512(passwordAttempt.encode('UTF-8'),
                              usedforsecurity=True)
-                .hexdigest() == users[userId][PASSWORD]):
+                .hexdigest() == users[userId][PASSWORD]) and (
+                    users[userId][ROLE] == role):
             return True
     return False

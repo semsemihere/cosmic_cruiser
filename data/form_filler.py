@@ -104,8 +104,6 @@ def form(fld_descrips):
     for fld in fld_descrips:
         opt = ''
         dflt = ''
-        if CHOICES in fld:
-            print(f'Options: {fld[CHOICES]}')
         if OPT in fld:
             opt = '(OPTIONAL) '
         if DEFAULT in fld:
@@ -124,10 +122,10 @@ def form(fld_descrips):
     return fld_vals
 
 
-def main():
-    result = form(TEST_FLD_DESCRIPS)
-    print(result)
+# def main():
+#     result = form(TEST_FLD_DESCRIPS)
+#     print(result)
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()

@@ -2,6 +2,9 @@
 Tests for form.py.
 """
 import data.form as fm
+import io
+import sys
+from unittest.mock import patch
 
 
 def test_get_form():
@@ -21,3 +24,23 @@ def test_get_form_descr():
 
 def test_get_fld_names():
     assert isinstance(fm.get_fld_names(), list)
+
+# def test_main():
+#     # redirect stdout to a StringIO object
+#     captured_output = io.StringIO()
+#     sys.stdout = captured_output
+#     # call main function
+#     fm.main()
+#     # printed output
+#     printed_output = captured_output.getvalue()
+#     # reset stdout
+#     sys.stdout = sys.__stdout__
+#     assert "Form:" in printed_output
+#     assert "get_form_descr()=" in printed_output
+
+
+# def test_main(capsys):
+#     fm.main()
+#     captured = capsys.readouterr()
+#     assert "Form:" in captured.out
+#     assert "get_form_descr()=" in captured.out

@@ -53,11 +53,11 @@ def get_fld_names() -> list:
     return ff.get_fld_names(LOGIN_FORM_FLDS)
 
 
-def main():
-    # print(f'Form: {get_form()=}\n\n')
-    print(f'Form: {get_form_descr()=}\n\n')
-    # print(f'Field names: {get_fld_names()=}\n\n')
+# def main():
+#     # print(f'Form: {get_form()=}\n\n')
+#     print(f'Form: {get_form_descr()=}\n\n')
+#     # print(f'Field names: {get_fld_names()=}\n\n')
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()

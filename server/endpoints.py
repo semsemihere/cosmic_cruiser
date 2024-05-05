@@ -96,6 +96,7 @@ class Login(Resource):
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.UNAUTHORIZED, 'Unauthorized')
     def post(self):
+        print("Request JSON:", request.json)
         username = request.json['username']
         password = request.json['password']
         role = request.json['role']
