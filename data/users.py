@@ -31,39 +31,11 @@ def exists(username):
     return dbc.fetch_one(USERS_COLLECT, {USERNAME: username})
 
 
-def create_user(email, username, password, first_name, last_name, phone):
+def create_user(email, username, password, first_name, last_name, phone, role):
     if not username:
         raise ValueError('Username missing')
     if exists(username):
         raise ValueError('Username already exists')
-
-    # Previous code
-    # id = (hashlib.sha3_512(username.encode('UTF-8'),
-    #                        usedforsecurity=True)).hexdigest()
-    # # print(id)
-    # if (id in users):
-    #     raise ValueError(f'Username already exists')
-
-    # users[id] = {
-    #     'email': email,
-    #     'username': username,
-    #     'hashedPass': hashlib.sha3_512(password.encode('UTF-8'),
-    #                                     usedforsecurity=True),
-    #     'first_name': first_name,
-    #     'last_name': last_name,
-    #     'phone': phone,
-    #     'role': 'user'
-    # }
-
-    # user[id] = {
-    #     'email': email,
-    #     'username': username,
-    #     'hashedPass': password,
-    #     'first_name': first_name,
-    #     'last_name': last_name,
-    #     'phone': phone,
-    #     'role': 'user'
-    # }
 
     user = {}
     user[EMAIL] = email
@@ -73,7 +45,8 @@ def create_user(email, username, password, first_name, last_name, phone):
     user[FIRSTNAME] = first_name
     user[LASTNAME] = last_name
     user[PHONE] = phone
-    user[ROLE] = 'user'
+    # user[ROLE] = 'user'
+    user[ROLE] = role  # Set the role for the user
 
     dbc.connect_db()
     _id = dbc.insert_one(USERS_COLLECT, user)
@@ -108,12 +81,20 @@ def delete_user(username):
 #         return True
 #     return -1
 
-def login_user(userId, passwordAttempt):
-    if exists(userId):
-        users = get_all_users()
-        print(users[userId])
-        if (hashlib.sha3_512(passwordAttempt.encode('UTF-8'),
-                             usedforsecurity=True)
-                .hexdigest() == users[userId][PASSWORD]):
-            return True
-    return False
+# def login_user(userId, passwordAttempt):
+#     if exists(userId):
+#         users = get_all_users()
+#         print(users[userId])
+#         if (hashlib.sha3_512(passwordAttempt.encode('UTF-8'),
+#                              usedforsecurity=True)
+#                 .hexdigest() == users[userId][PASSWORD]):
+#             return True
+#     return False
+
+
+def login_user(username, passwordAttempt):
+    user_info = exists(username)
+    if user_info:
+        if hashlib.sha3_512(passwordAttempt.encode('UTF-8'), usedforsecurity=True).hexdigest() == user_info[PASSWORD]:
+            return user_info[ROLE]  # Return the user's role if login successful
+    return None  # Return None if login fails

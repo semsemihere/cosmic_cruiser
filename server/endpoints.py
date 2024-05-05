@@ -75,7 +75,8 @@ LOGIN_FORM = 'login_form'
 # Define a new field for login credentials
 login_fields = api.model('Login', {
     'username': fields.String(required=True),
-    'password': fields.String(required=True)
+    'password': fields.String(required=True),
+    'role': fields.String(required=True)
 })
 
 
@@ -96,18 +97,17 @@ class Login(Resource):
     def post(self):
         username = request.json['username']
         password = request.json['password']
+        role = request.json['role']
 
         # user = users.exists(username)
-
-        if not username or not password:
-            return ({'message': 'user or password missing'},
-                    HTTPStatus.UNAUTHORIZED)
-
-        if users.login_user(username, password):
-            return ({'message': 'Login successful'}, HTTPStatus.OK)
+        if not username or not password or not role:
+            return {'message': 'Username, password, or role missing'}, HTTPStatus.UNAUTHORIZED
+        
+        user_role = users.login_user(username, password)
+        if users.login_user(username, password, role):
+            return {'message': 'Login successful'}, HTTPStatus.OK
         else:
-            return ({'message': 'Invalid username or password'},
-                    HTTPStatus.UNAUTHORIZED)
+            return {'message': 'Invalid username, password, or role'}, HTTPStatus.UNAUTHORIZED
 
 
 @api.route(HELLO_EP)
@@ -224,7 +224,7 @@ user_information = api.model('NewUser', {
     users.FIRSTNAME: fields.String,
     users.LASTNAME: fields.String,
     users.PHONE: fields.Integer,
-
+    users.ROLE: fields.String
 })
 
 
@@ -260,10 +260,11 @@ class Users(Resource):
             first_name = request.json[users.FIRSTNAME]
             last_name = request.json[users.LASTNAME]
             phone = request.json[users.PHONE]
+            role = request.json[users.ROLE]
 
             new_user = users.create_user(email, username,
                                          password, first_name,
-                                         last_name, phone)
+                                         last_name, phone, role)
 
             return {USERS: new_user}
 
