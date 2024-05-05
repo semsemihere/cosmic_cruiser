@@ -32,6 +32,7 @@ MAIN_MENU_EP = '/MainMenu'
 MAIN_MENU_NM = "Welcome to Jack-of-All-Trades!"
 HELLO_EP = '/hello'
 HELLO_RESP = 'hello'
+LOGIN_RESP = "{'login_form': "
 
 CATEGORIES_MENU_NM = 'Category Menu'
 CATEGORY_ID = 'Category ID'

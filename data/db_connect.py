@@ -80,6 +80,12 @@ def insert_one(collection, doc, db=MONGO_DB):
     return client[db][collection].insert_one(doc)
 
 
+def insert_deep(collection, outerKey,
+                innerKey, content, db=MONGO_DB):
+    print(f'{db=}')
+    return client[db][collection][outerKey][innerKey].insert_one(content)
+
+
 # function to return first doc found with filer
 def fetch_one(collection, filt, db=MONGO_DB):
     for doc in client[db][collection].find(filt):

@@ -1,5 +1,5 @@
 import pytest
-
+from unittest.mock import patch
 import data.categories as categ
 
 
@@ -20,10 +20,27 @@ def temp_category_name():
     yield category_name
     if categ.exists(category_id):
         categ.delete_category(category_id)
+        
+@pytest.fixture(scope='function')
+def temp_category_name_article_id(temp_category_name):
+    category_name = temp_category_name
+    temp = categ.add_article_to_category(category_name, "test")
+    categories = categ.get_categories()
+    print("success : ",categories)
+    last_article_id = len(categories[category_name][categ.ARTICLES].keys())
+    print("categories[category_name][categ.ARTICLES].keys() : ", categories[category_name][categ.ARTICLES].keys())
+    print("last_article_id : ", last_article_id)
+    yield (category_name, last_article_id)
+    # if(last_article_id in categories[category_name][categ.ARTICLES].keys()):
+    #     categ.delete_article_from_category(category_name,last_article_id)
 
+def test_delete_article_from_category(temp_category_name_article_id):
+    id_tuple = temp_category_name_article_id
+    cat_id  = id_tuple[0]
+    article_id = id_tuple[1]
+    assert categ.delete_article_from_category(cat_id,article_id) == True
 
-
-def test__article():
+def test_article():
     url = categ.get_article("web scrapping")
     assert isinstance(url,str) == True
     
@@ -32,7 +49,7 @@ def test_get_categories(temp_category):
 
     assert isinstance(categories, dict)     # checks if categories is a dictionary
 
-    assert len(categories) >= 0      # checks if categories is empty
+    assert len(categories) >= 0             # checks if categories is empty
 
     for category in categories:
         assert isinstance(category, str)
@@ -62,13 +79,14 @@ def test_add_article_no_category():
     assert categ.add_article_to_category("","") == False
     
 def test_add_article_category(temp_category_name):
-    assert categ.add_article_to_category(temp_category_name,"testing") == True
+    cat_id = temp_category_name
+    assert categ.add_article_to_category(cat_id,"test") == True
     
 def test_add_article(temp_category):
     assert categ.add_article_to_category(temp_category,"") == False
     
-def test_del_article(temp_category):
-    assert categ.delete_article_from_category(temp_category,"",) == None
+def test_del_article(temp_category_name):
+    assert categ.delete_article_from_category(temp_category_name,"",) == False
     
 def test_add_category():
     # ret = categ.add_category(ADD_NAME, 4)
