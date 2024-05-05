@@ -101,13 +101,13 @@ class Login(Resource):
 
         # user = users.exists(username)
         if not username or not password or not role:
-            return {'message': 'Username, password, or role missing'}, HTTPStatus.UNAUTHORIZED
-        
-        user_role = users.login_user(username, password)
+            return {'message': 'Info missing'}, HTTPStatus.UNAUTHORIZED
+
+        # user_role = users.login_user(username, password)
         if users.login_user(username, password, role):
             return {'message': 'Login successful'}, HTTPStatus.OK
         else:
-            return {'message': 'Invalid username, password, or role'}, HTTPStatus.UNAUTHORIZED
+            return {'message': 'Invalid info'}, HTTPStatus.UNAUTHORIZED
 
 
 @api.route(HELLO_EP)
