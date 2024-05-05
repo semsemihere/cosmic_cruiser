@@ -501,11 +501,11 @@ class NutritionArticles(Resource):
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     def post(self, nutrition_section_id):
         """
-        Add a nutrition section
+        Add a nutrition article to a specific section
         """
 
-        article_name = request.json['name']
-        article_id = request.json['number']
+        article_name = request.json['articleName']
+        article_id = request.json['articleID']
         article_content = categ.get_article(article_name)
 
         try:
