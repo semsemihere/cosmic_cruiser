@@ -91,15 +91,15 @@ def add_section(section_name: str, section_id: str, article_ids: list) -> bool:
 def delete_section(section_id: str):
     # check if the section to delete is in the database
     if exists(section_id):
-        return dbc.del_one(NUTRITION_COLLECT, {SECTION_ID: section_id})
+        return dbc.del_section(section_id, SECTION_ID, ARTICLE_ID, NUTRITION_COLLECT)
     else:
         raise ValueError(f'Delete failure: {section_id} not in database.')
 
 
-def delete_nutrition_article(article_id: str):
+def delete_article(article_id: str):
     # check if article exists
     if exists(article_id):
-        return dbc.del_one(NUTRITION_COLLECT, {ARTICLE_ID: article_id})
+        return dbc.del_article(NUTRITION_COLLECT, {ARTICLE_ID: article_id})
     else:
         raise ValueError(f'Delete failure: {article_id} not in database.')
 

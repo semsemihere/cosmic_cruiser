@@ -105,6 +105,28 @@ def delete_all(collection, db=MONGO_DB):
     return client[db][collection].delete_many({})
 
 
+# function delete a section along with all the articles within it
+def del_section(section_id, section_key, article_key, collection, db=MONGO_DB):
+    article_ids = []
+    for doc in client[db][collection].find():
+        # print(doc)
+        for section_key in doc:
+            # print(section_key)
+            if doc[section_key] == section_id:
+                print(doc)
+                if 'arrayOfArticleIDs' in doc and doc['arrayOfArticleIDs']:
+                    for article_id in doc['arrayOfArticleIDs']:
+                        del_one(collection, {article_key: article_id})
+                        # article_ids.append(article_id)
+                    
+                del_one(collection, {section_key: section_id})
+
+
+# function to delete an article
+def del_article(collection, article_id, db=MONGO_DB):
+    for doc in client[db][collection].find():
+        print(doc)
+
 # function to count number of documents in collection
 def count_documents(collection, db=MONGO_DB):
     return client[db][collection].count_documents({})

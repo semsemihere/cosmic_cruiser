@@ -388,11 +388,29 @@ class DeleteNutritionSection(Resource):
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
     def delete(self, nutrition_section_id):
         """
-        Delete a nutrition by id.
+        Delete a nutrition section by id.
         """
         try:
             nutrition.delete_section(nutrition_section_id)
             return {nutrition_section_id: 'Deleted'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
+
+
+@api.route(f'{DEL_NUTRITION_SECTION_EP}/<nutrition_article_id>')
+class DeleteNutritionArticle(Resource):
+    """
+    Deletes a section in nutrition by name.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
+    def delete(self, nutrition_article_id):
+        """
+        Delete a nutrition article by id.
+        """
+        try:
+            nutrition.delete_article(nutrition_article_id)
+            return {nutrition_article_id: 'Deleted'}
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')
 
@@ -441,8 +459,8 @@ class NutritionSections(Resource):
         # section_name = request.json[nutrition.SECTION_NAME]
         # section_id = request.json[nutrition.SECTION_ID]
         # article_ids = request.json[nutrition.ARTICLE_IDS]
-        section_name = request.json['name']
-        section_id = request.json['number']
+        section_name = request.json[nutrition.SECTION_NAME]
+        section_id = request.json[nutrition.SECTION_ID]
         article_ids = []
 
         try:
