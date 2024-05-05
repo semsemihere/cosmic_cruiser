@@ -17,7 +17,7 @@ LOGIN_FORM_FLDS = [
         ff.INSTRUCTIONS: True,
     },
     {
-        FLD_NM: 'Role',
+        FLD_NM: 'role',
         ff.QSTN: 'Role:',
         ff.CHOICES: ROLES,
         ff.PARAM_TYPE: 'dropdown',
