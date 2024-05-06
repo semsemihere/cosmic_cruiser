@@ -397,7 +397,9 @@ class DeleteNutritionSection(Resource):
             raise wz.NotFound(f'{str(e)}')
 
 
-@api.route(f'{DEL_NUTRITION_SECTION_EP}/<nutrition_section_id>/<nutrition_article_id>')
+@api.route(
+    f'{DEL_NUTRITION_SECTION_EP}/<nutrition_section_id>/<nutrition_article_id>'
+)
 class DeleteNutritionArticle(Resource):
     """
     Delete a nutrition article by id.
@@ -409,7 +411,8 @@ class DeleteNutritionArticle(Resource):
         Delete a nutrition article by id.
         """
         try:
-            nutrition.delete_article(nutrition_section_id, nutrition_article_id)
+            nutrition.delete_article(nutrition_section_id,
+                                     nutrition_article_id)
             return {nutrition_article_id: 'Deleted'}
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')

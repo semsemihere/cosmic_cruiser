@@ -128,7 +128,7 @@ def del_article(section_id,
                 article_ids_key,
                 collection,
                 db=MONGO_DB):
-    
+
     for doc in client[db][collection].find():
         for section_key in doc:
             if doc[section_key] == section_id:
@@ -136,7 +136,7 @@ def del_article(section_id,
                 if article_id in doc['arrayOfArticleIDs']:
                     del_one(collection, {article_key: article_id})
                     doc['arrayOfArticleIDs'].remove(article_id)
-                    
+
                     section = {}
                     section[article_ids_key] = doc['arrayOfArticleIDs']
 
