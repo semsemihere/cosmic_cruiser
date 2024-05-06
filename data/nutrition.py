@@ -40,7 +40,8 @@ def get_sections() -> dict:
 def get_articles(nutrition_section_id: str) -> dict:
     # return nutrition articles
     dbc.connect_db()
-    return dbc.fetch_articles_by_section(nutrition_section_id, SECTION_ID,
+    return dbc.fetch_articles_by_section(nutrition_section_id,
+                                         SECTION_ID,
                                          ARTICLE_ID,
                                          NUTRITION_COLLECT)
 
@@ -48,6 +49,11 @@ def get_articles(nutrition_section_id: str) -> dict:
 def exists(section_id: str) -> bool:
     dbc.connect_db()
     return dbc.fetch_one(NUTRITION_COLLECT, {SECTION_ID: section_id})
+
+
+def exists_article(article_id: str) -> bool:
+    dbc.connect_db()
+    return dbc.fetch_one(NUTRITION_COLLECT, {ARTICLE_ID: article_id})
 
 
 def _get_test_name():
@@ -99,10 +105,16 @@ def delete_section(section_id: str):
         raise ValueError(f'Delete failure: {section_id} not in database.')
 
 
-def delete_article(article_id: str):
+def delete_article(section_id: str, article_id: str):
     # check if article exists
-    if exists(article_id):
-        return dbc.del_article(NUTRITION_COLLECT, {ARTICLE_ID: article_id})
+    if exists(section_id):
+        if exists_article(article_id):
+            return dbc.del_article(section_id,
+                                   article_id,
+                                   SECTION_ID,
+                                   ARTICLE_ID,
+                                   ARTICLE_IDS,
+                                   NUTRITION_COLLECT)
     else:
         raise ValueError(f'Delete failure: {article_id} not in database.')
 

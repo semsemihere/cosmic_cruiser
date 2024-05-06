@@ -382,7 +382,7 @@ class UpdateCategoryNumSections(Resource):
 @api.route(f'{DEL_NUTRITION_SECTION_EP}/<nutrition_section_id>')
 class DeleteNutritionSection(Resource):
     """
-    Deletes a section in nutrition by name.
+    Delete a nutrition section by id.
     """
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
@@ -397,19 +397,19 @@ class DeleteNutritionSection(Resource):
             raise wz.NotFound(f'{str(e)}')
 
 
-@api.route(f'{DEL_NUTRITION_SECTION_EP}/<nutrition_article_id>')
+@api.route(f'{DEL_NUTRITION_SECTION_EP}/<nutrition_section_id>/<nutrition_article_id>')
 class DeleteNutritionArticle(Resource):
     """
-    Deletes a section in nutrition by name.
+    Delete a nutrition article by id.
     """
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
-    def delete(self, nutrition_article_id):
+    def delete(self, nutrition_section_id, nutrition_article_id):
         """
         Delete a nutrition article by id.
         """
         try:
-            nutrition.delete_article(nutrition_article_id)
+            nutrition.delete_article(nutrition_section_id, nutrition_article_id)
             return {nutrition_article_id: 'Deleted'}
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')

@@ -120,10 +120,29 @@ def del_section(section_id, section_key, article_key, collection, db=MONGO_DB):
                 del_one(collection, {section_key: section_id})
 
 
-# function to delete an article
-def del_article(collection, article_id, db=MONGO_DB):
+# function to delete an article and remove id from section
+def del_article(section_id,
+                article_id,
+                section_key,
+                article_key,
+                article_ids_key,
+                collection,
+                db=MONGO_DB):
+    
     for doc in client[db][collection].find():
-        print(doc)
+        for section_key in doc:
+            if doc[section_key] == section_id:
+                print(doc)
+                if article_id in doc['arrayOfArticleIDs']:
+                    del_one(collection, {article_key: article_id})
+                    doc['arrayOfArticleIDs'].remove(article_id)
+                    
+                    section = {}
+                    section[article_ids_key] = doc['arrayOfArticleIDs']
+
+                    filter_query = {section_key: section_id}
+                    update_query = {'$set': section}
+                    update_one(collection, filter_query, update_query, db)
 
 
 # function to count number of documents in collection
