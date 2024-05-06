@@ -461,9 +461,10 @@ class NutritionSections(Resource):
 
         # section_name = request.json[nutrition.SECTION_NAME]
         # section_id = request.json[nutrition.SECTION_ID]
-        # article_ids = request.json[nutrition.ARTICLE_IDS]
-        section_name = request.json[nutrition.SECTION_NAME]
-        section_id = request.json[nutrition.SECTION_ID]
+        section_name = request.json['name']
+        section_id = request.json['sectionID']
+        # article = categ.get_article(name)
+        # article = {}
         article_ids = []
 
         try:
