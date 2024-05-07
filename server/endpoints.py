@@ -697,30 +697,30 @@ class EMSArticles(Resource):
 
 
 # FINANCE #####
-articles_nested = api.model('articles', {
-    'title': fields.String,
-    'content': fields.String
-    },
-)
+# articles_nested = api.model('articles', {
+#     'title': fields.String,
+#     'content': fields.String
+#     },
+# )
 
 
 finance_fields = api.model('NewFinance', {
-    fin.FINANCES_NAME: fields.String,
-    fin.FINANCES_SECTION_ID: fields.String,
-    fin.FINANCES_ARTICLES: fields.Nested(articles_nested),
+    fin.SECTION_NAME: fields.String,
+    fin.SECTION_ID: fields.String,
+    fin.ARTICLE_IDS: fields.List(fields.String),
 })
 
 
 @api.route(f'{DEL_FINANCES_SECTION_EP}/<finance_section_id>')
 class DeleteFinancesSection(Resource):
     """
-    Delete a section in finance by name.
+    Delete a section in finance by id.
     """
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
     def delete(self, finance_section_id):
         """
-        Delete a finance by id.
+        Delete a finance section by id.
         """
         try:
             fin.delete_finances_section(finance_section_id)
@@ -736,7 +736,7 @@ class Finances(Resource):
     """
     def get(self):
         """
-        Return all finances
+        Return all finances sections
         """
         return {
             TYPE: DATA,
@@ -751,12 +751,12 @@ class Finances(Resource):
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     def post(self):
         """
-        Add a finance
+        Add a finance section
         """
-        name = request.json['name']
-        section_id = request.json['sectionID']
+        name = request.json[fin.SECTION_NAME]
+        section_id = request.json[fin.SECTION_ID]
         # article = categ.get_article(name)
-        article = {}
+        article = []
 
         try:
             new_section = fin.add_finances_section(name, section_id, article)

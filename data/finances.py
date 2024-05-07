@@ -12,12 +12,15 @@ BIG_NUM = 100_000_000_000_000_000_000
 
 MOCK_ID = '0' * ID_LEN
 
-FINANCES_NAME = 'name'
-FINANCES_SECTION_ID = 'sectionID'
-FINANCES_ARTICLES = 'articles'
-# FINANCES_ARTICLES = {'':''}
+SECTION_NAME = 'name'
+SECTION_ID = 'sectionID'
+ARTICLE_NAME = 'articleName'
+ARTICLE_ID = 'articleID'
+ARTICLE_IDS = 'arrayOfArticleIDs'
+ARTICLE_CONTENT = 'articleContent'
+# ARTICLE_IDS = {'':''}
 
-# TEST_CATEGORY_FINANCES_NAME = "Nutrition/Cooking"
+# TEST_CATEGORY_SECTION_NAME = "Nutrition/Cooking"
 
 # finances = {
 #     'section1': {
@@ -34,12 +37,12 @@ FINANCES_ARTICLES = 'articles'
 def get_finances_sections() -> dict:
     # return finances sections, by name
     dbc.connect_db()
-    return dbc.fetch_all_as_dict(FINANCES_NAME, FINANCES_COLLECT)
+    return dbc.fetch_all_as_dict(SECTION_ID, FINANCES_COLLECT)
 
 
 def exists(section_id: str) -> bool:
     dbc.connect_db()
-    return dbc.fetch_one(FINANCES_COLLECT, {FINANCES_SECTION_ID: section_id})
+    return dbc.fetch_one(FINANCES_COLLECT, {SECTION_ID: section_id})
 
 
 def _get_test_name():
@@ -50,9 +53,9 @@ def _get_test_name():
 
 def get_test_section():
     test_section = {}
-    test_section[FINANCES_NAME] = _get_test_name()
-    test_section[FINANCES_SECTION_ID] = generate_section_id()
-    test_section[FINANCES_ARTICLES] = {}
+    test_section[SECTION_NAME] = _get_test_name()
+    test_section[SECTION_ID] = generate_section_id()
+    test_section[ARTICLE_IDS] = {}
     return test_section
 
 
@@ -63,7 +66,7 @@ def generate_section_id() -> str:
 
 
 def add_finances_section(section_name: str, section_id: str,
-                         section_article: dict) -> bool:
+                         section_article: list) -> bool:
     if exists(section_id):
         raise ValueError(f'Duplicate section name: {section_id=}')
     if not section_id:
@@ -73,9 +76,9 @@ def add_finances_section(section_name: str, section_id: str,
     # return section_id
 
     section = {}
-    section[FINANCES_NAME] = section_name
-    section[FINANCES_SECTION_ID] = section_id
-    section[FINANCES_ARTICLES] = section_article
+    section[SECTION_NAME] = section_name
+    section[SECTION_ID] = section_id
+    section[ARTICLE_IDS] = section_article
     dbc.connect_db()
     _id = dbc.insert_one(FINANCES_COLLECT, section)
     return _id is not None
@@ -85,7 +88,7 @@ def add_finances_section(section_name: str, section_id: str,
 #     if exists(finance_section_id):
 #         dbc.connect_db()
 #         return dbc.fetch_one(FINANCES_COLLECT,
-#               {FINANCES_SECTION_ID: section_id})
+#               {SECTION_ID: section_id})
 #     else:
 #         raise ValueError(f'Update failed:
 # {finance_section_id} not in db.')
@@ -97,17 +100,17 @@ def update_finance_section_article(finance_section: str,
                                    article_content: str) -> bool:
     if exists(finance_section_id):
         # article = {}
-        # article[FINANCES_ARTICLES] = new_content
+        # article[ARTICLE_IDS] = new_content
         print("asdfaasfd")
         dbc.connect_db()
-        db = dbc.fetch_all_as_dict(FINANCES_NAME, FINANCES_COLLECT)
-        article = db[finance_section][FINANCES_ARTICLES]
+        db = dbc.fetch_all_as_dict(SECTION_NAME, FINANCES_COLLECT)
+        article = db[finance_section][ARTICLE_IDS]
         print("before addign", article)
         article[article_title] = article_content
         print("after adding ", article)
 
-        filter_query = {FINANCES_SECTION_ID: finance_section_id}
-        update_query = {'$set': {FINANCES_ARTICLES: article}}
+        filter_query = {SECTION_ID: finance_section_id}
+        update_query = {'$set': {ARTICLE_IDS: article}}
 
         _id = dbc.update_one(FINANCES_COLLECT, filter_query, update_query)
         return _id is not None
@@ -115,14 +118,15 @@ def update_finance_section_article(finance_section: str,
         raise ValueError(f'Update failed: {finance_section_id} not in db.')
 
 
-def delete_finances_section(section_id: str):
-    # check if the section to delete is in the database
-    if exists(section_id):
-        # del nutrition[section_name]
-        # dbc.del_one(FINANCES_COLLECT, {FINANCES_NAME: section_name})
-        return dbc.del_one(FINANCES_COLLECT, {FINANCES_SECTION_ID: section_id})
+def delete_finances_section(finance_section_id: str):
+    # Deletes EMS section by id
+    if exists(finance_section_id):
+        return dbc.del_section(finance_section_id,
+                               SECTION_ID,
+                               ARTICLE_ID,
+                               FINANCES_COLLECT)
     else:
-        raise ValueError(f'Delete failure: {section_id} not in database.')
+        raise ValueError(f'Delete failure: {finance_section_id} not in database.')
 
 
 # def exists(section_name: str) -> bool:
