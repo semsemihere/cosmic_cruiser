@@ -461,14 +461,14 @@ class NutritionSections(Resource):
 
         # section_name = request.json[nutrition.SECTION_NAME]
         # section_id = request.json[nutrition.SECTION_ID]
-        section_name = request.json['name']
-        section_id = request.json['sectionID']
+        name = request.json[nutrition.SECTION_NAME]
+        section_id = request.json[nutrition.SECTION_ID]
         # article = categ.get_article(name)
         # article = {}
         article_ids = []
 
         try:
-            new_section = nutrition.add_section(section_name,
+            new_section = nutrition.add_section(name,
                                                 section_id,
                                                 article_ids)
             return {NUTRITION: new_section}

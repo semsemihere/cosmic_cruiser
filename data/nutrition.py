@@ -12,7 +12,7 @@ BIG_NUM = 100_000_000_000_000_000_000
 
 MOCK_ID = '0' * ID_LEN
 
-SECTION_NAME = 'sectionName'
+SECTION_NAME = 'name'
 SECTION_ID = 'sectionID'
 ARTICLE_NAME = 'articleName'
 ARTICLE_ID = 'articleID'
