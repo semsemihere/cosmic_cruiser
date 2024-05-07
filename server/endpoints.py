@@ -553,6 +553,7 @@ class NutritionArticles(Resource):
         except ValueError as e:
             raise wz.NotAcceptable(f'{str(e)}')
 
+
 @api.route(f'{NUTRITION_EP}/<nutrition_section_id>/articles/<articleID>')
 class GetNutritionArticles(Resource):
     """
@@ -564,7 +565,6 @@ class GetNutritionArticles(Resource):
         # get the url associated with the article id
         print(nutrition.exists_article(articleID))
         article = nutrition.exists_article(articleID)
-        
         if article:
             url = article['articleContent']
             content = categ.get_article_content(url)
@@ -572,6 +572,7 @@ class GetNutritionArticles(Resource):
 
         # get article content
         return "No content found"
+
 
 @api.route(f'{DEL_EMS_SECTION_EP}/<ems_section_id>')
 class DeleteEMSSection(Resource):
