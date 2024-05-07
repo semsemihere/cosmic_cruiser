@@ -67,6 +67,7 @@ def get_article_content(article_url: str):
     all = soup.find_all('p')
     for i in range(len(all)):
         if all[i].get_text().strip():
+            print(all[i].get_text().strip())
             return all[i].get_text()
 
 
