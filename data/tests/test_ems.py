@@ -6,7 +6,7 @@ import data.ems as ems
 def temp_ems():
     ems_section_name = ems._get_test_name()
     ems_section_id = ems.generate_section_id()
-    ret = ems.add_ems_section(ems_section_name, ems_section_id, {})
+    ret = ems.add_section(ems_section_name, ems_section_id, {})
     
     yield ems_section_id
 
@@ -36,7 +36,7 @@ ADD_NAME = "New EMS"
 def test_add_ems_section():
     new_name = ems._get_test_name()
     new_id = ems.generate_section_id()
-    ret = ems.add_ems_section(new_name, new_id, {})
+    ret = ems.add_section(new_name, new_id, {})
     assert ems.exists(new_id)
     assert isinstance(ret, bool)
     ems.delete_ems_section(new_id)
@@ -45,12 +45,12 @@ def test_add_ems_section_duplicate_id(temp_ems):
     ems_name = ems._get_test_name
     duplicate_id = temp_ems
     with pytest.raises(ValueError):
-        ems.add_ems_section(ems_name, duplicate_id, {})
+        ems.add_section(ems_name, duplicate_id, {})
 
 def test_add_ems_section_blank_id():
     ems_name = ems._get_test_name
     with pytest.raises(ValueError):
-        ems.add_ems_section(ems_name, "", {})
+        ems.add_section(ems_name, "", {})
 
 # @pytest.mark.skip('temporary skip')
 def test_update_ems_section_content(temp_ems):
