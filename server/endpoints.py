@@ -57,6 +57,7 @@ DEL_EMS_SECTION_EP = f'{EMS_EP}/{DELETE}'
 FINANCES = 'finances'
 FINANCES_EP = '/categories/finances'
 FINANCES_MENU_EP = '/finances_menu'
+FINANCES_ARTICLE_MENU_EP = 'finances_article_menu'
 DEL_FINANCES_SECTION_EP = f'{FINANCES_EP}/{DELETE}'
 
 USERS = 'users'
@@ -581,14 +582,14 @@ class DeleteEMSArticle(Resource):
             raise wz.NotFound(f'{str(e)}')
 
 
-ems_article_fields = api.model('NewNutritionArticle', {
+ems_article_fields = api.model('NewEMSArticle', {
     ems.ARTICLE_NAME: fields.String,
     ems.ARTICLE_ID: fields.String,
     ems.ARTICLE_CONTENT: fields.String,
 })
 
 
-ems_section_fields = api.model('NewNutritionSection', {
+ems_section_fields = api.model('NewEMSSection', {
     ems.SECTION_NAME: fields.String,
     ems.SECTION_ID: fields.String,
     ems.ARTICLE_IDS: fields.List(fields.String),
@@ -704,6 +705,13 @@ class EMSArticles(Resource):
 # )
 
 
+finance_article_fields = api.model('NewFinanceArticle', {
+    nutrition.ARTICLE_NAME: fields.String,
+    nutrition.ARTICLE_ID: fields.String,
+    nutrition.ARTICLE_CONTENT: fields.String,
+})
+
+
 finance_fields = api.model('NewFinance', {
     fin.SECTION_NAME: fields.String,
     fin.SECTION_ID: fields.String,
@@ -725,6 +733,27 @@ class DeleteFinancesSection(Resource):
         try:
             fin.delete_finances_section(finance_section_id)
             return {finance_section_id: 'Deleted'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
+
+
+@api.route(
+    f'{DEL_FINANCES_SECTION_EP}/<finances_section_id>/<finances_article_id>'
+)
+class DeleteFinancesArticle(Resource):
+    """
+    Delete a finances article by id.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
+    def delete(self, finances_section_id, finances_article_id):
+        """
+        Delete a finances article by id.
+        """
+        try:
+            fin.delete_article(finances_section_id,
+                               finances_article_id)
+            return {finances_article_id: 'Deleted'}
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')
 
@@ -767,19 +796,19 @@ class Finances(Resource):
             raise wz.NotAcceptable(f'{str(e)}')
 
 
-@api.route(f'{FINANCES_EP}/<finance_section>/<finance_section_id>')
-class FinanceSectionArticles(Resource):
-    def get(self, finance_section, finance_section_id):
-        """
-        Return all finances
-        """
-        return {
-            TYPE: DATA,
-            TITLE: 'ALL FINANCES',
-            DATA: fin.exists(finance_section_id),
-            MENU: FINANCES_MENU_EP,
-            RETURN: MAIN_MENU_EP,
-        }
+# @api.route(f'{FINANCES_EP}/<finance_section>/<finance_section_id>')
+# class FinanceSectionArticles(Resource):
+#     def get(self, finance_section, finance_section_id):
+#         """
+#         Return all finances
+#         """
+#         return {
+#             TYPE: DATA,
+#             TITLE: 'ALL FINANCES',
+#             DATA: fin.exists(finance_section_id),
+#             MENU: FINANCES_MENU_EP,
+#             RETURN: MAIN_MENU_EP,
+#         }
 
 
 @api.route(f'{FINANCES_EP}/<finance_section>/<finance_section_id>/' +
@@ -807,3 +836,45 @@ class UpdateFinanceSection(Resource):
             raise wz.NotFound(f'{str(e)}')
         except Exception as e:
             raise wz.BadRequest(f'failed to update content: {str(e)}')
+
+
+@api.route(f'{FINANCES_EP}/<finances_section_id>/articles')
+class FinancesArticles(Resource):
+    """
+    This class supports various operations on finances, such as
+    listing them, and adding a new finances section.
+    """
+    def get(self, finances_section_id):
+        """
+        Return all finances articles within a specific section.
+        """
+
+        return {
+            TYPE: DATA,
+            TITLE: 'ALL FINANCES',
+            DATA: fin.get_articles(finances_section_id),
+            MENU: FINANCES_ARTICLE_MENU_EP,
+            RETURN: MAIN_MENU_EP,
+        }
+
+    @api.expect(finance_article_fields)
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    def post(self, finances_section_id):
+        """
+        Add a finances article to a specific section
+        """
+
+        article_name = request.json[fin.ARTICLE_NAME]
+        article_id = request.json[fin.ARTICLE_ID]
+        article_content = categ.get_article(article_name)
+
+        try:
+            new_article = fin.add_article(finances_section_id,
+                                          article_name,
+                                          article_id,
+                                          article_content)
+            return {FINANCES: new_article}, HTTPStatus.CREATED
+
+        except ValueError as e:
+            raise wz.NotAcceptable(f'{str(e)}')

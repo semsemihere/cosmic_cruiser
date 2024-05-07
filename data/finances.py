@@ -40,9 +40,23 @@ def get_finances_sections() -> dict:
     return dbc.fetch_all_as_dict(SECTION_ID, FINANCES_COLLECT)
 
 
+def get_articles(finance_section_id: str) -> dict:
+    # return finance articles
+    dbc.connect_db()
+    return dbc.fetch_articles_by_section(finance_section_id,
+                                         SECTION_ID,
+                                         ARTICLE_ID,
+                                         FINANCES_COLLECT)
+
+
 def exists(section_id: str) -> bool:
     dbc.connect_db()
     return dbc.fetch_one(FINANCES_COLLECT, {SECTION_ID: section_id})
+
+
+def exists_article(article_id: str) -> bool:
+    dbc.connect_db()
+    return dbc.fetch_one(FINANCES_COLLECT, {ARTICLE_ID: article_id})
 
 
 def _get_test_name():
@@ -92,6 +106,52 @@ def add_finances_section(section_name: str, section_id: str,
 #     else:
 #         raise ValueError(f'Update failed:
 # {finance_section_id} not in db.')
+
+
+def add_article(section_id: str,
+                article_name: str,
+                article_id: str,
+                article_content: str) -> bool:
+    if exists(article_id):
+        raise ValueError(f'Duplicate section id: {article_id=}')
+    if not article_id:
+        raise ValueError("Finance ID cannot be blank!")
+
+    # section_id = generate_section_id()
+    # return section_id
+
+    article = {}
+    article[ARTICLE_NAME] = article_name
+    article[ARTICLE_ID] = article_id
+    article[ARTICLE_CONTENT] = article_content
+
+    dbc.connect_db()
+    section_doc = dbc.fetch_one(FINANCES_COLLECT, {SECTION_ID: section_id})
+
+    if section_doc:
+        dbc.update_one(FINANCES_COLLECT,
+                       {SECTION_ID: section_id},
+                       {"$push": {ARTICLE_IDS: article_id}})
+    else:
+        raise ValueError(f'Section not found: {section_id}')
+
+    _id = dbc.insert_one(FINANCES_COLLECT, article)
+
+    return _id is not None
+
+
+def delete_article(section_id: str, article_id: str):
+    # check if article exists
+    if exists(section_id):
+        if exists_article(article_id):
+            return dbc.del_article(section_id,
+                                   article_id,
+                                   SECTION_ID,
+                                   ARTICLE_ID,
+                                   ARTICLE_IDS,
+                                   FINANCES_COLLECT)
+    else:
+        raise ValueError(f'Delete failure: {article_id} not in database.')
 
 
 def update_finance_section_article(finance_section: str,

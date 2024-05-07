@@ -167,7 +167,7 @@ def fetch_all_as_dict(key, collection, db=MONGO_DB):
     return ret
 
 
-def fetch_articles_by_section(nutrition_section_id,
+def fetch_articles_by_section(section_id,
                               section_key,
                               article_key,
                               collection, db=MONGO_DB):
@@ -175,7 +175,7 @@ def fetch_articles_by_section(nutrition_section_id,
     article_ids = []
     for doc in client[db][collection].find():
         if section_key in doc:
-            if doc[section_key] == nutrition_section_id:
+            if doc[section_key] == section_id:
                 # print(doc)
                 for article_id in doc['arrayOfArticleIDs']:
                     article_ids.append(article_id)
