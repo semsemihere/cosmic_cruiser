@@ -152,13 +152,6 @@ class GetArticle(Resource):
         return "No content found"
 
 
-# IS THIS USED? 
-@api.route('/categories/add_article_to_category/<categoryID>/<articleName>')
-class AddArticleToCategory(Resource):
-    def get(self, categoryID, articleName):
-        return categ.add_article_to_category(categoryID, articleName)
-
-
 @api.route('/endpoints')
 class Endpoints(Resource):
     """

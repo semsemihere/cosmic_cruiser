@@ -58,18 +58,17 @@ def get_article(article_name: str):
         article_url += str(page['key'])
     return article_url
 
-def get_article_content(article_url:str):
+
+def get_article_content(article_url: str):
     page = requests.get(article_url)
     # scrape webpage
     soup = BeautifulSoup(page.content, 'html.parser')
-    
     list(soup.children)
-
     all = soup.find_all('p')
-
     for i in range(len(all)):
         if all[i].get_text().strip():
             return all[i].get_text()
+
 
 def get_categories() -> dict:
     # return categories
