@@ -44,6 +44,11 @@ def test_delete_article_from_category(temp_category_name_article_id):
 def test_article():
     url = categ.get_article("web scrapping")
     assert isinstance(url,str) == True
+
+# def test_article_content():
+#     url = categ.get_article_content("1212")
+#     assert isinstance(url,str) == True
+    
     
 def test_get_categories(temp_category):
     categories = categ.get_categories()

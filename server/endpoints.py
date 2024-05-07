@@ -74,6 +74,9 @@ LOGIN = 'login'
 LOGIN_EP = '/login'
 LOGIN_FORM = 'login_form'
 
+ARTICLE = 'article'
+ARTICLE_EP = '/article'
+
 
 # Define a new field for login credentials
 login_fields = api.model('Login', {
@@ -134,6 +137,22 @@ class CreateArticle(Resource):
         return categ.get_article(articleName)
 
 
+@api.route(f'{CATEGORIES_EP}/article/<articleID>')
+class GetArticle(Resource):
+    def get(self, articleID):
+        print('im here')
+
+        # get the url associated with the article id
+        print(nutrition.exists_article(articleID))
+        article = nutrition.exists_article(articleID)
+        if article:
+            url = article['articleContent']
+            return categ.get_article_content(url)
+        # get article content
+        return "No content found"
+
+
+# IS THIS USED? 
 @api.route('/categories/add_article_to_category/<categoryID>/<articleName>')
 class AddArticleToCategory(Resource):
     def get(self, categoryID, articleName):
@@ -462,8 +481,6 @@ class NutritionSections(Resource):
         """
         name = request.json[nutrition.SECTION_NAME]
         section_id = request.json[nutrition.SECTION_ID]
-        # article = categ.get_article(name)
-        # article = {}
         article_ids = []
 
         print("nutrition", name,  section_id)

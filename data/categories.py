@@ -5,6 +5,7 @@ import random
 import data.db_connect as dbc
 import requests
 import json
+from bs4 import BeautifulSoup
 
 
 CATEGORIES_COLLECT = 'categories'
@@ -55,16 +56,20 @@ def get_article(article_name: str):
         article_url += language_code
         article_url += '.wikipedia.org/wiki/'
         article_url += str(page['key'])
-        # article_description = page['description']
-
-        # article_description = 'a Wikipedia article'
-        # try:
-        #     thumbnail_url = 'https:' + page['thumbnail']['url']
-        # except:
-        #     thumbnail_url = 'https://upload.wikimedia.org/wikipedia/commons
-        # /thumb/8/80/Wikipedia-logo-v2.svg/200px-Wikipedia-logo-v2.svg.png'
     return article_url
 
+def get_article_content(article_url:str):
+    page = requests.get(article_url)
+    # scrape webpage
+    soup = BeautifulSoup(page.content, 'html.parser')
+    
+    list(soup.children)
+
+    all = soup.find_all('p')
+
+    for i in range(len(all)):
+        if all[i].get_text().strip():
+            return all[i].get_text()
 
 def get_categories() -> dict:
     # return categories
