@@ -65,12 +65,12 @@ def _get_test_name():
 def get_test_section():
     test_section = {}
     test_section[SECTION_NAME] = _get_test_name()
-    test_section[SECTION_ID] = generate_section_id()
+    test_section[SECTION_ID] = generate_id()
     test_section[ARTICLE_IDS] = 'article'
     return test_section
 
 
-def generate_section_id() -> str:
+def generate_id() -> str:
     # generates a 24 digit id with leading 0's
     _id = str(random.randint(0, BIG_NUM)).rjust(ID_LEN, "0")
     return _id
@@ -82,7 +82,7 @@ def add_section(section_name: str, section_id: str, article_ids: list) -> bool:
     if not section_id:
         raise ValueError("Nutrition id cannot be blank!")
 
-    # section_id = generate_section_id()
+    # section_id = generate_id()
     # return section_id
 
     section = {}
@@ -148,7 +148,7 @@ def add_article(section_id: str,
     if not article_id:
         raise ValueError("Nutrition id cannot be blank!")
 
-    # section_id = generate_section_id()
+    # section_id = generate_id()
     # return section_id
 
     article = {}
