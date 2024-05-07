@@ -371,7 +371,7 @@ def test_good_update_ems_section_content(mock_update):
     """
     Testing we do the right thing with a good return from update_ems_section_content.
     """
-    section_id = ems.generate_section_id()
+    section_id = ems.generate_id()
     new_content = "TESTING NEW CONTENT"
     resp = TEST_CLIENT.put(f'{ep.EMS_EP}/{section_id}/{new_content}', json=ems.get_test_section())
     assert resp.status_code == OK
@@ -382,7 +382,7 @@ def test_good_update_ems_section_content(mock_update):
 #     """
 #     Testing we do the right thing with a value error from update_ems_section_content.
 #     """
-#     section_id = ems.generate_section_id()
+#     section_id = ems.generate_id()
 #     new_content = "TESTING NEW CONTENT"
 #     resp = TEST_CLIENT.put(f'{ep.EMS_EP}/{section_id}/{new_content}', json=ems.get_test_section())
 #     assert resp.status_code == NOT_FOUND
@@ -393,7 +393,7 @@ def test_bad_exception_update_ems_section_content(mock_update):
     """
     Testing we do the right thing with a exception from update_ems_section_content.
     """
-    section_id = ems.generate_section_id()
+    section_id = ems.generate_id()
     new_content = "TESTING NEW CONTENT"
     resp = TEST_CLIENT.put(f'{ep.EMS_EP}/{section_id}/{new_content}', json=ems.get_test_section())
     assert resp.status_code == BAD_REQUEST

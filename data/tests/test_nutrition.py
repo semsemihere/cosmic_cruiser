@@ -95,7 +95,7 @@ def test_add_article_duplicate_id(temp_section):
     with pytest.raises(ValueError):
         nutrition.add_article(new_name, section_id, duplicate_article_id, new_content)
 
-def test_add_article_blank_id(temp_section):
+def test_add_article_blank_id():
     # Duplicate section name raises a ValueError
     new_name = nutrition._get_test_name()
     section_id = nutrition.generate_id()
