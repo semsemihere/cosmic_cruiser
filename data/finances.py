@@ -118,15 +118,15 @@ def update_finance_section_article(finance_section: str,
         raise ValueError(f'Update failed: {finance_section_id} not in db.')
 
 
-def delete_finances_section(finance_section_id: str):
-    # Deletes EMS section by id
-    if exists(finance_section_id):
-        return dbc.del_section(finance_section_id,
+def delete_finances_section(section_id: str):
+    # Deletes finances section by id
+    if exists(section_id):
+        return dbc.del_section(section_id,
                                SECTION_ID,
                                ARTICLE_ID,
                                FINANCES_COLLECT)
     else:
-        raise ValueError(f'Delete failure: {finance_section_id} not in database.')
+        raise ValueError(f'Delete failure: {section_id} not in database.')
 
 
 # def exists(section_name: str) -> bool:
