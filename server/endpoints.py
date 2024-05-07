@@ -559,10 +559,17 @@ class DeleteEMS(Resource):
             raise wz.NotFound(f'{str(e)}')
 
 
-ems_fields = api.model('NewEMS', {
-    ems.EMS_SECTION_NAME: fields.String,
-    ems.EMS_SECTION_ID: fields.String,
-    ems.EMS_ARTICLES: fields.String,
+ems_article_fields = api.model('NewNutritionArticle', {
+    ems.ARTICLE_NAME: fields.String,
+    ems.ARTICLE_ID: fields.String,
+    ems.ARTICLE_CONTENT: fields.String,
+})
+
+
+ems_section_fields = api.model('NewNutritionSection', {
+    ems.SECTION_NAME: fields.String,
+    ems.SECTION_ID: fields.String,
+    ems.ARTICLE_IDS: fields.List(fields.String),
 })
 
 
@@ -574,7 +581,7 @@ class EmergencyMedicalServices(Resource):
     """
     def get(self):
         """
-        Return all emergency medical services.
+        Return all emergency medical services sections.
         """
         return {
             TYPE: DATA,
@@ -584,20 +591,22 @@ class EmergencyMedicalServices(Resource):
             RETURN: MAIN_MENU_EP,
         }
 
-    @api.expect(ems_fields)
+    @api.expect(ems_section_fields)
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     def post(self):
         """
-        Add a emergency medical service.
+        Add a emergency medical service section.
         """
 
-        name = request.json['name']
-        section_id = request.json['number']
-        article = categ.get_article(name)
+        name = request.json[ems.SECTION_NAME]
+        section_id = request.json[ems.SECTION_ID]
+        article_ids = []
 
         try:
-            new_section = ems.add_ems_section(name, section_id, article)
+            new_section = ems.add_section(name,
+                                          section_id,
+                                          article_ids)
 
             return {EMS: new_section}
 
