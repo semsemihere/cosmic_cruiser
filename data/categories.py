@@ -64,11 +64,11 @@ def get_article_content(article_url:str):
     soup = BeautifulSoup(page.content, 'html.parser')
     
     list(soup.children)
-
     all = soup.find_all('p')
 
     for i in range(len(all)):
         if all[i].get_text().strip():
+            print(all[i].get_text().strip())
             return all[i].get_text()
 
 def get_categories() -> dict:

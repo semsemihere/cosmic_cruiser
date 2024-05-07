@@ -137,19 +137,21 @@ class CreateArticle(Resource):
         return categ.get_article(articleName)
 
 
-@api.route(f'{CATEGORIES_EP}/article/<articleID>')
-class GetArticle(Resource):
-    def get(self, articleID):
-        print('im here')
+# @api.route(f'{CATEGORIES_EP}/article/<articleID>')
+# class Article(Resource):
+#     def get(self, articleID):
+#         print('BOOOM')
 
-        # get the url associated with the article id
-        print(nutrition.exists_article(articleID))
-        article = nutrition.exists_article(articleID)
-        if article:
-            url = article['articleContent']
-            return categ.get_article_content(url)
-        # get article content
-        return "No content found"
+#         # get the url associated with the article id
+#         print(nutrition.exists_article(articleID))
+#         article = nutrition.exists_article(articleID)
+#         if article:
+#             url = article['articleContent']
+#             content = categ.get_article_content(url)
+#             return content
+
+#         # get article content
+#         return "No content found"
 
 
 # IS THIS USED? 
@@ -527,7 +529,7 @@ class NutritionArticles(Resource):
         """
         Return all nutrition articles within a specific section.
         """
-
+        print('TADA')
         return {
             TYPE: DATA,
             TITLE: 'ALL NUTRITION',
@@ -558,6 +560,25 @@ class NutritionArticles(Resource):
         except ValueError as e:
             raise wz.NotAcceptable(f'{str(e)}')
 
+@api.route(f'{NUTRITION_EP}/<nutrition_section_id>/articles/<articleID>')
+class GetNutritionArticles(Resource):
+    """
+    Gets individual nutrition article
+    """
+    def get(self, nutrition_section_id, articleID):
+        print('BOOOM')
+
+        # get the url associated with the article id
+        print(nutrition.exists_article(articleID))
+        article = nutrition.exists_article(articleID)
+        
+        if article:
+            url = article['articleContent']
+            content = categ.get_article_content(url)
+            return content
+
+        # get article content
+        return "No content found"
 
 @api.route(f'{DEL_EMS_SECTION_EP}/<ems_section_id>')
 class DeleteEMSSection(Resource):
