@@ -51,6 +51,7 @@ DEL_NUTRITION_SECTION_EP = f'{NUTRITION_EP}/{DELETE}'
 EMS = "emergencyMedicalServices"
 EMS_EP = '/categories/emergency_medical_services'
 EMS_MENU_EP = '/emergency_medical_services_menu'
+EMS_ARTICLE_MENU_EP = 'ems_article_menu'
 DEL_EMS_SECTION_EP = f'{EMS_EP}/{DELETE}'
 
 FINANCES = 'finances'
@@ -526,8 +527,8 @@ class NutritionArticles(Resource):
         Add a nutrition article to a specific section
         """
 
-        article_name = request.json['articleName']
-        article_id = request.json['articleID']
+        article_name = request.json[nutrition.ARTICLE_NAME]
+        article_id = request.json[nutrition.ARTICLE_ID]
         article_content = categ.get_article(article_name)
 
         try:
@@ -542,19 +543,40 @@ class NutritionArticles(Resource):
 
 
 @api.route(f'{DEL_EMS_SECTION_EP}/<ems_section_id>')
-class DeleteEMS(Resource):
+class DeleteEMSSection(Resource):
     """
-    Deletes a emergency medical service by id.
+    Deletes a emergency medical service section by id.
     """
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
     def delete(self, ems_section_id):
         """
-        Delete a emergency medical service by id.
+        Delete a emergency medical service section by id.
         """
         try:
             ems.delete_ems_section(ems_section_id)
             return {ems_section_id: 'Deleted'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
+
+
+@api.route(
+    f'{DEL_EMS_SECTION_EP}/<ems_section_id>/<ems_article_id>'
+)
+class DeleteEMSArticle(Resource):
+    """
+    Delete a ems article by id.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
+    def delete(self, ems_section_id, ems_article_id):
+        """
+        Delete a ems article by id.
+        """
+        try:
+            ems.delete_article(ems_section_id,
+                               ems_article_id)
+            return {ems_article_id: 'Deleted'}
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')
 
@@ -630,6 +652,48 @@ class UpdateEMSSection(Resource):
             raise wz.NotFound(f'{str(e)}')
         except Exception as e:
             raise wz.BadRequest(f'failed to update content: {str(e)}')
+
+
+@api.route(f'{EMS_EP}/<ems_section_id>/articles')
+class EMSArticles(Resource):
+    """
+    This class supports various operations on ems, such as
+    listing them, and adding a new ems section.
+    """
+    def get(self, ems_section_id):
+        """
+        Return all ems articles within a specific section.
+        """
+
+        return {
+            TYPE: DATA,
+            TITLE: 'ALL EMERGENCY MEDICAL SERVICES',
+            DATA: ems.get_articles(ems_section_id),
+            MENU: NUTRITION_ARTICLE_MENU_EP,
+            RETURN: MAIN_MENU_EP,
+        }
+
+    @api.expect(ems_article_fields)
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    def post(self, ems_section_id):
+        """
+        Add a ems article to a specific section
+        """
+
+        article_name = request.json[ems.ARTICLE_NAME]
+        article_id = request.json[ems.ARTICLE_ID]
+        article_content = categ.get_article(article_name)
+
+        try:
+            new_article = ems.add_article(ems_section_id,
+                                          article_name,
+                                          article_id,
+                                          article_content)
+            return {EMS: new_article}, HTTPStatus.CREATED
+
+        except ValueError as e:
+            raise wz.NotAcceptable(f'{str(e)}')
 
 
 # FINANCE #####

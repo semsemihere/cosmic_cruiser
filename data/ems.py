@@ -22,7 +22,16 @@ ARTICLE_CONTENT = 'articleContent'
 def get_ems_sections() -> dict:
     # return all ems sections
     dbc.connect_db()
-    return dbc.fetch_all_as_dict(SECTION_NAME, EMS_COLLECT)
+    return dbc.fetch_all_as_dict(SECTION_ID, EMS_COLLECT)
+
+
+def get_articles(ems_section_id: str) -> dict:
+    # return ems articles
+    dbc.connect_db()
+    return dbc.fetch_articles_by_section(ems_section_id,
+                                         SECTION_ID,
+                                         ARTICLE_ID,
+                                         EMS_COLLECT)
 
 
 def get_test_section():
@@ -51,6 +60,38 @@ def add_section(section_name: str, section_id: str, article_ids: list) -> bool:
     return _id is not None
 
 
+def add_article(section_id: str,
+                article_name: str,
+                article_id: str,
+                article_content: str) -> bool:
+    if exists(article_id):
+        raise ValueError(f'Duplicate section id: {article_id=}')
+    if not article_id:
+        raise ValueError("EMS ID cannot be blank!")
+
+    # section_id = generate_section_id()
+    # return section_id
+
+    article = {}
+    article[ARTICLE_NAME] = article_name
+    article[ARTICLE_ID] = article_id
+    article[ARTICLE_CONTENT] = article_content
+
+    dbc.connect_db()
+    section_doc = dbc.fetch_one(EMS_COLLECT, {SECTION_ID: section_id})
+
+    if section_doc:
+        dbc.update_one(EMS_COLLECT,
+                       {SECTION_ID: section_id},
+                       {"$push": {ARTICLE_IDS: article_id}})
+    else:
+        raise ValueError(f'Section not found: {section_id}')
+
+    _id = dbc.insert_one(EMS_COLLECT, article)
+
+    return _id is not None
+
+
 def update_ems_section_content(ems_section_id: str, new_content: str) -> bool:
     if exists(ems_section_id):
         article = {}
@@ -69,15 +110,37 @@ def update_ems_section_content(ems_section_id: str, new_content: str) -> bool:
 def delete_ems_section(ems_section_id: str):
     # Deletes EMS section by id
     if exists(ems_section_id):
-        return dbc.del_one(EMS_COLLECT, {SECTION_ID: ems_section_id})
+        return dbc.del_section(ems_section_id,
+                               SECTION_ID,
+                               ARTICLE_ID,
+                               EMS_COLLECT)
     else:
         raise ValueError(f'Delete failure: {ems_section_id} not in database.')
+
+
+def delete_article(section_id: str, article_id: str):
+    # check if article exists
+    if exists(section_id):
+        if exists_article(article_id):
+            return dbc.del_article(section_id,
+                                   article_id,
+                                   SECTION_ID,
+                                   ARTICLE_ID,
+                                   ARTICLE_IDS,
+                                   EMS_COLLECT)
+    else:
+        raise ValueError(f'Delete failure: {article_id} not in database.')
 
 
 def exists(section_id: str) -> bool:
     # Checks ems section by id
     dbc.connect_db()
     return dbc.fetch_one(EMS_COLLECT, {SECTION_ID: section_id})
+
+
+def exists_article(article_id: str) -> bool:
+    dbc.connect_db()
+    return dbc.fetch_one(EMS_COLLECT, {ARTICLE_ID: article_id})
 
 
 def _get_test_name():
