@@ -124,7 +124,8 @@ def update_nutrition_section_content(section_id: str,
     if exists(section_id):
         # the article content
         article = {}
-        article[ARTICLE_IDS] = new_content
+        # article[ARTICLE_IDS] = new_content
+        article[ARTICLE_IDS].append(new_content)
 
         # update existing section with new article content
         filter_query = {SECTION_ID: section_id}

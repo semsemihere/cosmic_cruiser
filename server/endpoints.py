@@ -460,14 +460,13 @@ class NutritionSections(Resource):
         """
         Add a nutrition section
         """
-
-        # section_name = request.json[nutrition.SECTION_NAME]
-        # section_id = request.json[nutrition.SECTION_ID]
         name = request.json[nutrition.SECTION_NAME]
         section_id = request.json[nutrition.SECTION_ID]
         # article = categ.get_article(name)
         # article = {}
         article_ids = []
+
+        print("nutrition", name,  section_id)
 
         try:
             new_section = nutrition.add_section(name,
