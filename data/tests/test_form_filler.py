@@ -66,7 +66,7 @@ def test_get_query_fld_names():
 
 @patch('builtins.input', return_value='User input')
 def test_get_input(mock_input):
-    # call get_input function with some inpti
+    # call get_input function with some input
     user_input = ff.get_input('Default text', '(Optional)', 'Enter your input:')
     # check if correct arguments
     mock_input.assert_called_once_with('Default text(Optional)Enter your input: ')

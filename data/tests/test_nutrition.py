@@ -23,6 +23,7 @@ def temp_article(temp_section):
     nutrition.delete_article(section_id, article_id)
 
 def test_get_sections(temp_section):
+    # Test get sections with a temp_section
     sections = nutrition.get_sections()
 
     assert isinstance(sections, dict)     # checks if sections is a dictionary
@@ -37,16 +38,19 @@ def test_get_sections(temp_section):
     assert nutrition.exists(section_id)
 
 def test_get_sections():
+    # Test get sections
     sections = nutrition.get_sections()
     assert isinstance(sections, dict) 
     assert len(sections) >= 0 
 
 def test_get_articles():
+    # Test get articles
     section_id = "mock_section_id"
     articles = nutrition.get_articles(section_id)
     assert isinstance(articles, dict)
 
 def test_delete_non_existing_article(temp_section, temp_article):
+    # Test delete a non-existing article
     section_id = temp_section
     non_existing_article_id = nutrition.generate_id()
     result = nutrition.delete_article(section_id, non_existing_article_id)
@@ -54,16 +58,19 @@ def test_delete_non_existing_article(temp_section, temp_article):
 
 
 def test_get_test_name():
+    # Test get test name
     name = nutrition._get_test_name()
     assert isinstance(name, str)
     assert len(name) > 0
 
 
 def test_get_test_section():
+    # Test get test section
     assert isinstance(nutrition.get_test_section(), dict)
 
 
 def test_generate_id():
+    # Test generate id
     _id = nutrition.generate_id()
     assert isinstance(_id, str)
     assert len(_id) == nutrition.ID_LEN
@@ -72,9 +79,7 @@ def test_generate_id():
 ADD_NAME = "New Nutrition"
 
 def test_add_section():
-    # ret = nutrition.add_section(ADD_NAME, 4)
-    # assert nutrition.exists(ADD_NAME)
-    # assert isinstance(ret, str)
+    # Test add a section
     new_name = nutrition._get_test_name()
     new_section_id = nutrition.generate_id()
     new_article_id = nutrition.generate_id()
@@ -84,7 +89,7 @@ def test_add_section():
     nutrition.delete_section(new_section_id)
 
 def test_add_section_duplicate_id(temp_section):
-    # Duplicate section name raises a ValueError
+    # Duplicate section id raises a ValueError
     new_name = nutrition._get_test_name()
     duplicate_section_id = temp_section
     duplicate_article_ids = [temp_section]
@@ -92,12 +97,13 @@ def test_add_section_duplicate_id(temp_section):
         nutrition.add_section(new_name, duplicate_section_id, duplicate_article_ids)
 
 def test_add_section_blank_id():
-    # Blank section name raises a ValueError
+    # Blank section id raises a ValueError
     nutrition_name = nutrition._get_test_name()
     with pytest.raises(ValueError):
         nutrition.add_section(nutrition_name, "", [])
 
 def test_add_article_section_fail():
+    # Test unsuccessfull article section
     section_id = "non_existent_section_id" 
     article_name = "Article Name"
     article_id = nutrition.generate_id()
@@ -109,7 +115,7 @@ def test_add_article_section_fail():
     assert str(excinfo.value) == f'Section not found: {section_id}'
 
 def test_add_article_duplicate_id(temp_section):
-    # Duplicate section name raises a ValueError
+    # Duplicate article id raises a ValueError
     new_name = nutrition._get_test_name()
     section_id = nutrition.generate_id()
     duplicate_article_id = temp_section
@@ -118,7 +124,7 @@ def test_add_article_duplicate_id(temp_section):
         nutrition.add_article(new_name, section_id, duplicate_article_id, new_content)
 
 def test_add_article_blank_id():
-    # Duplicate section name raises a ValueError
+    # Blank article id raises a ValueError
     new_name = nutrition._get_test_name()
     section_id = nutrition.generate_id()
     new_content = ''
@@ -126,6 +132,7 @@ def test_add_article_blank_id():
         nutrition.add_article(new_name, section_id, "", new_content)
 
 def test_delete_article_success(temp_section):
+    # Test successful delete for a article
     section_id = temp_section
     article_name = "Article Name"
     article_id = nutrition.generate_id()
@@ -138,10 +145,12 @@ def test_delete_article_success(temp_section):
     assert not nutrition.exists_article(article_id)
 
 def test_delete_article_fail():
+    # Test unsuccessful delete of a article
         with pytest.raises(ValueError):
             nutrition.delete_article('non-existing section id',"non-existing article id")
 
 def test_delete_section_not_there():
+    # Tests delete section not there
     section_id = nutrition.generate_id()
     with pytest.raises(ValueError):
         nutrition.delete_section(section_id)

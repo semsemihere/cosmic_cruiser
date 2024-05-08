@@ -19,6 +19,7 @@ def temp_rec():
 @patch('data.db_connect.get_client', return_value=None, autospec=True)
 @patch('data.db_connect.get_cloud_status', return_value=dbc.CLOUD, autospec=True)
 def test_connect_db_cloud_success(mock_client, mock_cloud_status):
+    # Test db connect to cloud
     dbc.set_cloud_password("asdf1234")
     assert dbc.connect_db() == 1
 
@@ -26,22 +27,25 @@ def test_connect_db_cloud_success(mock_client, mock_cloud_status):
 @patch('data.db_connect.get_client', return_value=None, autospec=True)
 @patch('data.db_connect.get_cloud_status', return_value=dbc.LOCAL, autospec=True)
 def test_connect_db_local_success(mock_client,mock_cloud):
+    # Test db connect to local
     assert dbc.connect_db() == 0
 
 @patch('data.db_connect.get_client', return_value=None, autospec=True)
 @patch('data.db_connect.get_cloud_status', return_value=dbc.CLOUD, autospec=True)
 @patch('data.db_connect.get_cloud_password', return_value=None, autospec=True)
 def test_connect_db_cloud_failed_password(mock_client, mock_cloud_status, mock_password):
+    # Test db connect password fail
     with pytest.raises(ValueError):
         dbc.connect_db()
 
 
-
 def test_connect_db_already_connected():
+    # Test db connect already connected
     assert dbc.connect_db() == 3
 
 
 def test_get_cloud_password(): 
+    # Test cloud get password
     assert dbc.os.environ.get("MONGODB_PASSWORD") == dbc.get_cloud_password()
 
 def test_fetch_one(temp_rec):
