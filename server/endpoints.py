@@ -889,7 +889,6 @@ class FinancesArticles(Resource):
         """
         Add a finances article to a specific section
         """
-
         article_name = request.json[fin.ARTICLE_NAME]
         article_id = request.json[fin.ARTICLE_ID]
         article_content = categ.get_article(article_name)
