@@ -7,7 +7,7 @@ import data.categories as categ
 def temp_category():
     category_name = categ._get_test_name()
     category_id = categ.generate_category_id()
-    ret = categ.add_category(category_name, category_id)
+    ret = categ.add_category(category_name, category_id, 0)
     yield category_id
     if categ.exists(category_id):
         categ.delete_category(category_id)
@@ -16,7 +16,7 @@ def temp_category():
 def temp_category_name():
     category_name = categ._get_test_name()+'temp'
     category_id = categ.generate_category_id()+"1"
-    ret = categ.add_category(category_name, category_id)
+    ret = categ.add_category(category_name, category_id, 0)
     yield category_name
     if categ.exists(category_id):
         categ.delete_category(category_id)
@@ -92,7 +92,7 @@ def test_get_bad_article_content(mockResponse):
 def test_add_category():
     new_name = categ._get_test_name()
     new_id = categ.generate_category_id()
-    ret = categ.add_category(new_name, new_id)
+    ret = categ.add_category(new_name, new_id, 4)
     assert categ.exists(new_id)
     assert isinstance(ret, bool)
     categ.delete_category(new_id)
@@ -103,14 +103,14 @@ def test_add_category_duplicate_ID(temp_category):
     category_name = categ._get_test_name()
     duplicate_id = temp_category
     with pytest.raises(ValueError):
-        categ.add_category(category_name, duplicate_id)
+        categ.add_category(category_name, duplicate_id, 4)
 
 
 def test_add_category_blank_id():
     # Blank category ID raises a ValueError
     category_name = categ._get_test_name()
     with pytest.raises(ValueError):
-        categ.add_category(category_name, "")
+        categ.add_category(category_name, "", 4)
 
 
 def test_update_category_name(temp_category):

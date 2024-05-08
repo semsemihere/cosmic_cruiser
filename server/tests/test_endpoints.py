@@ -50,14 +50,13 @@ def create_test_user():
 
 @pytest.fixture
 def create_nutrition_section():
-    section_id = nutr.generate_id()
     TEST_CLIENT.post(ep.NUTRITION_EP,
                      json={"name": nutr.TEST_SECITON_NAME,
-                           "sectionID": section_id,
+                           "sectionID": nutr.TEST_SECITON_ID,
                            "arrayOfArticleIDs": []})
-    yield section_id
+    yield nutr.TEST_SECITON_ID
     TEST_CLIENT.delete(ep.NUTRITION_EP + "/delete/" 
-                       + section_id)
+                       + nutr.TEST_SECITON_ID)
     
 
 @pytest.fixture

@@ -134,7 +134,8 @@ def generate_category_id() -> str:
 #         return False
 
 
-def add_category(category_name: str, category_id: str) -> bool:
+def add_category(category_name: str, category_id: str,
+                 num_sections: int) -> bool:
     if exists(category_id):
         raise ValueError(f'Duplicate category ID: {category_id=}')
     if not category_id:
@@ -147,6 +148,8 @@ def add_category(category_name: str, category_id: str) -> bool:
     category = {}
     category[NAME] = category_name
     category[CATEGORY_ID] = category_id
+    category[NUM_SECTIONS] = num_sections
+    category[ARTICLES] = {}
     dbc.connect_db()
     _id = dbc.insert_one(CATEGORIES_COLLECT, category)
     return _id is not None

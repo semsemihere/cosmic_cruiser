@@ -280,8 +280,8 @@ class DeleteCategory(Resource):
 
 category_fields = api.model('NewCategory', {
     categ.NAME: fields.String,
-    # categ.CATEGORY_ID: fields.String,
-    # categ.NUM_SECTIONS: fields.Integer,
+    categ.CATEGORY_ID: fields.String,
+    categ.NUM_SECTIONS: fields.Integer,
 })
 
 
@@ -311,12 +311,11 @@ class Categories(Resource):
         Add a category.
         """
         name = request.json[categ.NAME]
-        category_id = categ.generate_category_id()
-        # category_id = request.json[categ.CATEGORY_ID]
-        # num_sections = request.json[categ.NUM_SECTIONS]
+        category_id = request.json[categ.CATEGORY_ID]
+        num_sections = request.json[categ.NUM_SECTIONS]
         try:
-            new_id = categ.add_category(name,
-                                        category_id)
+            new_id = categ.add_category(
+                name, category_id, num_sections)
             if new_id is None:
                 raise wz.ServiceUnavailable('We have a technical problem.')
             return {CATEGORY_ID: new_id}
@@ -407,12 +406,14 @@ class DeleteNutritionArticle(Resource):
 
 nutrition_article_fields = api.model('NewNutritionArticle', {
     nutrition.ARTICLE_NAME: fields.String,
+    nutrition.ARTICLE_ID: fields.String,
     nutrition.ARTICLE_CONTENT: fields.String,
 })
 
 
 nutrition_section_fields = api.model('NewNutritionSection', {
     nutrition.SECTION_NAME: fields.String,
+    nutrition.SECTION_ID: fields.String,
     nutrition.ARTICLE_IDS: fields.List(fields.String),
 })
 
@@ -444,7 +445,7 @@ class NutritionSections(Resource):
         Add a nutrition section
         """
         name = request.json[nutrition.SECTION_NAME]
-        section_id = nutrition.generate_id()
+        section_id = request.json[nutrition.SECTION_ID]
         article_ids = []
 
         print("nutrition", name,  section_id)
@@ -508,7 +509,7 @@ class NutritionArticles(Resource):
         """
 
         article_name = request.json[nutrition.ARTICLE_NAME]
-        article_id = nutrition.generate_id()
+        article_id = request.json[nutrition.ARTICLE_ID]
         article_content = categ.get_article(article_name)
 
         try:
