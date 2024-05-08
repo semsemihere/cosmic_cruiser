@@ -6,13 +6,18 @@ import data.ems as ems
 def temp_ems():
     ems_section_name = ems._get_test_name()
     ems_section_id = ems.generate_id()
-    ret = ems.add_section(ems_section_name, ems_section_id, {})
+    article_id = ems.generate_id()
+    ret = ems.add_section(ems_section_name, ems_section_id, [])
     
     yield ems_section_id
 
     if ems.exists(ems_section_id):
         ems.delete_ems_section(ems_section_id)
 
+def test_get_articles(temp_ems):
+    ems_section_id = temp_ems
+    res = ems.get_articles(ems_section_id)
+    assert isinstance(res, dict)
 
 def test_get_ems_sections(temp_ems):
     ems_sections = ems.get_ems_sections()
@@ -54,6 +59,14 @@ def test_add_ems_section_blank_id():
     with pytest.raises(ValueError):
         ems.add_section(ems_name, "", {})
 
+def test_add_article_success(temp_ems):
+    ems_section_name = temp_ems
+    ems_section_id = temp_ems
+    article_id = ems.generate_id()
+    new_content = 'content'
+    ems.add_article(ems_section_id, ems_section_name, article_id, new_content)
+    assert ems.exists(ems_section_id)
+
 def test_add_article_duplicate_id(temp_ems):
     # Duplicate section name raises a ValueError
     new_name = ems._get_test_name()
@@ -82,22 +95,14 @@ def test_add_article_section_fail():
 
     assert str(excinfo.value) == f'Section not found: {section_id}'
 
-# @pytest.mark.skip('temporary skip')
 def test_update_ems_section_content(temp_ems):
     updated_content = 'updated the content'
     ems.update_ems_section_content(temp_ems, updated_content)
-    # print("qwer: ", fin.get_finances_sections())
     
     for key in ems.get_ems_sections():
         if ems.get_ems_sections()[key] == updated_content:
             assert True
 
-    # section_id = temp_ems
-    # new_content = "Updated content for testing"
-    # ems.update_ems_section_content(section_id, new_content)
-    # updated_section = ems.get_ems_sections().get(section_id, {})
-
-    # assert updated_section.get(ems.EMS_ARTICLES) == new_content
 
 def test_update_ems_section_content_fail():
     with pytest.raises(ValueError):
@@ -124,3 +129,35 @@ def test_generate_id():
     _id = ems.generate_id()
     assert isinstance(_id, str)
     assert len(_id) == ems.ID_LEN
+
+def test_delete_article_success(temp_ems):
+    section_id = temp_ems
+    article_name = "Article Name"
+    article_id = ems.generate_id()
+    article_content = ""
+    
+    ems.add_article(section_id, article_name, article_id, article_content)
+
+    ems.delete_article(section_id, article_id)
+
+    assert not ems.exists_article(article_id)
+
+def test_delete_article_fail_invalid_section_id(temp_ems):
+    article_id = temp_ems
+    with pytest.raises(ValueError):
+        ems.delete_article('non-existing section id',article_id)
+
+def test_delete_article_fail_invalid_article_id(temp_ems):
+    section_id = temp_ems
+    with pytest.raises(ValueError):
+        ems.delete_article(section_id,"non-existing article id")
+
+# def test_delete_section(temp_ems):
+#     section_id = temp_ems
+#     ems.delete_article(section_id)
+#     assert not ems.exists(section_id)
+
+# def test_delete_section_not_there():
+#     section_id = ems.generate_id()
+#     with pytest.raises(ValueError):
+#         ems.delete_article(section_id)
