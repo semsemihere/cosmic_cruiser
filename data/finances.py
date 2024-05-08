@@ -160,29 +160,6 @@ def delete_article(section_id: str, article_id: str):
         raise ValueError(f'Delete failure: {article_id} not in database.')
 
 
-def update_finance_section_article(finance_section: str,
-                                   finance_section_id: str,
-                                   article_title: str,
-                                   article_content: str) -> bool:
-    if exists(finance_section_id):
-        # article = {}
-        # article[ARTICLE_IDS] = new_content
-        print("asdfaasfd")
-        dbc.connect_db()
-        db = dbc.fetch_all_as_dict(SECTION_NAME, FINANCES_COLLECT)
-        article = db[finance_section][ARTICLE_IDS]
-        print("before addign", article)
-        article[article_title] = article_content
-        print("after adding ", article)
-
-        filter_query = {SECTION_ID: finance_section_id}
-        update_query = {'$set': {ARTICLE_IDS: article}}
-
-        _id = dbc.update_one(FINANCES_COLLECT, filter_query, update_query)
-        return _id is not None
-    else:
-        raise ValueError(f'Update failed: {finance_section_id} not in db.')
-
 
 def delete_finances_section(section_id: str):
     # Deletes finances section by id
@@ -194,14 +171,3 @@ def delete_finances_section(section_id: str):
     else:
         raise ValueError(f'Delete failure: {section_id} not in database.')
 
-
-# def exists(section_name: str) -> bool:
-#     return section_name in get_finances_sections()
-
-
-# def main():
-#     print(get_finances_sections())
-
-
-# if __name__ == '__main__':
-#     main()

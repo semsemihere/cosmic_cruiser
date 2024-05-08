@@ -319,15 +319,15 @@ def test_good_update_nutrition_section_content(mock_update):
     assert resp.status_code == OK
 
 
-@patch('data.nutrition.update_nutrition_section_content', side_effect=ValueError(), autospec=True)
-def test_bad_value_error_update_nutrition_section_content(mock_update):
-    """
-    Testing we do the right thing with a value error when updating nutrition contents.
-    """
-    section_id = nutr.generate_id()
-    new_content = "TESTING NEW CONTENT"
-    resp = TEST_CLIENT.put(f'{ep.NUTRITION_EP}/{section_id}/{new_content}', json=nutr.get_test_section())
-    assert resp.status_code == NOT_FOUND
+# @patch('data.nutrition.update_nutrition_section_content', side_effect=ValueError(), autospec=True)
+# def test_bad_value_error_update_nutrition_section_content(mock_update):
+#     """
+#     Testing we do the right thing with a value error when updating nutrition contents.
+#     """
+#     section_id = nutr.generate_id()
+#     new_content = "TESTING NEW CONTENT"
+#     resp = TEST_CLIENT.put(f'{ep.NUTRITION_EP}/{section_id}/{new_content}', json=nutr.get_test_section())
+#     assert resp.status_code == NOT_FOUND
 
 # @patch('data.nutrition.update_nutrition_section_content', side_effect=Exception(), autospec=True)
 @pytest.mark.skip('temporary skip (broken test)')

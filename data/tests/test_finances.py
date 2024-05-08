@@ -145,27 +145,13 @@ def test_delete_article_fail():
         fin.delete_article('non-existing section id',"non-existing article id")
 
 
-@pytest.mark.skip('temporary skip')
+# @pytest.mark.skip('temporary skip')
 def test_delete_section(temp_section):
     section_id = temp_section
-    fin.delete_section(section_id)
+    fin.delete_finances_section(section_id)
     assert not fin.exists(section_id)
 
 def test_delete_section_not_there():
     section_id = fin.generate_id()
     with pytest.raises(ValueError):
         fin.delete_finances_section(section_id)
-
-@pytest.mark.skip('temporary skip')
-def test_update_finance_section_content(temp_section):
-    updated_content = 'update the content'
-    fin.update_finance_section_article(temp_section, updated_content)
-
-    for key in fin.get_sections():
-        if fin.get_sections()[key] == updated_content:
-            assert True
-
-@pytest.mark.skip('temporary skip')
-def test_update_finance_section_content_fail():
-    with pytest.raises(ValueError):
-        fin.update_finance_section_article('non-existing section',"content")

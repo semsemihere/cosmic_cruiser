@@ -119,27 +119,6 @@ def delete_article(section_id: str, article_id: str):
         raise ValueError(f'Delete failure: {article_id} not in database.')
 
 
-def update_nutrition_section_content(section_id: str,
-                                     new_content: str) -> bool:
-    if exists(section_id):
-        # the article content
-        article = {}
-        # article[ARTICLE_IDS] = new_content
-        article[ARTICLE_IDS].append(new_content)
-
-        # update existing section with new article content
-        filter_query = {SECTION_ID: section_id}
-        update_query = {'$set': article}
-
-        dbc.connect_db()
-        _id = dbc.update_one(NUTRITION_COLLECT, filter_query, update_query)
-
-        # check if the update was successful
-        return _id is not None
-    else:
-        raise ValueError(f'Update failed: {section_id} not in database.')
-
-
 def add_article(section_id: str,
                 article_name: str,
                 article_id: str,
@@ -170,10 +149,3 @@ def add_article(section_id: str,
     _id = dbc.insert_one(NUTRITION_COLLECT, article)
 
     return _id is not None
-
-# def main():
-#     print(get_sections())
-
-
-# if __name__ == '__main__':
-#     main()

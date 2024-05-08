@@ -128,23 +128,3 @@ def test_delete_section_not_there():
     section_id = nutrition.generate_id()
     with pytest.raises(ValueError):
         nutrition.delete_section(section_id)
-
-@pytest.mark.skip('temporary skip')
-def test_update_nutrition_section_content(temp_section):
-    updated_content = 'update the content'
-    nutrition.update_nutrition_section_content(temp_section, updated_content)
-
-    for key in nutrition.get_sections():
-        if nutrition.get_sections()[key] == updated_content:
-            assert True
-    # section_name = temp_section
-    # new_content = 'Updated content for testing.'
-    # nutrition.update_section_content(section_name, new_content)
-    # updated_section = nutrition.get_sections().get(section_name, {})
-
-    # assert updated_section.get(nutrition.ARTICLE) == new_content
-
-# @pytest.mark.skip('temporary skip')
-def test_update_nutrition_section_content_fail():
-    with pytest.raises(ValueError):
-        nutrition.update_nutrition_section_content('non-existing section',"content")
