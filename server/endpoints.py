@@ -165,53 +165,28 @@ class Endpoints(Resource):
         return {"Available endpoints": endpoints}
 
 
-@api.route(f'{MAIN_MENU_EP}')
-class MainMenu(Resource):
-    """
-    This will deliver our main menu.
-    """
-    def get(self):
-        """
-        Gets the main category menu.
-        """
-        return {TITLE: MAIN_MENU_NM,
-                DEFAULT: 2,
-                'Choices': {
-                    '1': {'url': '/', 'method': 'get',
-                          'text': 'List Available Characters'},
-                    '2': {'url': '/',
-                          'method': 'get', 'text': 'List Active Categories'},
-                    '3': {'url': f'{USERS_EP}',
-                          'method': 'get', 'text': 'List Users'},
-                    '4': {'url': '/',
-                          'method': 'get', 'text': 'Illustrating a Point!'},
-                    'X': {'text': 'Exit'},
-                }}
-
-
-@api.route(f'{USER_MENU_EP}')
-class UserMenu(Resource):
-    """
-    This will deliver our user menu.
-    """
-    def get(self):
-        """
-        Gets the user menu.
-        """
-        return {
-                   TITLE: USER_MENU_NM,
-                   DEFAULT: '0',
-                   'Choices': {
-                       '1': {
-                            'url': '/',
-                            'method': 'get',
-                            'text': 'Get User Details',
-                       },
-                       '0': {
-                            'text': 'Return',
-                       },
-                   },
-               }
+# @api.route(f'{MAIN_MENU_EP}')
+# class MainMenu(Resource):
+#     """
+#     This will deliver our main menu.
+#     """
+#     def get(self):
+#         """
+#         Gets the main category menu.
+#         """
+#         return {TITLE: MAIN_MENU_NM,
+#                 DEFAULT: 2,
+#                 'Choices': {
+#                     '1': {'url': '/', 'method': 'get',
+#                           'text': 'List Available Characters'},
+#                     '2': {'url': '/',
+#                           'method': 'get', 'text': 'List Active Categories'},
+#                     '3': {'url': f'{USERS_EP}',
+#                           'method': 'get', 'text': 'List Users'},
+#                     '4': {'url': '/',
+#                           'method': 'get', 'text': 'Illustrating a Point!'},
+#                     'X': {'text': 'Exit'},
+#                 }}
 
 
 @api.route(f'{DEL_USERS_EP}/<username>')
