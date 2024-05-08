@@ -120,6 +120,8 @@ def delete_article(section_id: str, article_id: str):
                                    ARTICLE_ID,
                                    ARTICLE_IDS,
                                    NUTRITION_COLLECT)
+        else:
+            return False
     else:
         raise ValueError(f'Delete failure: {article_id} not in database.')
 

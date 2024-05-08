@@ -12,6 +12,16 @@ def temp_section():
     if nutrition.exists(section_id):
         nutrition.delete_section(section_id)
 
+@pytest.fixture(scope='function')
+def temp_article(temp_section):
+    section_id = temp_section
+    article_name = "Temporary Article"
+    article_id = nutrition.generate_id()
+    article_content = "This is a temporary article."
+    nutrition.add_article(section_id, article_name, article_id, article_content)
+    yield article_id
+    nutrition.delete_article(section_id, article_id)
+
 @pytest.mark.skip('temporary skip')
 def test_get_sections(temp_section):
     sections = nutrition.get_sections()
@@ -26,6 +36,22 @@ def test_get_sections(temp_section):
 
     section_id = temp_section
     assert nutrition.exists(section_id)
+
+def test_get_sections():
+    sections = nutrition.get_sections()
+    assert isinstance(sections, dict) 
+    assert len(sections) >= 0 
+
+def test_get_articles():
+    section_id = "mock_section_id"
+    articles = nutrition.get_articles(section_id)
+    assert isinstance(articles, dict)
+
+def test_delete_non_existing_article(temp_section, temp_article):
+    section_id = temp_section
+    non_existing_article_id = nutrition.generate_id()
+    result = nutrition.delete_article(section_id, non_existing_article_id)
+    assert result is False
 
 
 def test_get_test_name():
