@@ -109,16 +109,6 @@ def add_finances_section(section_name: str, section_id: str,
     _id = dbc.insert_one(FINANCES_COLLECT, section)
     return _id is not None
 
-# def get_finance_section_article(finance_section:
-# str, finance_section_id: str):
-#     if exists(finance_section_id):
-#         dbc.connect_db()
-#         return dbc.fetch_one(FINANCES_COLLECT,
-#               {SECTION_ID: section_id})
-#     else:
-#         raise ValueError(f'Update failed:
-# {finance_section_id} not in db.')
-
 
 def add_article(section_id: str,
                 article_name: str,

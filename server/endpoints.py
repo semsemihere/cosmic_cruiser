@@ -134,23 +134,6 @@ class GetArticle(Resource):
         return "article: " + categ.get_article(articleName)
 
 
-# @api.route(f'{CATEGORIES_EP}/article/<articleID>')
-# class Article(Resource):
-#     def get(self, articleID):
-#         print('BOOOM')
-
-#         # get the url associated with the article id
-#         print(nutrition.exists_article(articleID))
-#         article = nutrition.exists_article(articleID)
-#         if article:
-#             url = article['articleContent']
-#             content = categ.get_article_content(url)
-#             return content
-
-#         # get article content
-#         return "No content found"
-
-
 @api.route('/endpoints')
 class Endpoints(Resource):
     """
@@ -163,30 +146,6 @@ class Endpoints(Resource):
         """
         endpoints = sorted(rule.rule for rule in api.app.url_map.iter_rules())
         return {"Available endpoints": endpoints}
-
-
-# @api.route(f'{MAIN_MENU_EP}')
-# class MainMenu(Resource):
-#     """
-#     This will deliver our main menu.
-#     """
-#     def get(self):
-#         """
-#         Gets the main category menu.
-#         """
-#         return {TITLE: MAIN_MENU_NM,
-#                 DEFAULT: 2,
-#                 'Choices': {
-#                     '1': {'url': '/', 'method': 'get',
-#                           'text': 'List Available Characters'},
-#                     '2': {'url': '/',
-#                           'method': 'get', 'text': 'List Active Categories'},
-#                     '3': {'url': f'{USERS_EP}',
-#                           'method': 'get', 'text': 'List Users'},
-#                     '4': {'url': '/',
-#                           'method': 'get', 'text': 'Illustrating a Point!'},
-#                     'X': {'text': 'Exit'},
-#                 }}
 
 
 @api.route(f'{DEL_USERS_EP}/<username>')
@@ -460,28 +419,6 @@ class NutritionSections(Resource):
             raise wz.NotAcceptable(f'{str(e)}')
 
 
-# @api.route(f'{NUTRITION_EP}/<nutrition_section_id>/<new_content>')
-# class UpdateNutritionSection(Resource):
-#     """
-#     Updates content of a section in the nutrition category.
-#     """
-#     @api.response(HTTPStatus.OK, 'Success')
-#     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
-#     @api.response(HTTPStatus.BAD_REQUEST, 'Bad Request')
-#     def put(self, nutrition_section_id, new_content):
-#         """
-#         Update the contents of a nutrition by id.
-#         """
-#         try:
-#             nutrition.update_nutrition_section_content(nutrition_section_id,
-#                                                        new_content)
-#             return {nutrition_section_id: 'Updated content'}
-#         except ValueError as e:
-#             raise wz.NotFound(f'{str(e)}')
-#         except Exception as e:
-#             raise wz.BadRequest(f'failed to update content: {str(e)}')
-
-
 @api.route(f'{NUTRITION_EP}/<nutrition_section_id>/articles')
 class NutritionArticles(Resource):
     """
@@ -696,14 +633,6 @@ class EMSArticles(Resource):
             raise wz.NotAcceptable(f'{str(e)}')
 
 
-# FINANCE #####
-# articles_nested = api.model('articles', {
-#     'title': fields.String,
-#     'content': fields.String
-#     },
-# )
-
-
 finance_article_fields = api.model('NewFinanceArticle', {
     nutrition.ARTICLE_NAME: fields.String,
     nutrition.ARTICLE_ID: fields.String,
@@ -793,48 +722,6 @@ class Finances(Resource):
 
         except ValueError as e:
             raise wz.NotAcceptable(f'{str(e)}')
-
-
-# @api.route(f'{FINANCES_EP}/<finance_section>/<finance_section_id>')
-# class FinanceSectionArticles(Resource):
-#     def get(self, finance_section, finance_section_id):
-#         """
-#         Return all finances
-#         """
-#         return {
-#             TYPE: DATA,
-#             TITLE: 'ALL FINANCES',
-#             DATA: fin.exists(finance_section_id),
-#             MENU: FINANCES_MENU_EP,
-#             RETURN: MAIN_MENU_EP,
-#         }
-
-
-# @api.route(f'{FINANCES_EP}/<finance_section>/<finance_section_id>/' +
-#            '<article_title>/<article_content>')
-# class UpdateFinanceSection(Resource):
-#     """
-#     updates finance section
-#     """
-
-#     @api.response(HTTPStatus.OK, 'Success')
-#     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
-#     @api.response(HTTPStatus.BAD_REQUEST, 'Bad Request')
-#     def put(self, finance_section, finance_section_id,
-#             article_title, article_content):
-#         """
-#         Update the contents of a finance by id.
-#         """
-#         try:
-#             fin.update_finance_section_article(
-#                 finance_section, finance_section_id,
-#                 article_title, article_content)
-#             # return {finance_section_id: 'Updated content'}
-#             return fin.get_finances_sections()
-#         except ValueError as e:
-#             raise wz.NotFound(f'{str(e)}')
-#         except Exception as e:
-#             raise wz.BadRequest(f'failed to update content: {str(e)}')
 
 
 @api.route(f'{FINANCES_EP}/<finances_section_id>/articles')

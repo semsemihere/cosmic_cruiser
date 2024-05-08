@@ -63,24 +63,6 @@ def delete_user(username):
     return id is not None
 
 
-# # Remove the user from the db
-# def delete_user(username):
-#     if exists(username):
-#         return dbc.del_one(USERS_COLLECT, {USERNAME : username})
-
-
-# # Update User information
-# def update_user(username, field, update):
-#     # parameter: userId
-#     #     use the userId to grab the user information
-#     # return: True is successful, else -1log
-#     user_info = exists(username)
-
-#     if user_info:
-#         user_info[field] = update
-#         return True
-#     return -1
-
 def login_user(userId, passwordAttempt):
     if exists(userId):
         users = get_all_users()

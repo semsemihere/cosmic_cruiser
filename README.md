@@ -1,5 +1,5 @@
 # Project Information
-Jack of All Trades: An educational platform to learn essential life skills for a successful and well-rounded future, targeted towards college students and young adults.
+Jack of All Trades: A Wiki platform to learn essential life skills for a successful and well-rounded future, targeted towards college students and young adults.
 
 # Team Members
 Christy Lin, George Gonzalez, Nishma Shakya, Semi Hong
@@ -11,28 +11,22 @@ Christy Lin, George Gonzalez, Nishma Shakya, Semi Hong
 [Progress and Goals](ProgressAndGoals.md)
 
 # Project Endpoints
-- Home
-- Categories/Sections/Topics List
-  - Life Skills
-  - Emergency Resources/Services
-  - Finances
-- Course Information
-- Course Enrollment
-- Course Search (Keywords/Tags)
-- User Login
-- User Profile
-- Administrative Login
-- Personal Recommended Page
-- Saved Page
-- History
-- Subscriptions
-- Quiz Questions for Course Completion
+- Categories
+  - Finance
+  - EMS
+  - Nutrition
+- Users
+  - Login
+  - Sign Up
+- Articles
 
 
 
 # flask-api
-An example flask rest API server.
-
 To build production, type `make prod`.
 
 To create the env for a new developer, run `make dev_env`.
+
+# Necessary Libraries
+Beautiful Soup
+`pip install bs4`

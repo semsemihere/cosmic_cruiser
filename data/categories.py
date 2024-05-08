@@ -114,41 +114,12 @@ def generate_category_id() -> str:
     return _id
 
 
-# def add_article_to_category(category_id: str,
-#                             article_name: str) -> bool:
-#     categories = get_categories()
-#     if category_id in categories:
-#         articleId = str(len(categories[category_id][ARTICLES].keys())+1)
-#         articleDict = {articleId: {"name": article_name,
-#                                    "url": get_article(article_name)}}
-#         dbc.connect_db()
-#         dbc.insert_deep(CATEGORIES_COLLECT,
-#         category_id, ARTICLES, articleDict)
-#         return True
-#     else:
-#         return False
-
-
-# def delete_article_from_category(category_id: str,
-#                                  article_id: str) -> bool:
-#     if exists(category_id):
-#         dbc.connect_db()
-#         dbc.del_one
-#         return True
-#     else:
-#         return False
-
-
 def add_category(category_name: str, category_id: str,
                  num_sections: int) -> bool:
     if exists(category_id):
         raise ValueError(f'Duplicate category ID: {category_id=}')
     if not category_id:
         raise ValueError("Category ID cannot be blank!")
-
-    # categories[category_name] = {NUM_SECTIONS: num_sections}
-    # category_id = generate_category_id()
-    # return category_id
 
     category = {}
     category[NAME] = category_name
@@ -199,15 +170,3 @@ def delete_category(category_id: str):
         return dbc.del_one(CATEGORIES_COLLECT, {CATEGORY_ID: category_id})
     else:
         raise ValueError(f'Delete failure: {category_id} not in database.')
-
-
-# def exists(category_name: str) -> bool:
-#     return category_name in get_categories()
-
-
-# def main():
-#     print(get_categories())
-
-
-# if __name__ == '__main__':
-#     main()

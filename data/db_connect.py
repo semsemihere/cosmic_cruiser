@@ -184,7 +184,9 @@ def fetch_articles_by_section(section_id,
         if article_key in doc:
             for _id in article_ids:
                 if doc[article_key] == _id:
-                    del doc[MONGO_ID]
+                    # del doc[MONGO_ID]
+                    doc.pop('_id', None)
+
                     ret[doc[article_key]] = doc
 
     return ret
