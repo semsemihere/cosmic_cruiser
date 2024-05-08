@@ -112,20 +112,10 @@ def form(fld_descrips):
         if QSTN in fld:
             fld_vals[fld[FLD_NM]] = get_input(dflt, opt, fld[QSTN])
             if TYPECAST in fld:
-                if fld[TYPECAST] == INT:
-                    fld_vals[fld[FLD_NM]] = int(fld_vals[fld[FLD_NM]])
+                fld_vals[fld[FLD_NM]] = int(fld_vals[fld[FLD_NM]])
         else:
             fld_vals[fld[FLD_NM]] = ''
         # See if we should fill in default val:
         if DEFAULT in fld and not fld_vals[fld[FLD_NM]]:
             fld_vals[fld[FLD_NM]] = fld["default"]
     return fld_vals
-
-
-# def main():
-#     result = form(TEST_FLD_DESCRIPS)
-#     print(result)
-
-
-# if __name__ == "__main__":
-#     main()

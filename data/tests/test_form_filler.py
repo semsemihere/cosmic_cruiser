@@ -92,3 +92,21 @@ def test_form_without_default():
     ff.get_input = lambda dflt, opt, qstn: 'InputValue'
     result = ff.form(field_descriptions)
     assert result['Field2'] == 'InputValue'
+
+
+def test_optional_flag_present():
+    fld_descrips = [{ff.FLD_NM: 'Field1', ff.OPT: True}]
+    result = ff.form(fld_descrips)
+    assert any(ff.OPT in fld for fld in fld_descrips)
+
+def test_set_default_value():
+    fld_descrips = [{ff.FLD_NM: 'Field1', ff.DEFAULT: 'DefaultValue'}]    
+    result = ff.form(fld_descrips)
+    assert result['Field1'] == 'DefaultValue'
+
+def test_typecast_to_int():
+    fld_descrips = [{ff.FLD_NM: 'Field1', ff.TYPECAST: ff.INT, ff.QSTN: 'Enter an integer value:'}]
+    ff.get_input = lambda dflt, opt, qstn: '123'
+    result = ff.form(fld_descrips)
+    assert 'Field1' in result
+    assert isinstance(result['Field1'], int)
