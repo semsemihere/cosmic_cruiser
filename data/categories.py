@@ -15,7 +15,7 @@ ID_LEN = 24
 BIG_NUM = 100_000_000_000_000_000_000
 
 MOCK_ID = '0' * ID_LEN
-
+ARTICLE_NAME = "articleName"
 NAME = 'name'
 CATEGORY_ID = 'categoryID'
 NUM_SECTIONS = "numSections"

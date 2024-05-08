@@ -33,7 +33,7 @@ MAIN_MENU_NM = "Welcome to Jack-of-All-Trades!"
 HELLO_EP = '/hello'
 HELLO_RESP = 'hello'
 LOGIN_RESP = "{'login_form': "
-
+GET_ARTICLE_RESP = "article: "
 CATEGORIES_MENU_NM = 'Category Menu'
 CATEGORY_ID = 'Category ID'
 CATEGORIES_EP = '/categories'
@@ -41,6 +41,7 @@ CATEGORIES_MENU_EP = '/category_menu'
 UPDATE_CATEGORY_NAME_EP = f'{CATEGORIES_EP}/{UPDATE}/{NAME}'
 UPDATE_CATEGORY_SECTIONS_EP = f'{CATEGORIES_EP}/{UPDATE}/{SECTIONS}'
 DEL_CATEGORY_EP = f'{CATEGORIES_EP}/{DELETE}'
+GET_ARTICLE_EP = f'{CATEGORIES_EP}/get_article/'
 
 NUTRITION = 'nutrition'
 NUTRITION_EP = '/categories/nutrition'
@@ -128,9 +129,9 @@ class HelloWorld(Resource):
 
 
 @api.route('/categories/get_article/<articleName>')
-class CreateArticle(Resource):
+class GetArticle(Resource):
     def get(self, articleName):
-        return categ.get_article(articleName)
+        return "article: " + categ.get_article(articleName)
 
 
 # @api.route(f'{CATEGORIES_EP}/article/<articleID>')

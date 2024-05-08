@@ -15,6 +15,7 @@ from http.client import (
     FORBIDDEN,
     NOT_ACCEPTABLE,
     NOT_FOUND,
+    UNAUTHORIZED,
     OK,
     SERVICE_UNAVAILABLE,
 )
@@ -45,15 +46,31 @@ def test_login():
     resp_json = str(resp_json)[:15]
     assert ep.LOGIN_RESP in resp_json
 
+
+def test_get_article():
+    resp = TEST_CLIENT.get('/categories/get_article/web scrapping')
+    print(f'{resp=}')
+    resp_json = resp.get_json()
+    print(f'{resp_json=}')
+    resp_json = str(resp_json)
+    assert ep.GET_ARTICLE_RESP in resp_json
+
+
 def test_login_post(create_test_user):
-    Username = create_test_user
     resp = TEST_CLIENT.post(ep.LOGIN_EP, json={usrs.EMAIL:"test@gmail.com", usrs.USERNAME: USERNAME,usrs.PASSWORD:PASSWORD})
     print(f'{resp=}')
     resp_json = resp.get_json()
     print(f'{resp_json=}')
+    assert resp.status_code ==  OK
+
+def test_bad_login_post():
+    resp = TEST_CLIENT.post(ep.LOGIN_EP, json={usrs.EMAIL:"test@gmail.com", usrs.USERNAME: BAD_USERNAME,usrs.PASSWORD:BAD_PASSWORD})
+    resp_json = resp.get_json()
+    print(f'{resp_json=}')
     resp_json = resp.get_json()
     print(resp_json)
-    assert resp.status_code ==  OK
+    assert resp.status_code ==  UNAUTHORIZED
+
 
 
 def test_hello():
@@ -90,7 +107,7 @@ def test_user_menu():
     assert resp_json[ep.TITLE] == ep.USER_MENU_NM
 
 
-@pytest.mark.skip('bad test')
+# @pytest.mark.skip('bad test')
 def test_bad_user_delete(create_test_user):
     username = create_test_user
     usrs.delete_user(username)
@@ -100,7 +117,7 @@ def test_bad_user_delete(create_test_user):
     assert resp.status_code == NOT_FOUND
 
 
-@pytest.mark.skip('bad test')
+# @pytest.mark.skip('bad test')
 def test_user_delete(create_test_user):
     username = create_test_user
     resp = TEST_CLIENT.delete(ep.DEL_USERS_EP+'/'+username)
@@ -109,13 +126,13 @@ def test_user_delete(create_test_user):
     assert resp_json[username] == 'Deleted'
 
 
-@pytest.mark.skip('bad test')
+# @pytest.mark.skip('bad test')
 @patch('data.users.create_user', side_effect=ValueError(), autospec=True)
 def test_post_bad_user(mock_post):
     resp = TEST_CLIENT.post(ep.USERS_EP, json={usrs.EMAIL:"test@gmail.com", usrs.USERNAME: USERNAME,usrs.PASSWORD:PASSWORD,usrs.FIRSTNAME:"test",usrs.LASTNAME:"test",usrs.PHONE:1111111111})
     assert resp.status_code == NOT_ACCEPTABLE
     
-@pytest.mark.skip('bad test')
+# @pytest.mark.skip('bad test')
 @patch('data.users.create_user', return_value=USERNAME, autospec=True)
 def test_post_user(mock_post):
     resp = TEST_CLIENT.post(ep.USERS_EP, json={usrs.EMAIL:"test@gmail.com", usrs.USERNAME: USERNAME,usrs.PASSWORD:PASSWORD,usrs.FIRSTNAME:"test",usrs.LASTNAME:"test",usrs.PHONE:1111111111})
