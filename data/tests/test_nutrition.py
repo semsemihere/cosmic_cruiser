@@ -115,6 +115,8 @@ def test_delete_article_success(temp_section):
 
     assert not nutrition.exists_article(article_id)
 
+
+
 def test_delete_article_fail():
         with pytest.raises(ValueError):
             nutrition.delete_article('non-existing section id',"non-existing article id")

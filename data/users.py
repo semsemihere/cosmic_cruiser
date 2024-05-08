@@ -73,7 +73,7 @@ def delete_user(username):
 # def update_user(username, field, update):
 #     # parameter: userId
 #     #     use the userId to grab the user information
-#     # return: True is successful, else -1
+#     # return: True is successful, else -1log
 #     user_info = exists(username)
 
 #     if user_info:

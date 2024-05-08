@@ -46,9 +46,10 @@ def test_get_cloud_password():
 
 def test_fetch_one(temp_rec):
     ret = dbc.fetch_one(TEST_COLLECT, {TEST_NAME: TEST_NAME})
+    print(ret)
     assert ret is not None
 
-def test_fetch_one_not_there(temp_rec):
+def test_fetch_one_not_there():
     ret = dbc.fetch_one(TEST_COLLECT, {TEST_NAME: 'not a field value in db!'})
     assert ret is None
 

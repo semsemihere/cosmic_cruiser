@@ -102,27 +102,29 @@ def generate_category_id() -> str:
     return _id
 
 
-def add_article_to_category(category_id: str,
-                            article_name: str) -> bool:
-    categories = get_categories()
-    if category_id in categories:
-        articleId = str(len(categories[category_id][ARTICLES].keys())+1)
-        articleDict = {articleId: {"name": article_name,
-                                   "url": get_article(article_name)}}
-        dbc.connect_db()
-        dbc.insert_deep(CATEGORIES_COLLECT, category_id, ARTICLES, articleDict)
-        return True
-    else:
-        return False
+# def add_article_to_category(category_id: str,
+#                             article_name: str) -> bool:
+#     categories = get_categories()
+#     if category_id in categories:
+#         articleId = str(len(categories[category_id][ARTICLES].keys())+1)
+#         articleDict = {articleId: {"name": article_name,
+#                                    "url": get_article(article_name)}}
+#         dbc.connect_db()
+#         dbc.insert_deep(CATEGORIES_COLLECT,
+#         category_id, ARTICLES, articleDict)
+#         return True
+#     else:
+#         return False
 
 
-def delete_article_from_category(category_id: str,
-                                 article_id: str) -> bool:
-    if exists(category_id):
-        categories[category_id][ARTICLES].pop(article_id)
-        return True
-    else:
-        return False
+# def delete_article_from_category(category_id: str,
+#                                  article_id: str) -> bool:
+#     if exists(category_id):
+#         dbc.connect_db()
+#         dbc.del_one
+#         return True
+#     else:
+#         return False
 
 
 def add_category(category_name: str, category_id: str,

@@ -81,18 +81,21 @@ def test_generate_category_id():
 
 ADD_NAME = "New Category"
 
-def test_add_article_no_category():
-    assert categ.add_article_to_category("","") == False
+def test_get_article_content():
+    assert None is not None
+
+# def test_add_article_no_category():
+#     assert categ.add_article_to_category("","") == False
     
-def test_add_article_category(temp_category_name):
-    cat_id = temp_category_name
-    assert categ.add_article_to_category(cat_id,"test") == True
+# def test_add_article_category(temp_category_name):
+#     cat_id = temp_category_name
+#     assert categ.add_article_to_category(cat_id,"test") == True
     
-def test_add_article(temp_category):
-    assert categ.add_article_to_category(temp_category,"") == False
+# def test_add_article(temp_category):
+#     assert categ.add_article_to_category(temp_category,"") == False
     
-def test_del_article(temp_category_name):
-    assert categ.delete_article_from_category(temp_category_name,"",) == False
+# def test_del_article(temp_category_name):
+#     assert categ.delete_article_from_category(temp_category_name,"",) == False
     
 def test_add_category():
     # ret = categ.add_category(ADD_NAME, 4)
