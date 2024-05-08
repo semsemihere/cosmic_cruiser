@@ -662,22 +662,22 @@ class EmergencyMedicalServices(Resource):
             raise wz.NotAcceptable(f'{str(e)}')
 
 
-@api.route(f'{EMS_EP}/<ems_section_id>/<new_content>')
-class UpdateEMSSection(Resource):
-    @api.response(HTTPStatus.OK, 'Success')
-    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
-    @api.response(HTTPStatus.BAD_REQUEST, 'Bad Request')
-    def put(self, ems_section_id, new_content):
-        """
-        Update the contents of a emergency medical service by id.
-        """
-        try:
-            ems.update_ems_section_content(ems_section_id, new_content)
-            return {ems_section_id: 'Updated content'}
-        except ValueError as e:
-            raise wz.NotFound(f'{str(e)}')
-        except Exception as e:
-            raise wz.BadRequest(f'failed to update content: {str(e)}')
+# @api.route(f'{EMS_EP}/<ems_section_id>/<new_content>')
+# class UpdateEMSSection(Resource):
+#     @api.response(HTTPStatus.OK, 'Success')
+#     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
+#     @api.response(HTTPStatus.BAD_REQUEST, 'Bad Request')
+#     def put(self, ems_section_id, new_content):
+#         """
+#         Update the contents of a emergency medical service by id.
+#         """
+#         try:
+#             ems.update_ems_section_content(ems_section_id, new_content)
+#             return {ems_section_id: 'Updated content'}
+#         except ValueError as e:
+#             raise wz.NotFound(f'{str(e)}')
+#         except Exception as e:
+#             raise wz.BadRequest(f'failed to update content: {str(e)}')
 
 
 @api.route(f'{EMS_EP}/<ems_section_id>/articles')
@@ -836,31 +836,31 @@ class Finances(Resource):
 #         }
 
 
-@api.route(f'{FINANCES_EP}/<finance_section>/<finance_section_id>/' +
-           '<article_title>/<article_content>')
-class UpdateFinanceSection(Resource):
-    """
-    updates finance section
-    """
+# @api.route(f'{FINANCES_EP}/<finance_section>/<finance_section_id>/' +
+#            '<article_title>/<article_content>')
+# class UpdateFinanceSection(Resource):
+#     """
+#     updates finance section
+#     """
 
-    @api.response(HTTPStatus.OK, 'Success')
-    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
-    @api.response(HTTPStatus.BAD_REQUEST, 'Bad Request')
-    def put(self, finance_section, finance_section_id,
-            article_title, article_content):
-        """
-        Update the contents of a finance by id.
-        """
-        try:
-            fin.update_finance_section_article(
-                finance_section, finance_section_id,
-                article_title, article_content)
-            # return {finance_section_id: 'Updated content'}
-            return fin.get_finances_sections()
-        except ValueError as e:
-            raise wz.NotFound(f'{str(e)}')
-        except Exception as e:
-            raise wz.BadRequest(f'failed to update content: {str(e)}')
+#     @api.response(HTTPStatus.OK, 'Success')
+#     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
+#     @api.response(HTTPStatus.BAD_REQUEST, 'Bad Request')
+#     def put(self, finance_section, finance_section_id,
+#             article_title, article_content):
+#         """
+#         Update the contents of a finance by id.
+#         """
+#         try:
+#             fin.update_finance_section_article(
+#                 finance_section, finance_section_id,
+#                 article_title, article_content)
+#             # return {finance_section_id: 'Updated content'}
+#             return fin.get_finances_sections()
+#         except ValueError as e:
+#             raise wz.NotFound(f'{str(e)}')
+#         except Exception as e:
+#             raise wz.BadRequest(f'failed to update content: {str(e)}')
 
 
 @api.route(f'{FINANCES_EP}/<finances_section_id>/articles')
