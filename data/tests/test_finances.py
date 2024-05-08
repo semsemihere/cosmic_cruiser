@@ -6,7 +6,8 @@ import data.finances as fin
 def temp_section():
     finances_section_name = fin._get_test_name()
     finances_section_id = fin.generate_section_id()
-    ret = fin.add_finances_section(finances_section_name, finances_section_id, "article")
+    article_id = fin.generate_id()
+    ret = fin.add_finances_section(finances_section_name, finances_section_id, [])
     yield finances_section_id
     if fin.exists(finances_section_id):
         fin.delete_finances_section(finances_section_id)
@@ -25,6 +26,11 @@ def test_get_finances_sections(temp_section):
 
     finance_section_id = temp_section
     assert fin.exists(finance_section_id)
+
+def test_get_articles(temp_section):
+    finances_section_id = temp_section
+    res = fin.get_articles(finances_section_id)
+    assert isinstance(res, dict)
 
 
 def test_get_test_name():
@@ -46,9 +52,6 @@ def test_generate_section_id():
 ADD_NAME = "New Finances Section"
 
 def test_add_finances_section():
-    # ret = fin.add_finances_section(ADD_NAME, 4)
-    # assert fin.exists(ADD_NAME)
-    # assert isinstance(ret, str)
     new_name = fin._get_test_name()
     new_id = fin.generate_section_id()
     ret = fin.add_finances_section(new_name, new_id, "article")
@@ -68,25 +71,6 @@ def test_add_finances_section_blank_id():
     finance_name = fin._get_test_name()
     with pytest.raises(ValueError):
         fin.add_finances_section(finance_name, "", "article")
-"""
-def test_update_finance_section_article(temp_section):
-    # print("asdf: ", fin.get_finances_sections())
-    # print(temp_section)
-    # print("asdf: ", fin.get_finances_sections()[temp_section])
-    
-    updated_content = 'updated the content'
-    fin.update_finance_section_article(temp_section, updated_content)
-    # print("qwer: ", fin.get_finances_sections())
-    
-    for key in fin.get_finances_sections():
-        if fin.get_finances_sections()[key] == updated_content:
-            assert True
-    
-def test_update_finance_section_content_fail(temp_section):
-    with pytest.raises(ValueError):
-        fin.update_finance_section_article('non-existing section',"content")
-
-"""
 
 def test_delete_finances_section(temp_section):
     finances_section_id = temp_section
@@ -97,6 +81,14 @@ def test_delete_finances_section_not_there():
     finances_section_id = fin.generate_section_id()
     with pytest.raises(ValueError):
         fin.delete_finances_section(finances_section_id)
+
+def test_add_article_success(temp_section):
+    finances_section_name = temp_section
+    finances_section_id = temp_section
+    article_id = fin.generate_id()
+    new_content = 'content'
+    fin.add_article(finances_section_id, finances_section_name, article_id, new_content)
+    assert fin.exists(finances_section_id)
 
 def test_add_article_section_fail():
     section_id = "non_existent_section_id" 
@@ -126,7 +118,7 @@ def test_add_article_blank_id():
     with pytest.raises(ValueError):
         fin.add_article(new_name, section_id, "", new_content)
 
-@pytest.mark.skip('gives type Error')
+
 def test_delete_article_success(temp_section):
     section_id = temp_section
     article_name = "Article Name"
@@ -139,13 +131,16 @@ def test_delete_article_success(temp_section):
 
     assert not fin.exists_article(article_id)
 
-
-def test_delete_article_fail():
+def test_delete_article_fail_invalid_section_id(temp_section):
+    article_id = temp_section
     with pytest.raises(ValueError):
-        fin.delete_article('non-existing section id',"non-existing article id")
+        fin.delete_article('non-existing section id',article_id)
 
+def test_delete_article_fail_invalid_article_id(temp_section):
+    section_id = temp_section
+    with pytest.raises(ValueError):
+        fin.delete_article(section_id,"non-existing article id")
 
-# @pytest.mark.skip('temporary skip')
 def test_delete_section(temp_section):
     section_id = temp_section
     fin.delete_finances_section(section_id)
