@@ -97,21 +97,6 @@ def add_article(section_id: str,
     return _id is not None
 
 
-def update_ems_section_content(ems_section_id: str, new_content: str) -> bool:
-    if exists(ems_section_id):
-        article = {}
-        article[ARTICLE_IDS] = new_content
-
-        filter_query = {SECTION_ID: ems_section_id}
-        update_query = {'$set': article}
-
-        dbc.connect_db()
-        _id = dbc.update_one(EMS_COLLECT, filter_query, update_query)
-        return _id is not None
-    else:
-        raise ValueError(f'Update failed: {ems_section_id} not in database.')
-
-
 def delete_ems_section(ems_section_id: str):
     # Deletes EMS section by id
     if exists(ems_section_id):
