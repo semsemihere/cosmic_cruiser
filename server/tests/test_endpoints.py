@@ -45,6 +45,16 @@ def test_login():
     resp_json = str(resp_json)[:15]
     assert ep.LOGIN_RESP in resp_json
 
+def test_login_post(create_test_user):
+    Username = create_test_user
+    resp = TEST_CLIENT.post(ep.LOGIN_EP, json={usrs.EMAIL:"test@gmail.com", usrs.USERNAME: USERNAME,usrs.PASSWORD:PASSWORD})
+    print(f'{resp=}')
+    resp_json = resp.get_json()
+    print(f'{resp_json=}')
+    resp_json = resp.get_json()
+    print(resp_json)
+    assert resp.status_code ==  OK
+
 
 def test_hello():
     resp = TEST_CLIENT.get(ep.HELLO_EP)

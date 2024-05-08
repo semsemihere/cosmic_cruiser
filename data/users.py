@@ -31,7 +31,7 @@ def exists(username):
     return dbc.fetch_one(USERS_COLLECT, {USERNAME: username})
 
 
-def create_user(email, username, password, first_name, last_name, phone, role):
+def create_user(email, username, password, first_name, last_name, phone):
     if not username:
         raise ValueError('Username missing')
     if exists(username):
@@ -46,7 +46,7 @@ def create_user(email, username, password, first_name, last_name, phone, role):
     user[LASTNAME] = last_name
     user[PHONE] = phone
     # user[ROLE] = 'user'
-    user[ROLE] = role  # Set the role for the user
+    # user[ROLE] = role  # Set the role for the user
 
     dbc.connect_db()
     _id = dbc.insert_one(USERS_COLLECT, user)
@@ -81,13 +81,12 @@ def delete_user(username):
 #         return True
 #     return -1
 
-def login_user(userId, passwordAttempt, role):
+def login_user(userId, passwordAttempt):
     if exists(userId):
         users = get_all_users()
         print(users[userId])
         if (hashlib.sha3_512(passwordAttempt.encode('UTF-8'),
                              usedforsecurity=True)
-                .hexdigest() == users[userId][PASSWORD]) and (
-                    users[userId][ROLE] == role):
+                .hexdigest() == users[userId][PASSWORD]):
             return True
     return False

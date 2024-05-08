@@ -81,8 +81,7 @@ ARTICLE_EP = '/article'
 # Define a new field for login credentials
 login_fields = api.model('Login', {
     'username': fields.String(required=True),
-    'password': fields.String(required=True),
-    'role': fields.String(required=True)
+    'password': fields.String(required=True)
 })
 
 
@@ -104,14 +103,11 @@ class Login(Resource):
         print("Request JSON:", request.json)
         username = request.json['username']
         password = request.json['password']
-        role = request.json['role']
 
         # user = users.exists(username)
-        if not username or not password or not role:
-            return {'message': 'Info missing'}, HTTPStatus.UNAUTHORIZED
 
         # user_role = users.login_user(username, password)
-        if users.login_user(username, password, role):
+        if users.login_user(username, password):
             return {'message': 'Login successful'}, HTTPStatus.OK
         else:
             return {'message': 'Invalid info'}, HTTPStatus.UNAUTHORIZED
@@ -241,8 +237,7 @@ user_information = api.model('NewUser', {
     users.PASSWORD: fields.String,
     users.FIRSTNAME: fields.String,
     users.LASTNAME: fields.String,
-    users.PHONE: fields.Integer,
-    users.ROLE: fields.String
+    users.PHONE: fields.Integer
 })
 
 
@@ -278,11 +273,10 @@ class Users(Resource):
             first_name = request.json[users.FIRSTNAME]
             last_name = request.json[users.LASTNAME]
             phone = request.json[users.PHONE]
-            role = request.json[users.ROLE]
 
             new_user = users.create_user(email, username,
                                          password, first_name,
-                                         last_name, phone, role)
+                                         last_name, phone)
 
             return {USERS: new_user}
 

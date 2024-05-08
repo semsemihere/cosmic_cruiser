@@ -34,12 +34,12 @@ def temp_category_name_article_id(temp_category_name):
     # if(last_article_id in categories[category_name][categ.ARTICLES].keys()):
     #     categ.delete_article_from_category(category_name,last_article_id)
 
-@pytest.mark.skip('bad test, just showing how skip works')
-def test_delete_article_from_category(temp_category_name_article_id):
-    id_tuple = temp_category_name_article_id
-    cat_id  = id_tuple[0]
-    article_id = id_tuple[1]
-    assert categ.delete_article_from_category(cat_id,article_id) == True
+# @pytest.mark.skip('bad test, just showing how skip works')
+# def test_delete_article_from_category(temp_category_name_article_id):
+#     id_tuple = temp_category_name_article_id
+#     cat_id  = id_tuple[0]
+#     article_id = id_tuple[1]
+#     assert categ.delete_article_from_category(cat_id,article_id) == True
 
 def test_article():
     url = categ.get_article("web scrapping")
