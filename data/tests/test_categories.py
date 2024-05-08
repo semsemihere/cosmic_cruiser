@@ -81,8 +81,19 @@ def test_generate_category_id():
 
 ADD_NAME = "New Category"
 
-# def test_get_article_content():
-#     assert None is not None
+def test_get_article_content():
+    ret = categ.get_article_content(categ.TEST_ARTICLE_URL)
+    print(ret)
+    assert isinstance(ret, str)
+
+
+
+@patch('data.categories.len', return_value=0)
+def test_get_bad_article_content(mockResponse):
+    ret = categ.get_article_content(categ.TEST_BAD_ARTICLE_URL)
+    print(ret)
+    
+    assert ret is None
 
 # def test_add_article_no_category():
 #     assert categ.add_article_to_category("","") == False

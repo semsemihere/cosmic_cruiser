@@ -21,7 +21,13 @@ CATEGORY_ID = 'categoryID'
 NUM_SECTIONS = "numSections"
 ARTICLES = "articles"
 
+TEST_ARTICLE_URL = "https://en.wikipedia.org/wiki/Test"
+
+TEST_BAD_ARTICLE_URL = "https://en.wikipedia.org/wiki/Test234124124312"
+
 TEST_CATEGORY_NAME = "Nutrition/Cooking"
+TEST_BAD_URL_RESP = "Other reasons this message may be displayed:"
+
 
 categories = {}
 
@@ -69,6 +75,7 @@ def get_article_content(article_url: str):
         if all[i].get_text().strip():
             print(all[i].get_text().strip())
             return all[i].get_text()
+    return None
 
 
 def get_categories() -> dict:
