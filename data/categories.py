@@ -71,11 +71,16 @@ def get_article_content(article_url: str):
     soup = BeautifulSoup(page.content, 'html.parser')
     list(soup.children)
     all = soup.find_all('p')
+    res = ""
+    paragraph = 0
+
     for i in range(len(all)):
-        if all[i].get_text().strip():
+        if all[i].get_text().strip() and paragraph < 3:
             print(all[i].get_text().strip())
-            return all[i].get_text()
-    return None
+            res += all[i].get_text().strip()
+            paragraph += 1
+    return res
+    # return None
 
 
 def get_categories() -> dict:

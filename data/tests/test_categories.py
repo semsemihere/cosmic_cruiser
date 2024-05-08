@@ -94,7 +94,7 @@ def test_get_bad_article_content(mockResponse):
     ret = categ.get_article_content(categ.TEST_BAD_ARTICLE_URL)
     print(ret)
     
-    assert ret is None
+    assert not ret 
 
     
 def test_add_category():
