@@ -485,26 +485,26 @@ class NutritionSections(Resource):
             raise wz.NotAcceptable(f'{str(e)}')
 
 
-@api.route(f'{NUTRITION_EP}/<nutrition_section_id>/<new_content>')
-class UpdateNutritionSection(Resource):
-    """
-    Updates content of a section in the nutrition category.
-    """
-    @api.response(HTTPStatus.OK, 'Success')
-    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
-    @api.response(HTTPStatus.BAD_REQUEST, 'Bad Request')
-    def put(self, nutrition_section_id, new_content):
-        """
-        Update the contents of a nutrition by id.
-        """
-        try:
-            nutrition.update_nutrition_section_content(nutrition_section_id,
-                                                       new_content)
-            return {nutrition_section_id: 'Updated content'}
-        except ValueError as e:
-            raise wz.NotFound(f'{str(e)}')
-        except Exception as e:
-            raise wz.BadRequest(f'failed to update content: {str(e)}')
+# @api.route(f'{NUTRITION_EP}/<nutrition_section_id>/<new_content>')
+# class UpdateNutritionSection(Resource):
+#     """
+#     Updates content of a section in the nutrition category.
+#     """
+#     @api.response(HTTPStatus.OK, 'Success')
+#     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
+#     @api.response(HTTPStatus.BAD_REQUEST, 'Bad Request')
+#     def put(self, nutrition_section_id, new_content):
+#         """
+#         Update the contents of a nutrition by id.
+#         """
+#         try:
+#             nutrition.update_nutrition_section_content(nutrition_section_id,
+#                                                        new_content)
+#             return {nutrition_section_id: 'Updated content'}
+#         except ValueError as e:
+#             raise wz.NotFound(f'{str(e)}')
+#         except Exception as e:
+#             raise wz.BadRequest(f'failed to update content: {str(e)}')
 
 
 @api.route(f'{NUTRITION_EP}/<nutrition_section_id>/articles')
@@ -517,7 +517,6 @@ class NutritionArticles(Resource):
         """
         Return all nutrition articles within a specific section.
         """
-        print('TADA')
         return {
             TYPE: DATA,
             TITLE: 'ALL NUTRITION',
