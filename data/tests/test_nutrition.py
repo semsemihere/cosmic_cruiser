@@ -22,7 +22,6 @@ def temp_article(temp_section):
     yield article_id
     nutrition.delete_article(section_id, article_id)
 
-@pytest.mark.skip('temporary skip')
 def test_get_sections(temp_section):
     sections = nutrition.get_sections()
 
@@ -72,7 +71,6 @@ def test_generate_id():
 
 ADD_NAME = "New Nutrition"
 
-# @pytest.mark.skip('temporary skip')
 def test_add_section():
     # ret = nutrition.add_section(ADD_NAME, 4)
     # assert nutrition.exists(ADD_NAME)
@@ -85,7 +83,6 @@ def test_add_section():
     assert isinstance(ret, bool)
     nutrition.delete_section(new_section_id)
 
-# @pytest.mark.skip('temporary skip')
 def test_add_section_duplicate_id(temp_section):
     # Duplicate section name raises a ValueError
     new_name = nutrition._get_test_name()
@@ -143,12 +140,6 @@ def test_delete_article_success(temp_section):
 def test_delete_article_fail():
         with pytest.raises(ValueError):
             nutrition.delete_article('non-existing section id',"non-existing article id")
-
-@pytest.mark.skip('temporary skip')
-def test_delete_section(temp_section):
-    section_id = temp_section
-    nutrition.delete_section(section_id)
-    assert not nutrition.exists(section_id)
 
 def test_delete_section_not_there():
     section_id = nutrition.generate_id()

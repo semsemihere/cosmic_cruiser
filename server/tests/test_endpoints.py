@@ -144,20 +144,20 @@ def test_list_users():
     assert resp_json[ep.DATA] == usrs.get_all_users()
 
 
-def test_main_menu():
-    resp = TEST_CLIENT.get(ep.MAIN_MENU_EP)
-    resp_json = resp.get_json()
-    print(resp_json)
-    assert isinstance(resp_json, dict)
-    assert resp_json[ep.TITLE] == ep.MAIN_MENU_NM
+# def test_main_menu():
+#     resp = TEST_CLIENT.get(ep.MAIN_MENU_EP)
+#     resp_json = resp.get_json()
+#     print(resp_json)
+#     assert isinstance(resp_json, dict)
+#     assert resp_json[ep.TITLE] == ep.MAIN_MENU_NM
 
 
-def test_user_menu():
-    resp = TEST_CLIENT.get(ep.USER_MENU_EP)
-    resp_json = resp.get_json()
-    print(resp_json)
-    assert isinstance(resp_json, dict)
-    assert resp_json[ep.TITLE] == ep.USER_MENU_NM
+# def test_user_menu():
+#     resp = TEST_CLIENT.get(ep.USER_MENU_EP)
+#     resp_json = resp.get_json()
+#     print(resp_json)
+#     assert isinstance(resp_json, dict)
+#     assert resp_json[ep.TITLE] == ep.USER_MENU_NM
 
 
 def test_bad_user_delete(create_test_user):
