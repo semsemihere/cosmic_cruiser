@@ -127,7 +127,6 @@ def test_user_menu():
     assert resp_json[ep.TITLE] == ep.USER_MENU_NM
 
 
-# @pytest.mark.skip('bad test')
 def test_bad_user_delete(create_test_user):
     username = create_test_user
     usrs.delete_user(username)
@@ -137,7 +136,6 @@ def test_bad_user_delete(create_test_user):
     assert resp.status_code == NOT_FOUND
 
 
-# @pytest.mark.skip('bad test')
 def test_user_delete(create_test_user):
     username = create_test_user
     resp = TEST_CLIENT.delete(ep.DEL_USERS_EP+'/'+username)
@@ -146,22 +144,15 @@ def test_user_delete(create_test_user):
     assert resp_json[username] == 'Deleted'
 
 
-# @pytest.mark.skip('bad test')
 @patch('data.users.create_user', side_effect=ValueError(), autospec=True)
 def test_post_bad_user(mock_post):
     resp = TEST_CLIENT.post(ep.USERS_EP, json={usrs.EMAIL:"test@gmail.com", usrs.USERNAME: USERNAME,usrs.PASSWORD:PASSWORD,usrs.FIRSTNAME:"test",usrs.LASTNAME:"test",usrs.PHONE:1111111111})
     assert resp.status_code == NOT_ACCEPTABLE
     
-# @pytest.mark.skip('bad test')
 @patch('data.users.create_user', return_value=USERNAME, autospec=True)
 def test_post_user(mock_post):
     resp = TEST_CLIENT.post(ep.USERS_EP, json={usrs.EMAIL:"test@gmail.com", usrs.USERNAME: USERNAME,usrs.PASSWORD:PASSWORD,usrs.FIRSTNAME:"test",usrs.LASTNAME:"test",usrs.PHONE:1111111111})
     assert resp.status_code == OK
-    
-
-@pytest.mark.skip('bad test, just showing how skip works')
-def test_to_skip_categ():
-    assert(categ.add_category("test")=="test")
 
 
 def test_list_categories():
@@ -276,13 +267,8 @@ def test_get_nutrition_sections(create_nutrition_section):
     assert resp.status_code == OK
     resp_json = resp.get_json()
     assert isinstance(resp_json, dict)
-    
-# def test_update_nutrition_section(create_nutrition_section):
-#     section_id = create_nutrition_section
-#     resp = TEST_CLIENT.put(ep.NUTRITION_EP ,json={"section_id" : section_id, ""} )
 
 
-@pytest.mark.skip('temporary skip (broken test)')
 def test_add_nutrition_article(create_nutrition_section):
     section_id = nutr.TEST_SECITON_ID
     TEST_CLIENT.post(ep.NUTRITION_EP, json={"name": nutr.TEST_SECITON_NAME, "sectionID": nutr.TEST_SECITON_ID, "arrayOfArticleIDs": []})
@@ -321,16 +307,6 @@ def test_delete_nutrition_section():
     assert delete_resp.status_code == OK
 
 
-@pytest.mark.skip('temporary skip (broken test)')
-def test_nutrition_add_db_failure(mock_add):
-    """
-    Testing we do the right thing with a null ID return from add_section.
-    """
-    resp = TEST_CLIENT.post(ep.NUTRITION_EP, json=nutr.get_test_section())
-    # assert resp.status_code == SERVICE_UNAVAILABLE
-    assert resp.status_code == SERVICE_UNAVAILABLE
-
-
 @patch('data.nutrition.delete_section', autospec=True)
 def test_good_nutrition_delete(mock_del):
     """
@@ -350,15 +326,15 @@ def test_nutrition_bad_delete(mock_del):
 
 
 # @patch('data.nutrition.update_nutrition_section_content', return_value=nutr.MOCK_ID, autospec=True)
-@pytest.mark.skip('temporary skip (broken test)')
-def test_good_update_nutrition_section_content(mock_update):
-    """
-    Testing we do the right thing with a good return from update_nutrition_section_content.
-    """
-    section_id = nutr.generate_id()
-    new_content = "TESTING NEW CONTENT"
-    resp = TEST_CLIENT.put(f'{ep.NUTRITION_EP}/{section_id}/{new_content}', json=nutr.get_test_section())
-    assert resp.status_code == OK
+# @pytest.mark.skip('temporary skip (broken test)')
+# def test_good_update_nutrition_section_content(mock_update):
+#     """
+#     Testing we do the right thing with a good return from update_nutrition_section_content.
+#     """
+#     section_id = nutr.generate_id()
+#     new_content = "TESTING NEW CONTENT"
+#     resp = TEST_CLIENT.put(f'{ep.NUTRITION_EP}/{section_id}/{new_content}', json=nutr.get_test_section())
+#     assert resp.status_code == OK
 
 
 # @patch('data.nutrition.update_nutrition_section_content', side_effect=ValueError(), autospec=True)
@@ -372,15 +348,15 @@ def test_good_update_nutrition_section_content(mock_update):
 #     assert resp.status_code == NOT_FOUND
 
 # @patch('data.nutrition.update_nutrition_section_content', side_effect=Exception(), autospec=True)
-@pytest.mark.skip('temporary skip (broken test)')
-def test_bad_exception_update_nutrition_section_content(mock_update):
-    """
-    Testing we do the right thing with an exception when updating nutrition contents.
-    """
-    section_id = nutr.generate_id()
-    new_content = "TESTING NEW CONTENT"
-    resp = TEST_CLIENT.put(f'{ep.NUTRITION_EP}/{section_id}/{new_content}', json=nutr.get_test_section())
-    assert resp.status_code == BAD_REQUEST
+# @pytest.mark.skip('temporary skip (broken test)')
+# def test_bad_exception_update_nutrition_section_content(mock_update):
+#     """
+#     Testing we do the right thing with an exception when updating nutrition contents.
+#     """
+#     section_id = nutr.generate_id()
+#     new_content = "TESTING NEW CONTENT"
+#     resp = TEST_CLIENT.put(f'{ep.NUTRITION_EP}/{section_id}/{new_content}', json=nutr.get_test_section())
+#     assert resp.status_code == BAD_REQUEST
 
 def test_get_ems_sections():
     resp = TEST_CLIENT.get(ep.EMS_EP)
@@ -474,15 +450,15 @@ def test_ems_bad_delete(mock_del):
 #     assert resp.status_code == NOT_FOUND
 
 # @patch('data.ems.update_ems_section_content', side_effect=Exception(), autospec=True)
-@pytest.mark.skip('temporary skip (broken test)')
-def test_bad_exception_update_ems_section_content(mock_update):
-    """
-    Testing we do the right thing with a exception from update_ems_section_content.
-    """
-    section_id = ems.generate_id()
-    new_content = "TESTING NEW CONTENT"
-    resp = TEST_CLIENT.put(f'{ep.EMS_EP}/{section_id}/{new_content}', json=ems.get_test_section())
-    assert resp.status_code == BAD_REQUEST
+# @pytest.mark.skip('temporary skip (broken test)')
+# def test_bad_exception_update_ems_section_content(mock_update):
+#     """
+#     Testing we do the right thing with a exception from update_ems_section_content.
+#     """
+#     section_id = ems.generate_id()
+#     new_content = "TESTING NEW CONTENT"
+#     resp = TEST_CLIENT.put(f'{ep.EMS_EP}/{section_id}/{new_content}', json=ems.get_test_section())
+#     assert resp.status_code == BAD_REQUEST
 
 def test_get_finances_sections():
     resp = TEST_CLIENT.get(ep.FINANCES_EP)
@@ -513,14 +489,14 @@ def test_get_finances_article(create_finances_section):
     assert isinstance(resp_json, dict)
 
 
-@pytest.mark.skip('temporary skip (broken test)')
-def test_finances_add_db_failure(mock_add):
-    """
-    Testing we do the right thing with a null ID return from add_finances_section.
-    """
-    resp = TEST_CLIENT.post(ep.FINANCES_EP, json=fin.get_test_section())
-    # assert resp.status_code == SERVICE_UNAVAILABLE
-    assert resp.status_code == SERVICE_UNAVAILABLE
+# @pytest.mark.skip('temporary skip (broken test)')
+# def test_finances_add_db_failure(mock_add):
+#     """
+#     Testing we do the right thing with a null ID return from add_finances_section.
+#     """
+#     resp = TEST_CLIENT.post(ep.FINANCES_EP, json=fin.get_test_section())
+#     # assert resp.status_code == SERVICE_UNAVAILABLE
+#     assert resp.status_code == SERVICE_UNAVAILABLE
 
 
 @patch('data.finances.delete_finances_section', autospec=True)
@@ -542,35 +518,35 @@ def test_finances_bad_delete(mock_del):
 
 
 # @patch('data.finances.update_finance_section_content', return_value=fin.MOCK_ID, autospec=True)
-@pytest.mark.skip('temporary skip (broken test)')
-def test_good_update_finance_section_content(mock_update):
-    """
-    Testing we do the right thing with a good return from update_finance_section_content.
-    """
-    section_id = fin.generate_section_id()
-    new_content = "TESTING NEW CONTENT"
-    resp = TEST_CLIENT.put(f'{ep.FINANCES_EP}/{section_id}/{new_content}', json=fin.get_test_section())
-    assert resp.status_code == OK
+# @pytest.mark.skip('temporary skip (broken test)')
+# def test_good_update_finance_section_content(mock_update):
+#     """
+#     Testing we do the right thing with a good return from update_finance_section_content.
+#     """
+#     section_id = fin.generate_section_id()
+#     new_content = "TESTING NEW CONTENT"
+#     resp = TEST_CLIENT.put(f'{ep.FINANCES_EP}/{section_id}/{new_content}', json=fin.get_test_section())
+#     assert resp.status_code == OK
 
 
 # @patch('data.finances.update_finance_section_content', side_effect=ValueError(), autospec=True)
-@pytest.mark.skip('temporary skip (broken test)')
-def test_bad_value_error_update_finance_section_content(mock_update):
-    """
-    Testing we do the right thing with a value error from update_finance_section_content.
-    """
-    section_id = fin.generate_section_id()
-    new_content = "TESTING NEW CONTENT"
-    resp = TEST_CLIENT.put(f'{ep.FINANCES_EP}/{section_id}/{new_content}', json=fin.get_test_section())
-    assert resp.status_code == NOT_FOUND
+# @pytest.mark.skip('temporary skip (broken test)')
+# def test_bad_value_error_update_finance_section_content(mock_update):
+#     """
+#     Testing we do the right thing with a value error from update_finance_section_content.
+#     """
+#     section_id = fin.generate_section_id()
+#     new_content = "TESTING NEW CONTENT"
+#     resp = TEST_CLIENT.put(f'{ep.FINANCES_EP}/{section_id}/{new_content}', json=fin.get_test_section())
+#     assert resp.status_code == NOT_FOUND
 
 # @patch('data.finances.update_finance_section_content', side_effect=Exception(), autospec=True)
-@pytest.mark.skip('temporary skip (broken test)')
-def test_bad_exception_update_finance_section_content(mock_update):
-    """
-    Testing we do the right thing with a exception from update_finance_section_content.
-    """
-    section_id = fin.generate_section_id()
-    new_content = "TESTING NEW CONTENT"
-    resp = TEST_CLIENT.put(f'{ep.FINANCES_EP}/{section_id}/{new_content}', json=fin.get_test_section())
-    assert resp.status_code == BAD_REQUEST
+# @pytest.mark.skip('temporary skip (broken test)')
+# def test_bad_exception_update_finance_section_content(mock_update):
+#     """
+#     Testing we do the right thing with a exception from update_finance_section_content.
+#     """
+#     section_id = fin.generate_section_id()
+#     new_content = "TESTING NEW CONTENT"
+#     resp = TEST_CLIENT.put(f'{ep.FINANCES_EP}/{section_id}/{new_content}', json=fin.get_test_section())
+#     assert resp.status_code == BAD_REQUEST
