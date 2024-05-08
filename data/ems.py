@@ -128,8 +128,10 @@ def delete_article(section_id: str, article_id: str):
                                    ARTICLE_ID,
                                    ARTICLE_IDS,
                                    EMS_COLLECT)
+        else:
+            raise ValueError(f'Delete failure: {article_id} not in database.')
     else:
-        raise ValueError(f'Delete failure: {article_id} not in database.')
+        raise ValueError(f'Delete failure: {section_id} not in database.')
 
 
 def exists(section_id: str) -> bool:
