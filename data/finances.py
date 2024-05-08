@@ -18,6 +18,7 @@ ARTICLE_NAME = 'articleName'
 ARTICLE_ID = 'articleID'
 ARTICLE_IDS = 'arrayOfArticleIDs'
 ARTICLE_CONTENT = 'articleContent'
+BAD_ID_RESP = 'Finance ID cannot be blank!'
 # ARTICLE_IDS = {'':''}
 
 # TEST_CATEGORY_SECTION_NAME = "Nutrition/Cooking"
