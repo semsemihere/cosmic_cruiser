@@ -18,6 +18,7 @@ from http.client import (
     UNAUTHORIZED,
     OK,
     SERVICE_UNAVAILABLE,
+    CREATED
 )
 USERNAME = "test_username"
 BAD_USERNAME = ""
@@ -46,15 +47,15 @@ def create_nutrition_section():
     
 @pytest.fixture
 def create_ems_section():
-    TEST_CLIENT.post(ep.EMS_EP, json={"name": nutr.TEST_SECITON_NAME, "sectionID": nutr.TEST_SECITON_ID, "arrayOfArticleIDs": []})
-    yield nutr.TEST_SECITON_ID
-    TEST_CLIENT.delete(ep.EMS_EP + "/delete/" + nutr.TEST_SECITON_ID)
+    TEST_CLIENT.post(ep.EMS_EP, json={"name": ems.TEST_SECITON_NAME, "sectionID": ems.TEST_SECITON_ID, "arrayOfArticleIDs": []})
+    yield ems.TEST_SECITON_ID
+    TEST_CLIENT.delete(ep.EMS_EP + "/delete/" + ems.TEST_SECITON_ID)
     
 @pytest.fixture
 def create_finances_section():
-    TEST_CLIENT.post(ep.FINANCES_EP, json={"name": nutr.TEST_SECITON_NAME, "sectionID": nutr.TEST_SECITON_ID, "arrayOfArticleIDs": []})
-    yield nutr.TEST_SECITON_ID
-    TEST_CLIENT.delete(ep.FINANCES_EP + "/delete/" + nutr.TEST_SECITON_ID)
+    TEST_CLIENT.post(ep.FINANCES_EP, json={"name": fin.TEST_SECITON_NAME, "sectionID": fin.TEST_SECITON_ID, "arrayOfArticleIDs": []})
+    yield fin.TEST_SECITON_ID
+    TEST_CLIENT.delete(ep.FINANCES_EP + "/delete/" + fin.TEST_SECITON_ID)
     
 
 def test_login():
@@ -268,16 +269,42 @@ def test_get_nutrition_sections(create_nutrition_section):
     resp_json = resp.get_json()
     assert isinstance(resp_json, dict)
 
-@pytest.mark.skip('temporary skip (broken test)')
 def test_add_nutrition_article(create_nutrition_section):
-    section_id = nutr.TEST_SECITON_ID
-    TEST_CLIENT.post(ep.NUTRITION_EP, json={"name": nutr.TEST_SECITON_NAME, "sectionID": nutr.TEST_SECITON_ID, "arrayOfArticleIDs": []})
-    print("THIS IS THE section_id: ", section_id)
-    resp = TEST_CLIENT.put("/categories/nutrition/TEST_ONLY/articles", json={"articleName": "test", "articleID": "article_test_only", "articleContent": "stuff"})
-    print("THIS IS THE RESPONSE: ", resp)
-    assert resp.status_code == OK
+    section_id = create_nutrition_section
+    resp = TEST_CLIENT.post(f'{ep.NUTRITION_EP}/{section_id }/articles', json={"articleName": nutr.TEST_ARTICLE_NAME, "articleID": nutr.TEST_ARTICLE_ID, "articleContent": nutr.TEST_ARTICLE_CONTENT})
+    TEST_CLIENT.delete(f'{ep.NUTRITION_EP}/delete/{section_id}/{nutr.TEST_ARTICLE_ID}')
+    assert resp.status_code == 201
+    
+def test_add_bad_nutrition_article(create_nutrition_section):
+    section_id = create_nutrition_section + " BAD"
+    resp = TEST_CLIENT.post(f'{ep.NUTRITION_EP}/{section_id }/articles', json={"articleName": nutr.TEST_ARTICLE_NAME, "articleID": nutr.TEST_ARTICLE_ID, "articleContent": nutr.TEST_ARTICLE_CONTENT})
+    assert resp.status_code == 406
+    
+def test_del_nutrition_article(create_nutrition_section):
+    section_id = create_nutrition_section
+    TEST_CLIENT.post(f'{ep.NUTRITION_EP}/{section_id}/articles', json={"articleName": nutr.TEST_ARTICLE_NAME, "articleID": nutr.TEST_ARTICLE_ID, "articleContent": nutr.TEST_ARTICLE_CONTENT})
+    resp = TEST_CLIENT.delete(f'{ep.NUTRITION_EP}/delete/{section_id}/{nutr.TEST_ARTICLE_ID}')
+    assert resp.status_code == 200
     
 def test_get_nutrition_article(create_nutrition_section):
+    section_id = create_nutrition_section
+    TEST_CLIENT.post(f'{ep.NUTRITION_EP}/{section_id }/articles', json={"articleName": nutr.TEST_ARTICLE_NAME, "articleID": nutr.TEST_ARTICLE_ID, "articleContent": nutr.TEST_ARTICLE_CONTENT})
+    resp = TEST_CLIENT.get(f'{ep.NUTRITION_EP}/{section_id}/articles/{nutr.TEST_ARTICLE_ID}')
+    TEST_CLIENT.delete(f'{ep.NUTRITION_EP}/delete/{section_id}/{nutr.TEST_ARTICLE_ID}')
+    assert resp.status_code == 200
+
+def test_get_bad_nutrition_article(create_nutrition_section):
+    section_id = create_nutrition_section
+    resp = TEST_CLIENT.get(f'{ep.NUTRITION_EP}/{section_id}/articles/{nutr.TEST_ARTICLE_ID}')
+    assert resp.status_code == 200
+    
+def test_bad_del_nutrition_article(create_nutrition_section):
+    resp = TEST_CLIENT.delete(f'{ep.NUTRITION_EP}/delete/{create_nutrition_section}212312312312425235/{nutr.TEST_ARTICLE_ID}')
+    print(resp)
+    print(resp.get_json)
+    assert resp.status_code == 404
+    
+def test_get_nutrition_articles(create_nutrition_section):
     resp = TEST_CLIENT.get(f'{ep.NUTRITION_EP}/{create_nutrition_section}/articles')
     print(resp)
     resp_json = resp.get_json()
@@ -363,6 +390,18 @@ def test_get_ems_sections():
     assert resp.status_code == OK
     resp_json = resp.get_json()
     assert isinstance(resp_json, dict)
+    
+def test_add_ems_article(create_ems_section):
+    section_id = create_ems_section
+    resp = TEST_CLIENT.post(f'{ep.EMS_EP}/{section_id}/articles', json={"articleName": ems.TEST_ARTICLE_NAME, "articleID": ems.TEST_ARTICLE_ID, "articleContent": ems.TEST_ARTICLE_CONTENT})
+    TEST_CLIENT.delete(f'{ep.EMS_EP}/delete/{section_id}/{ems.TEST_ARTICLE_ID}')
+    assert resp.status_code == CREATED
+
+
+def test_add_bad_ems_article(create_ems_section):
+    section_id = create_ems_section + " BAD"
+    resp = TEST_CLIENT.post(f'{ep.EMS_EP}/{section_id}/articles', json={"articleName": ems.TEST_ARTICLE_NAME, "articleID": ems.TEST_ARTICLE_ID, "articleContent": ems.TEST_ARTICLE_CONTENT})
+    assert resp.status_code == 406
 
 def test_add_bad_ems_section():
     resp = TEST_CLIENT.post(ep.EMS_EP, json={"name": "", "sectionID": "", "arrayOfArticleIDs": []})
@@ -385,6 +424,18 @@ def test_get_ems_article(create_ems_section):
     print(resp)
     resp_json = resp.get_json()
     assert isinstance(resp_json, dict)
+    
+def test_del_ems_article(create_ems_section):
+    section_id = create_ems_section
+    TEST_CLIENT.post(f'{ep.EMS_EP}/{section_id}/articles', json={"articleName": ems.TEST_ARTICLE_NAME, "articleID": ems.TEST_ARTICLE_ID, "articleContent": ems.TEST_ARTICLE_CONTENT})
+    resp = TEST_CLIENT.delete(f'{ep.EMS_EP}/delete/{section_id}/{ems.TEST_ARTICLE_ID}')
+    assert resp.status_code == 200
+
+def test_bad_del_ems_article(create_ems_section):
+    resp = TEST_CLIENT.delete(f'{ep.EMS_EP}/delete/{create_ems_section}/{ems.TEST_ARTICLE_ID}234232342')
+    print(resp)
+    print(resp.get_json)
+    assert resp.status_code == 404
     
 
 # @pytest.mark.skip('temporary skip (broken test)')
@@ -488,7 +539,29 @@ def test_get_finances_article(create_finances_section):
     resp_json = resp.get_json()
     assert isinstance(resp_json, dict)
 
+def test_add_finances_article(create_finances_section):
+    section_id = create_finances_section
+    resp = TEST_CLIENT.post(f'{ep.FINANCES_EP}/{section_id}/articles', json={"articleName": fin.TEST_ARTICLE_NAME, "articleID": fin.TEST_ARTICLE_ID, "articleContent": fin.TEST_ARTICLE_CONTENT})
+    TEST_CLIENT.delete(f'{ep.FINANCES_EP}/delete/{section_id}/{fin.TEST_ARTICLE_ID}')
+    assert resp.status_code == CREATED
+    
 
+def test_add_bad_finances_article(create_finances_section):
+    section_id = create_finances_section + " BAD"
+    resp = TEST_CLIENT.post(f'{ep.FINANCES_EP}/{section_id}/articles', json={"articleName": fin.TEST_ARTICLE_NAME, "articleID": fin.TEST_ARTICLE_ID, "articleContent": fin.TEST_ARTICLE_CONTENT})
+    assert resp.status_code == 406
+    
+def test_del_finances_article(create_finances_section):
+    section_id = create_finances_section
+    TEST_CLIENT.post(f'{ep.FINANCES_EP}/{section_id}/articles', json={"articleName": fin.TEST_ARTICLE_NAME, "articleID": fin.TEST_ARTICLE_ID, "articleContent": fin.TEST_ARTICLE_CONTENT})
+    resp = TEST_CLIENT.delete(f'{ep.FINANCES_EP}/delete/{section_id}/{fin.TEST_ARTICLE_ID}')
+    assert resp.status_code == 200
+    
+def test_bad_del_finances_article(create_finances_section):
+    resp = TEST_CLIENT.delete(f'{ep.FINANCES_EP}/delete/{create_finances_section}/{fin.TEST_ARTICLE_ID}234232342')
+    print(resp)
+    print(resp.get_json)
+    assert resp.status_code == 404
 # @pytest.mark.skip('temporary skip (broken test)')
 # def test_finances_add_db_failure(mock_add):
 #     """

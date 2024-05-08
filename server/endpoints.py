@@ -554,7 +554,6 @@ class GetNutritionArticles(Resource):
     Gets individual nutrition article
     """
     def get(self, nutrition_section_id, articleID):
-        print('BOOOM')
 
         # get the url associated with the article id
         print(nutrition.exists_article(articleID))
