@@ -38,6 +38,12 @@ def create_test_user():
     if(USERNAME in usrs.get_all_users()):
         usrs.delete_user(USERNAME)
 
+@pytest.fixture
+def create_nutrition_section():
+    TEST_CLIENT.post(ep.NUTRITION_EP, json={"name": "TEST_ONLY", "sectionID": "TEST_ONLY", "arrayOfArticleIDs": []})
+    yield "TEST_ONLY"
+    TEST_CLIENT.delete(ep.NUTRITION_EP + "/delete/TEST_ONLY")
+    
 def test_login():
     resp = TEST_CLIENT.get(ep.LOGIN_EP)
     print(f'{resp=}')
@@ -54,6 +60,7 @@ def test_get_article():
     print(f'{resp_json=}')
     resp_json = str(resp_json)
     assert ep.GET_ARTICLE_RESP in resp_json
+
 
 
 def test_login_post(create_test_user):
@@ -251,32 +258,34 @@ def test_bad_exception_update_category_sections(mock_update):
     resp = TEST_CLIENT.put(f'{ep.UPDATE_CATEGORY_SECTIONS_EP}/{category_id}/{updated_num_sections}', json=categ.get_test_category())
     assert resp.status_code == BAD_REQUEST
     
-@pytest.mark.skip('temporary skip (broken test)')
-def test_get_nutrition_sections():
+def test_get_nutrition_sections(create_nutrition_section):
     resp = TEST_CLIENT.get(ep.NUTRITION_EP)
     assert resp.status_code == OK
     resp_json = resp.get_json()
     assert isinstance(resp_json, dict)
+    
+# def test_update_nutrition_section(create_nutrition_section):
+#     section_id = create_nutrition_section
+#     resp = TEST_CLIENT.put(ep.NUTRITION_EP ,json={"section_id" : section_id, } )
 
+def test_add_bad_nutrition_section():
+    resp = TEST_CLIENT.post(ep.NUTRITION_EP, json={"name": "", "sectionID": "", "arrayOfArticleIDs": []})
+    print(resp)
+    assert resp.status_code == 406
 
-# @patch('data.nutrition.add_section', return_value=nutr.MOCK_ID, autospec=True)
-@pytest.mark.skip('temporary skip (broken test)')
-def test_good_add_nutrition_section(mock_add):
-    """
-    Testing we do the right thing with a good return from add_section.
-    """
-    resp = TEST_CLIENT.post(ep.NUTRITION_EP, json=nutr.get_test_section())
+def test_add_nutrition_section():
+    resp = TEST_CLIENT.post(ep.NUTRITION_EP, json={"name": "TEST_ONLY", "sectionID": "TEST_ONLY", "arrayOfArticleIDs": []})
+    print(resp)
+    delete_resp = TEST_CLIENT.delete(ep.NUTRITION_EP + "/delete/TEST_ONLY")
+    print(delete_resp)
     assert resp.status_code == OK
 
-
-# @patch('data.nutrition.add_section', side_effect=ValueError(), autospec=True)
-@pytest.mark.skip('temporary skip (broken test)')
-def test_bad_add_nutrition_section(mock_add):
-    """
-    Testing we do the right thing with a value error from add_section.
-    """
-    resp = TEST_CLIENT.post(ep.NUTRITION_EP, json=nutr.get_test_section())
-    assert resp.status_code == NOT_ACCEPTABLE
+def test_delete_nutrition_section():
+    resp = TEST_CLIENT.post(ep.NUTRITION_EP, json={"name": "TEST_ONLY", "sectionID": "TEST_ONLY", "arrayOfArticleIDs": []})
+    print(resp)
+    delete_resp = TEST_CLIENT.delete(ep.NUTRITION_EP + "/delete/TEST_ONLY")
+    print(delete_resp)
+    assert delete_resp.status_code == OK
 
 
 @pytest.mark.skip('temporary skip (broken test)')

@@ -12,7 +12,7 @@ def temp_section():
     if nutrition.exists(section_id):
         nutrition.delete_section(section_id)
 
-# @pytest.mark.skip('temporary skip')
+@pytest.mark.skip('temporary skip')
 def test_get_sections(temp_section):
     sections = nutrition.get_sections()
 

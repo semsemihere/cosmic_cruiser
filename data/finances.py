@@ -160,7 +160,6 @@ def delete_article(section_id: str, article_id: str):
         raise ValueError(f'Delete failure: {article_id} not in database.')
 
 
-
 def delete_finances_section(section_id: str):
     # Deletes finances section by id
     if exists(section_id):
@@ -170,4 +169,3 @@ def delete_finances_section(section_id: str):
                                FINANCES_COLLECT)
     else:
         raise ValueError(f'Delete failure: {section_id} not in database.')
-
