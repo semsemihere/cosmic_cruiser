@@ -12,7 +12,7 @@ def temp_section():
     if nutrition.exists(section_id):
         nutrition.delete_section(section_id)
 
-@pytest.mark.skip('temporary skip')
+# @pytest.mark.skip('temporary skip')
 def test_get_sections(temp_section):
     sections = nutrition.get_sections()
 
@@ -68,7 +68,6 @@ def test_add_section_duplicate_id(temp_section):
     with pytest.raises(ValueError):
         nutrition.add_section(new_name, duplicate_section_id, duplicate_article_ids)
 
-# @pytest.mark.skip('temporary skip')
 def test_add_section_blank_id():
     # Blank section name raises a ValueError
     nutrition_name = nutrition._get_test_name()
@@ -114,8 +113,6 @@ def test_delete_article_success(temp_section):
     nutrition.delete_article(section_id, article_id)
 
     assert not nutrition.exists_article(article_id)
-
-
 
 def test_delete_article_fail():
         with pytest.raises(ValueError):

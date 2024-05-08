@@ -59,6 +59,12 @@ def exists_article(article_id: str) -> bool:
     return dbc.fetch_one(FINANCES_COLLECT, {ARTICLE_ID: article_id})
 
 
+def generate_id() -> str:
+    # generates a 24 digit id with leading 0's
+    _id = str(random.randint(0, BIG_NUM)).rjust(ID_LEN, "0")
+    return _id
+
+
 def _get_test_name():
     name = 'test'
     rand_part = random.randint(0, BIG_NUM)
